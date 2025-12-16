@@ -1,3 +1,5 @@
+import time
+
 import streamlit as st
 
 from ui_common import render_avatar, render_footer, render_sidebar_nav, setup_page
@@ -6,6 +8,19 @@ from ui_common import render_avatar, render_footer, render_sidebar_nav, setup_pa
 setup_page("Home")
 render_sidebar_nav("app")
 
+def typewriter_subtitle(text: str, speed: float = 40):
+    """Simple typewriter effect for the hero subtitle on first page load."""
+    placeholder = st.empty()
+    rendered = ""
+    for ch in text:
+        rendered += ch
+        placeholder.markdown(
+            f'<div class="subtitle">{rendered}</div>',
+            unsafe_allow_html=True,
+        )
+        time.sleep(1.0 / speed)
+
+
 # ----------------------------
 # Hero Section (Home)
 # ----------------------------
@@ -13,8 +28,14 @@ col1, col2, col3 = st.columns([1, 2, 1])
 with col2:
     render_avatar("avatar.png")
     st.markdown('<div class="main-header">Per4ex.org</div>', unsafe_allow_html=True)
-    st.markdown('<div class="subtitle">Specialized in AI-Related Ecosystems</div>', unsafe_allow_html=True)
-    st.markdown("---")
+    if "hero_typed" not in st.session_state:
+        typewriter_subtitle("Specialized in AI-Related Ecosystems")
+        st.session_state["hero_typed"] = True
+    else:
+        st.markdown(
+            '<div class="subtitle">Specialized in AI-Related Ecosystems</div>',
+            unsafe_allow_html=True,
+        )
 
 st.markdown(
     """

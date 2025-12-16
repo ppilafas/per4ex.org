@@ -9,14 +9,14 @@ def main():
 
     col1, col2, col3 = st.columns([1, 2, 1])
     with col2:
-        render_avatar("avatar.png")
+        render_avatar("catalyst.png")
         st.markdown(
-            '<div class="main-header"><span class="material-symbols-outlined">smart_toy</span> '
+            '<div class="main-header">'
             "Catalyst AI</div>",
             unsafe_allow_html=True,
         )
         st.markdown(
-            '<div class="subtitle">A local-first, always-on personal AI operating system for your machine</div>',
+            '<div class="subtitle">A local-first, always-on personal AI operating system for your local setup</div>',
             unsafe_allow_html=True,
         )
         st.markdown("---")

@@ -4,16 +4,16 @@ from ui_common import fetch_github_repos, render_avatar, render_footer, render_s
 
 
 def main():
-    setup_page("GitHub Projects")
-    render_sidebar_nav("GitHub Projects")
+    setup_page("GitHub")
+    render_sidebar_nav("GitHub")
 
     col1, col2, col3 = st.columns([1, 2, 1])
     with col2:
         render_avatar("avatar.png")
-        st.markdown('<div class="main-header"><span class="material-symbols-outlined">code</span> GitHub Projects</div>', unsafe_allow_html=True)
+        st.markdown('<div class="main-header"><span class="material-symbols-outlined">code</span> GitHub</div>', unsafe_allow_html=True)
         st.markdown("---")
 
-    st.markdown('<div class="section-header">GitHub Projects</div>', unsafe_allow_html=True)
+    st.markdown('<div class="section-header">GitHub</div>', unsafe_allow_html=True)
 
     refresh = st.button("🔄 Refresh from GitHub", help="Clear cache and reload public repositories from GitHub.")
     if refresh:
@@ -25,7 +25,7 @@ def main():
         st.markdown(
             """
             <p style="color: #e8e8e8; margin-bottom: 1rem;">
-            Showing public repositories from <a href="https://github.com/ppilafas" target="_blank" style="color: #e8e8e8; text-decoration: underline;">github.com/ppilafas</a>.
+            Showing public repositories from <a href="https://github.com/ppilafas" style="color: #e8e8e8; text-decoration: underline;">github.com/ppilafas</a>.
             </p>
             """,
             unsafe_allow_html=True,
@@ -44,7 +44,7 @@ def main():
                 f"""
                 <div class="project-card">
                     <h4 style="color: #f5f5f5; margin-top: 0;">
-                        <a href="{html_url}" target="_blank" style="color: #f5f5f5; text-decoration: none;">
+                        <a href="{html_url}" style="color: #f5f5f5; text-decoration: none;">
                             {name}
                         </a>
                     </h4>

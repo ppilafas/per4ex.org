@@ -39,10 +39,18 @@ def setup_page(page_title_suffix: str = "Home") -> None:
                 background-color: #2d2d2d;
             }
             
-            /* Sidebar styling to match main theme */
+            /* Sidebar styling to match main theme and keep it always visible */
             section[data-testid="stSidebar"] {
                 background-color: #2d2d2d !important;
                 border-right: 1px solid #3d3d3d;
+                min-width: 280px;
+                transform: translateX(0) !important;
+                visibility: visible !important;
+            }
+            
+            /* Hide only the top-right hamburger menu toggle */
+            button[kind="header"] [data-testid="baseButton-toggleSidebar"] {
+                display: none !important;
             }
             
             section[data-testid="stSidebar"] .block-container {
@@ -77,9 +85,10 @@ def setup_page(page_title_suffix: str = "Home") -> None:
             }
             
             .main .block-container {
-                padding-top: 3rem;
+                padding-top: 2.2rem;
                 padding-bottom: 3rem;
-                max-width: 1200px;
+                padding-left: 2.5rem;
+                max-width: 1100px;
             }
             
             .main-header {
@@ -184,7 +193,8 @@ def setup_page(page_title_suffix: str = "Home") -> None:
             }
             
             .stMarkdown, .stMarkdown p, .stMarkdown li {
-                color: #e8e8e8;
+                color: #f0f0f0;
+                line-height: 1.7;
             }
             
             .stTabs [data-baseweb="tab-list"] {
@@ -242,9 +252,60 @@ def setup_page(page_title_suffix: str = "Home") -> None:
                 border-radius: 999px;
                 transition: background-color 0.15s ease, color 0.15s ease;
             }
+            section[data-testid="stSidebar"] a.sidebar-link span:last-child {
+                font-size: 0.95rem;
+            }
             section[data-testid="stSidebar"] a.sidebar-link:hover {
                 background-color: #3d3d3d;
                 color: #ffffff;
+            }
+            
+            /* Style the built-in sidebar collapse/expand control to show a Material icon
+               and disable interaction so the sidebar cannot be hidden. */
+            [data-testid="collapsedControl"] button {
+                font-family: 'Material Symbols Outlined', sans-serif !important;
+                font-size: 20px;
+                color: #e8e8e8;
+                pointer-events: none;  /* prevent click to collapse */
+            }
+            
+            /* Hide stray Material icon ligature text such as "keyboard_double_arrow_right" */
+            span[data-testid="stIconMaterial"] {
+                font-size: 0 !important;        /* hide glyph/text */
+                color: transparent !important;  /* just in case */
+            }
+            
+            /* Sidebar icon color palette (Pantone-inspired on graphite background) */
+            section[data-testid="stSidebar"] .sidebar-icon {
+                color: #f2f2f2; /* fallback */
+            }
+            section[data-testid="stSidebar"] ul li:nth-child(1) .sidebar-icon {
+                /* Home – soft warm yellow */
+                color: #F4D06F;
+            }
+            section[data-testid="stSidebar"] ul li:nth-child(2) .sidebar-icon {
+                /* Technical Expertise – teal */
+                color: #40C9A2;
+            }
+            section[data-testid="stSidebar"] ul li:nth-child(3) .sidebar-icon {
+                /* Technologies & Tools – sky blue */
+                color: #5BC0EB;
+            }
+            section[data-testid="stSidebar"] ul li:nth-child(4) .sidebar-icon {
+                /* GitHub – soft violet */
+                color: #9B5DE5;
+            }
+            section[data-testid="stSidebar"] ul li:nth-child(5) .sidebar-icon {
+                /* Connect – coral */
+                color: #FF6B6B;
+            }
+            section[data-testid="stSidebar"] ul li:nth-child(6) .sidebar-icon {
+                /* Catalyst AI – orange */
+                color: #FF9F1C;
+            }
+            section[data-testid="stSidebar"] ul li:nth-child(7) .sidebar-icon {
+                /* Authored Works – mint */
+                color: #7AE582;
             }
             
             /* Hide default Streamlit page selector so we can use a custom one */
@@ -318,9 +379,7 @@ def render_sidebar_nav(active: str) -> None:
     pages = [
         ("/", "app", "home", "Home"),
         ("/Technical_Expertise", "Technical Expertise", "hub", "Technical Expertise"),
-        ("/Technologies_and_Tools", "Technologies and Tools", "build", "Technologies &amp; Tools"),
-        ("/Projects_and_Experience", "Projects and Experience", "rocket_launch", "Projects &amp; Experience"),
-        ("/GitHub_Projects", "GitHub Projects", "code", "GitHub Projects"),
+        ("/GitHub_Projects", "GitHub", "code", "GitHub"),
         ("/Connect", "Connect", "mail", "Connect"),
         ("/Catalyst_AI", "Catalyst AI", "smart_toy", "Catalyst AI"),
         ("/Authored_Works", "Authored Works", "menu_book", "Authored Works"),
@@ -336,8 +395,8 @@ def render_sidebar_nav(active: str) -> None:
         )
         items_html.append(
             f'<li style="margin-bottom: 0.4rem; list-style: none;">'
-            f'<a href="{href}" class="sidebar-link">'
-            f'<span class="material-symbols-outlined" style="font-size: 1.1rem;">{icon}</span>'
+            f'<a href="{href}" class="sidebar-link" target="_self">'
+            f'<span class="material-symbols-outlined sidebar-icon" style="font-size: 1.1rem;">{icon}</span>'
             f'<span style="{active_style}">{label}</span>'
             f"</a></li>"
         )

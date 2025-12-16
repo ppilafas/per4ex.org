@@ -9,7 +9,7 @@ def main():
 
     col1, col2, col3 = st.columns([1, 2, 1])
     with col2:
-        render_avatar("avatar.png")
+        render_avatar("parisian_author.png")
         st.markdown(
             '<div class="main-header"><span class="material-symbols-outlined">menu_book</span> Authored Works</div>',
             unsafe_allow_html=True,
