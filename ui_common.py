@@ -1,0 +1,357 @@
+import base64
+from datetime import datetime
+from pathlib import Path
+
+import requests
+import streamlit as st
+
+
+def setup_page(page_title_suffix: str = "Home") -> None:
+    """Configure the Streamlit page and inject global styles."""
+    full_title = f"Per4ex.org | {page_title_suffix}" if page_title_suffix else "Per4ex.org"
+
+    st.set_page_config(
+        page_title=full_title,
+        page_icon="⚙️",  # Note: page_icon doesn't support Material Symbols directly
+        layout="wide",
+        initial_sidebar_state="expanded",
+    )
+
+    # Global typography, layout and theme
+    st.markdown(
+        """
+        <link href="https://fonts.googleapis.com/css2?family=Hack:wght@400;700&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" media="all">
+        <style>
+            @font-face {
+                font-family: 'Material Symbols Outlined';
+                font-style: normal;
+                font-weight: 400;
+                src: url(https://fonts.gstatic.com/s/materialsymbolsoutlined/v179/kJF1BvYX7BgnkSrUwT8OhrdQw4oELdPIeeII9v6oFsI.woff2) format('woff2');
+            }
+        </style>
+        <style>
+            * {
+                font-family: 'Hack', 'Courier New', monospace !important;
+            }
+            
+            .stApp {
+                background-color: #2d2d2d;
+            }
+            
+            /* Sidebar styling to match main theme */
+            section[data-testid="stSidebar"] {
+                background-color: #2d2d2d !important;
+                border-right: 1px solid #3d3d3d;
+            }
+            
+            section[data-testid="stSidebar"] .block-container {
+                padding-top: 2rem;
+                padding-bottom: 2rem;
+            }
+            
+            /* Match header bar to background */
+            header[data-testid="stHeader"] {
+                background-color: #2d2d2d !important;
+                border-bottom: none;
+            }
+            
+            /* Hide Streamlit menu button */
+            #MainMenu {
+                visibility: hidden;
+            }
+            
+            /* Hide header decoration line */
+            header[data-testid="stHeader"]::before {
+                display: none;
+            }
+            
+            /* Style deploy button area */
+            .stDeployButton {
+                display: none;
+            }
+            
+            /* Hide any header borders or lines */
+            header[data-testid="stHeader"] > div {
+                background-color: #2d2d2d !important;
+            }
+            
+            .main .block-container {
+                padding-top: 3rem;
+                padding-bottom: 3rem;
+                max-width: 1200px;
+            }
+            
+            .main-header {
+                font-size: 4rem;
+                font-weight: 700;
+                text-align: center;
+                color: #f5f5f5;
+                margin-bottom: 0.5rem;
+            }
+            
+            .subtitle {
+                font-size: 1.4rem;
+                text-align: center;
+                color: #e8e8e8;
+                margin-bottom: 3rem;
+            }
+            
+            .section-header {
+                font-size: 2.2rem;
+                font-weight: 700;
+                color: #f5f5f5;
+                margin-top: 3rem;
+                margin-bottom: 1.5rem;
+                border-bottom: 2px solid #3d3d3d;
+                padding-bottom: 0.8rem;
+            }
+            
+            .skill-badge {
+                display: inline-block;
+                background-color: #3d3d3d;
+                color: #f5f5f5;
+                padding: 0.6rem 1.2rem;
+                border-radius: 4px;
+                margin: 0.4rem;
+                font-size: 0.85rem;
+                border: 1px solid #4d4d4d;
+            }
+            
+            .highlight-box {
+                background-color: #3d3d3d;
+                padding: 2rem;
+                border-radius: 8px;
+                margin: 0;
+                border: 1px solid #4d4d4d;
+                height: 100%;
+                display: flex;
+                flex-direction: column;
+            }
+            
+            .focus-list {
+                background-color: #3d3d3d;
+                padding: 2rem;
+                border-radius: 8px;
+                border: 1px solid #4d4d4d;
+                height: 100%;
+                display: flex;
+                flex-direction: column;
+            }
+            
+            .expertise-card {
+                background-color: #3d3d3d;
+                padding: 1.8rem;
+                border-radius: 8px;
+                margin-bottom: 1rem;
+                border: 1px solid #4d4d4d;
+            }
+            
+            .project-card {
+                background-color: #3d3d3d;
+                padding: 1.5rem;
+                border-radius: 8px;
+                margin: 1rem 0;
+                border: 1px solid #4d4d4d;
+            }
+            
+            .contact-link {
+                display: block;
+                padding: 0.8rem;
+                background-color: #3d3d3d;
+                border-radius: 8px;
+                text-decoration: none;
+                color: #f5f5f5;
+                border: 1px solid #4d4d4d;
+            }
+            
+            .tech-term {
+                background-color: #4d4d4d;
+                padding: 0.2rem 0.5rem;
+                border-radius: 4px;
+                color: #f5f5f5;
+            }
+            
+            hr {
+                border: none;
+                height: 1px;
+                background-color: #4d4d4d;
+                margin: 2rem 0;
+            }
+            
+            h1, h2, h3, h4, h5, h6, p, li, span, div, a {
+                color: #f5f5f5;
+            }
+            
+            .stMarkdown, .stMarkdown p, .stMarkdown li {
+                color: #e8e8e8;
+            }
+            
+            .stTabs [data-baseweb="tab-list"] {
+                background-color: #3d3d3d;
+            }
+            
+            .stTabs [data-baseweb="tab"] {
+                color: #e8e8e8;
+            }
+            
+            /* Align columns at top */
+            [data-testid="column"] {
+                align-items: flex-start;
+            }
+            
+            /* Ensure boxes align */
+            .stColumn > div {
+                display: flex;
+                flex-direction: column;
+                height: 100%;
+            }
+            
+            /* Material Symbols styling */
+            .material-symbols-outlined {
+                font-family: 'Material Symbols Outlined' !important;
+                font-weight: normal !important;
+                font-style: normal !important;
+                font-size: 1.2em !important;
+                line-height: 1 !important;
+                letter-spacing: normal !important;
+                text-transform: none !important;
+                display: inline-block !important;
+                white-space: nowrap !important;
+                word-wrap: normal !important;
+                direction: ltr !important;
+                vertical-align: middle !important;
+                margin-right: 0.4rem !important;
+                font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24 !important;
+                -webkit-font-smoothing: antialiased !important;
+            }
+            
+            /* Override Hack font for Material Symbols */
+            .material-symbols-outlined {
+                font-family: 'Material Symbols Outlined' !important;
+            }
+            
+            /* Custom sidebar nav hover styles */
+            section[data-testid="stSidebar"] a.sidebar-link {
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+                text-decoration: none;
+                color: #e8e8e8;
+                padding: 0.35rem 0.6rem;
+                border-radius: 999px;
+                transition: background-color 0.15s ease, color 0.15s ease;
+            }
+            section[data-testid="stSidebar"] a.sidebar-link:hover {
+                background-color: #3d3d3d;
+                color: #ffffff;
+            }
+            
+            /* Hide default Streamlit page selector so we can use a custom one */
+            section[data-testid="stSidebar"] [data-testid="stSidebarNav"] {
+                display: none;
+            }
+        </style>
+        """,
+        unsafe_allow_html=True,
+    )
+
+
+def render_avatar(path: str = "avatar.png", size: int = 140) -> None:
+    """Render a circular avatar image centered above the main title, if the file exists."""
+    avatar_file = Path(path)
+    if not avatar_file.exists():
+        return
+
+    try:
+        data = avatar_file.read_bytes()
+        encoded = base64.b64encode(data).decode()
+    except Exception:
+        return
+
+    st.markdown(
+        f"""
+        <div style="display: flex; justify-content: center; margin-bottom: 1.5rem;">
+            <img src="data:image/png;base64,{encoded}"
+                 alt="Avatar"
+                 style="
+                    width: {size}px;
+                    height: {size}px;
+                    border-radius: 50%;
+                    object-fit: cover;
+                    border: 3px solid #f5f5f5;
+                 " />
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+
+@st.cache_data(ttl=3600)
+def fetch_github_repos(user: str):
+    """Fetch public GitHub repositories for the given user."""
+    url = f"https://api.github.com/users/{user}/repos"
+    try:
+        response = requests.get(url, params={"sort": "updated", "per_page": 100}, timeout=10)
+        response.raise_for_status()
+        return response.json()
+    except Exception as e:
+        st.warning(f"Unable to load GitHub repositories for {user}: {e}")
+        return []
+
+
+def render_footer() -> None:
+    """Render the standard footer."""
+    st.markdown("---")
+    st.markdown(
+        f"""
+        <div style="text-align: center; color: #e8e8e8; padding: 2rem; font-size: 0.9rem;">
+        © {datetime.now().year} Systems Engineer | AI Ecosystems Specialist — Built with Streamlit & Hack Font
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+
+def render_sidebar_nav(active: str) -> None:
+    """Render a custom sidebar page list with Material Symbols."""
+    pages = [
+        ("/", "app", "home", "Home"),
+        ("/Technical_Expertise", "Technical Expertise", "hub", "Technical Expertise"),
+        ("/Technologies_and_Tools", "Technologies and Tools", "build", "Technologies &amp; Tools"),
+        ("/Projects_and_Experience", "Projects and Experience", "rocket_launch", "Projects &amp; Experience"),
+        ("/GitHub_Projects", "GitHub Projects", "code", "GitHub Projects"),
+        ("/Connect", "Connect", "mail", "Connect"),
+        ("/Catalyst_AI", "Catalyst AI", "smart_toy", "Catalyst AI"),
+        ("/Authored_Works", "Authored Works", "menu_book", "Authored Works"),
+    ]
+
+    items_html: list[str] = []
+    for href, key, icon, label in pages:
+        is_active = key == active
+        active_style = (
+            "background-color: #3d3d3d;"
+            if is_active
+            else ""
+        )
+        items_html.append(
+            f'<li style="margin-bottom: 0.4rem; list-style: none;">'
+            f'<a href="{href}" class="sidebar-link">'
+            f'<span class="material-symbols-outlined" style="font-size: 1.1rem;">{icon}</span>'
+            f'<span style="{active_style}">{label}</span>'
+            f"</a></li>"
+        )
+
+    # IMPORTANT: build HTML without leading spaces so Markdown doesn't treat it as a code block
+    html = (
+        '<div style="margin-bottom: 1.5rem;">'
+        '<h3 style="margin-top: 0; color: #f5f5f5;">Navigate</h3>'
+        '<ul style="padding-left: 0; margin-left: 0; list-style: none;">'
+        + "".join(items_html)
+        + "</ul></div>"
+    )
+
+    with st.sidebar:
+        st.markdown(html, unsafe_allow_html=True)
+
+
