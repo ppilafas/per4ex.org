@@ -13,8 +13,8 @@ export async function POST(req: NextRequest) {
     // Catalyst Server now manages System Prompts and Models centrally.
     // We only pass user messages and session config.
 
-    console.log("--- PROXY REQUEST START ---");
-    console.log("Session:", session_id);
+    // console.log("--- PROXY REQUEST START ---");
+    // console.log("Session:", session_id);
 
     // Forward to Catalyst Service
     const response = await fetch(`${CATALYST_API_URL}/chat/stream`, {
@@ -59,10 +59,10 @@ export async function POST(req: NextRequest) {
                     if (done) break;
                     
                     const chunk = decoder.decode(value);
-                    console.log("Catalyst Stream Chunk:", chunk); // Log full chunk to terminal
+                    // console.log("Catalyst Stream Chunk:", chunk); // Log full chunk to terminal
                     controller.enqueue(encoder.encode(chunk));
                 }
-                console.log("--- PROXY REQUEST END ---");
+                // console.log("--- PROXY REQUEST END ---");
                 controller.close();
             } catch (err) {
                 console.error("Stream Error:", err);

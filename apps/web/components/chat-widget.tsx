@@ -71,7 +71,6 @@ export function ChatWidget() {
                     if (!dataStr.trim()) continue;
 
                     const data = JSON.parse(dataStr)
-                    console.log("Stream Data:", data);
 
                     // 1. Metadata / Session Init
                     if (data.session_id && !sessionId) {
@@ -79,36 +78,12 @@ export function ChatWidget() {
                         continue
                     }
 
-                    // 2. Check for Double-JSON Encoded RAG Response
-                    // "content": "{\"store_type\": ...}"
-                    let contentToAppend = data.content || data.text || "";
-                    
-                    if (contentToAppend && contentToAppend.trim().startsWith("{")) {
-                        try {
-                            const innerJson = JSON.parse(contentToAppend);
-                            if (innerJson.hits && Array.isArray(innerJson.hits)) {
-                                // This IS a RAG raw dump.
-                                // Instead of showing JSON, show the most relevant snippet or a fallback
-                                const bestHit = innerJson.hits[0];
-                                if (bestHit && bestHit.content) {
-                                    // Hack: If the LLM didn't wrap this, we treat the RAG content as the answer
-                                    // But prepending a meta-note
-                                    if (!assistantMessage) {
-                                         contentToAppend = `📚 *Accessing Knowledge Base...*\n\n${bestHit.content}`;
-                                    } else {
-                                         contentToAppend = `\n\n---\n📚 *Source Context:*\n${bestHit.content}`;
-                                    }
-                                } else {
-                                    contentToAppend = ""; // Hide empty RAG dumps
-                                }
-                            }
-                        } catch (e) {
-                            // Not JSON, just normal text starting with {
-                        }
+                    // 2. Standard Text Streaming
+                    if (data.content || data.text) {
+                        assistantMessage += (data.content || data.text || "")
                     }
-
-                    assistantMessage += contentToAppend
                     
+                    // Update UI
                     setMessages(prev => {
                         const newArr = [...prev]
                         if (assistantMessage) {
@@ -174,7 +149,7 @@ export function ChatWidget() {
                {messages.map((msg, idx) => (
                   <div key={idx} className={cn("flex", msg.role === "user" ? "justify-end" : "justify-start")}>
                      <div className={cn(
-                        "max-w-[80%] p-3 rounded-lg text-sm leading-relaxed whitespace-pre-wrap overflow-hidden", // Added overflow-hidden to prevent layout breaks
+                        "max-w-[80%] p-3 rounded-lg text-sm leading-relaxed whitespace-pre-wrap",
                         msg.role === "user" 
                            ? "bg-accent text-black rounded-tr-none" 
                            : "bg-card border border-card-border text-foreground rounded-tl-none"
