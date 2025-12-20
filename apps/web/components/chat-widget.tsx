@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useRef, useEffect } from "react"
-import { MessageSquare, X, Send, Cpu, Loader2 } from "lucide-react"
+import { MessageSquare, X, Send, Cpu, Loader2, Sparkles } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
 import { cn } from "@/lib/utils"
 
@@ -9,6 +9,13 @@ interface Message {
   role: "user" | "assistant"
   content: string
 }
+
+const STARTERS = [
+  "Who is Panagiotis?",
+  "How does Catalyst work?",
+  "Tell me about π.Law",
+  "What is your tech stack?"
+]
 
 export function ChatWidget() {
   const [isOpen, setIsOpen] = useState(false)
@@ -29,13 +36,10 @@ export function ChatWidget() {
     scrollToBottom()
   }, [messages])
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    if (!input.trim() || isLoading) return
+  const handleSendMessage = async (text: string) => {
+    if (!text.trim() || isLoading) return
 
-    const userMsg = input.trim()
-    setInput("")
-    setMessages(prev => [...prev, { role: "user", content: userMsg }])
+    setMessages(prev => [...prev, { role: "user", content: text }])
     setIsLoading(true)
 
     // Add placeholder for assistant response
@@ -46,7 +50,7 @@ export function ChatWidget() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ 
-            messages: [{ role: "user", content: userMsg }],
+            messages: [{ role: "user", content: text }],
             session_id: sessionId
         }),
       })
@@ -111,6 +115,12 @@ export function ChatWidget() {
     }
   }
 
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    handleSendMessage(input)
+    setInput("")
+  }
+
   return (
     <>
       {/* Floating Button */}
@@ -158,6 +168,26 @@ export function ChatWidget() {
                      </div>
                   </div>
                ))}
+               
+               {/* Conversation Starters (Only show if only 1 message exists) */}
+               {messages.length === 1 && (
+                  <div className="grid grid-cols-1 gap-2 mt-4 px-2">
+                     <p className="text-xs text-muted mb-1 flex items-center gap-1">
+                        <Sparkles className="w-3 h-3 text-accent" />
+                        Suggested Commands
+                     </p>
+                     {STARTERS.map((starter, idx) => (
+                        <button
+                           key={idx}
+                           onClick={() => handleSendMessage(starter)}
+                           className="text-left text-xs p-2.5 rounded-lg border border-accent/20 hover:border-accent/50 hover:bg-accent/5 text-foreground/80 hover:text-accent transition-all duration-200"
+                        >
+                           {starter}
+                        </button>
+                     ))}
+                  </div>
+               )}
+
                {isLoading && !messages[messages.length-1].content && (
                    <div className="flex justify-start">
                        <div className="bg-card border border-card-border p-3 rounded-lg rounded-tl-none">
