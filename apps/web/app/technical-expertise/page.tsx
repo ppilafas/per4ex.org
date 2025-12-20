@@ -62,8 +62,9 @@ export default function TechnicalExpertise() {
         <h2 className="text-3xl font-bold text-foreground mt-12 mb-6 border-b-2 border-sidebar-border pb-3">Technologies & Tools</h2>
         <div className="glass-panel">
              <p className="text-lg leading-relaxed text-muted mb-6">
-                The Catalyst backend service is a persistent macOS <span className="bg-card-border px-2 py-0.5 rounded text-foreground text-base">launchd</span> daemon that provides long-running state management,
-                proactive message generation, background data fetching, and WebSocket communication for the Catalyst AI assistant platform.
+                These technologies power the Catalyst Platform and other high-performance systems I build. 
+                The Catalyst backend, for example, runs as a persistent macOS <span className="bg-card-border px-2 py-0.5 rounded text-foreground text-sm">launchd</span> daemon 
+                to handle long-running state and proactive intelligence.
              </p>
              <div className="flex flex-wrap justify-center gap-2 mt-4">
                 {[

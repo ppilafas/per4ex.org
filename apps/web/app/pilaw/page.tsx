@@ -1,5 +1,6 @@
 import Image from "next/image"
 import { Scale, Database, Lock, Server, ArrowRight } from "lucide-react"
+import { TypewriterSubtitle } from "@/components/typewriter"
 
 export default function PiLaw() {
   return (
@@ -12,7 +13,11 @@ export default function PiLaw() {
              <Scale className="w-16 h-16 text-foreground" />
           </div>
           <h1 className="text-4xl md:text-5xl font-bold text-center text-foreground mb-2">π.Law</h1>
-          <p className="text-xl md:text-2xl text-center text-muted">Enterprise Legal AI CRM built on the Catalyst Platform</p>
+          <TypewriterSubtitle 
+             text="Enterprise Legal AI CRM built on the Catalyst Platform" 
+             className="mb-6 text-lg md:text-xl"
+             cursorColor="bg-blue-500"
+          />
           <hr className="w-full border-t border-card-border mt-6" />
         </div>
         <div />
@@ -79,7 +84,7 @@ export default function PiLaw() {
                     <Lock className="w-5 h-5 text-blue-400" /> Zero-Leakage Architecture
                  </h3>
                  <p className="text-muted leading-relaxed mb-4">
-                    The frontend never touches the Catalyst API directly. A dedicated backend proxy injects the `X-Tenant-Id` and strips sensitive metadata.
+                    The frontend never touches the Catalyst API directly. A dedicated backend proxy injects the <code className="bg-background/50 px-1 py-0.5 rounded text-sm">X-Tenant-Id</code> and strips sensitive metadata.
                  </p>
                  <ul className="space-y-2 text-sm text-muted list-disc pl-4">
                     <li><strong>Hard Isolation:</strong> API keys are strictly scoped to tenants.</li>

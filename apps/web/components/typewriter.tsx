@@ -2,8 +2,16 @@
 
 import { useState, useEffect, useRef } from "react"
 import { motion } from "framer-motion"
+import { cn } from "@/lib/utils"
 
-export function TypewriterSubtitle({ text, speed = 40 }: { text: string; speed?: number }) {
+interface TypewriterSubtitleProps {
+  text: string
+  speed?: number
+  className?: string
+  cursorColor?: string
+}
+
+export function TypewriterSubtitle({ text, speed = 40, className, cursorColor = "bg-accent" }: TypewriterSubtitleProps) {
   const [displayedText, setDisplayedText] = useState("")
   const startedRef = useRef(false)
 
@@ -32,12 +40,12 @@ export function TypewriterSubtitle({ text, speed = 40 }: { text: string; speed?:
   }, [text, speed])
 
   return (
-    <div className="text-xl md:text-2xl text-center text-muted mb-12 min-h-[2em] font-mono">
+    <div className={cn("text-xl md:text-2xl text-center text-muted min-h-[1.5em] font-mono", className)}>
       {displayedText}
       <motion.span
         animate={{ opacity: [0, 1, 0] }}
         transition={{ repeat: Infinity, duration: 0.8 }}
-        className="inline-block w-[10px] h-[1em] bg-accent ml-1 align-middle"
+        className={cn("inline-block w-[10px] h-[1em] ml-1 align-middle", cursorColor)}
       />
     </div>
   )

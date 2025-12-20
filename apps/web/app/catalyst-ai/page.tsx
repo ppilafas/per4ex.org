@@ -1,5 +1,6 @@
 import Image from "next/image"
-import { Cpu, Mic, Shield, Server, Terminal, Layers } from "lucide-react"
+import { Cpu, Mic, Shield, Server, Terminal, Layers, Link as LinkIcon } from "lucide-react"
+import { TypewriterSubtitle } from "@/components/typewriter"
 
 export default function CatalystAI() {
   return (
@@ -12,7 +13,10 @@ export default function CatalystAI() {
              <Image src="/catalyst.png" alt="Catalyst AI" fill className="object-cover" />
           </div>
           <h1 className="text-4xl md:text-5xl font-bold text-center text-foreground mb-2">Catalyst AI</h1>
-          <p className="text-xl md:text-2xl text-center text-muted">A local-first, always-on personal AI operating system</p>
+          <TypewriterSubtitle 
+             text="A local-first, always-on personal AI operating system" 
+             className="mb-6 text-lg md:text-xl"
+          />
           <hr className="w-full border-t border-card-border mt-6" />
         </div>
         <div />
@@ -54,7 +58,7 @@ export default function CatalystAI() {
         
         <div className="glass-panel space-y-12">
            
-           {/* Architecture Visual Placeholder (we can replace with SVG later) */}
+           {/* Architecture Visual Placeholder */}
            <div className="flex flex-col md:flex-row items-center justify-center gap-6 p-6 bg-background/30 rounded-xl border border-dashed border-card-border">
               <div className="text-center space-y-2">
                  <div className="w-16 h-16 bg-card rounded-full flex items-center justify-center mx-auto border border-card-border"><Mic className="w-8 h-8 text-accent"/></div>
@@ -137,6 +141,24 @@ export default function CatalystAI() {
                       </p>
                   </div>
               </div>
+           </div>
+
+           <hr className="border-card-border" />
+
+           <div>
+              <h3 className="text-xl font-bold text-foreground mb-4 flex items-center gap-2">
+                 <LinkIcon className="w-5 h-5" /> Links
+              </h3>
+              <ul className="space-y-3">
+                 <li>
+                    🔧 <strong className="text-foreground">Catalyst Service (Backend):</strong>{" "}
+                    <span className="text-muted">Repository private (Contact for access)</span>
+                 </li>
+                 <li>
+                    💻 <strong className="text-foreground">Catalyst Native Client:</strong>{" "}
+                    <span className="text-muted">Repository private (Contact for access)</span>
+                 </li>
+              </ul>
            </div>
 
         </div>
