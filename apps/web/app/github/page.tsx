@@ -2,7 +2,7 @@
 
 import Image from "next/image"
 import useSWR from "swr"
-import { Code, Star } from "lucide-react"
+import { Star } from "lucide-react"
 import { getApiUrl } from "@/lib/config"
 import { TypewriterSubtitle } from "@/components/typewriter"
 
@@ -11,11 +11,7 @@ const fetcher = (url: string) => fetch(url).then((res) => res.json())
 
 export default function GitHubProjects() {
   const API_URL = getApiUrl()
-  const { data, error, isLoading, mutate } = useSWR(`${API_URL}/api/github/repos`, fetcher)
-
-  const handleRefresh = () => {
-     mutate() // Re-fetch
-  }
+  const { data, error, isLoading } = useSWR(`${API_URL}/api/github/repos`, fetcher)
 
   return (
     <div className="space-y-12">
@@ -26,8 +22,8 @@ export default function GitHubProjects() {
           <div className="relative w-[140px] h-[140px] mb-6 rounded-full overflow-hidden border-[3px] border-foreground">
              <Image src="/github.png" alt="GitHub" fill className="object-cover" />
           </div>
-          <h1 className="text-4xl md:text-5xl font-bold text-center text-foreground flex items-center gap-3 mb-2">
-            <Code className="w-10 h-10" /> GitHub
+          <h1 className="text-4xl md:text-5xl font-bold text-center text-foreground mb-2">
+            GitHub
           </h1>
           <TypewriterSubtitle 
              text="Open source contributions and public repositories" 
@@ -39,15 +35,6 @@ export default function GitHubProjects() {
       </div>
 
       <div>
-        <h2 className="text-3xl font-bold text-foreground mb-6 border-b-2 border-sidebar-border pb-3">GitHub</h2>
-        
-        <button 
-           onClick={handleRefresh}
-           className="bg-card hover:bg-card-border text-foreground px-4 py-2 rounded mb-6 flex items-center gap-2 border border-card-border transition-colors"
-        >
-           <span>🔄 Refresh from GitHub</span>
-        </button>
-
         {!data && !error && (
             <div className="text-center py-10">Loading repositories...</div>
         )}
@@ -89,4 +76,3 @@ export default function GitHubProjects() {
     </div>
   )
 }
-
