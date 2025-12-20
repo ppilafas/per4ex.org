@@ -1,0 +1,9 @@
+{
+  "name": "per4ex-monorepo",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ]
+}
+

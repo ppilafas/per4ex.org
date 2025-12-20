@@ -1,62 +1,67 @@
-#!/usr/bin/env bash
-set -e
+#!/bin/bash
 
-# ---------------------------------------------------------
-# Bootstrap script for per4ex.org Streamlit environment
-# ---------------------------------------------------------
+# Function to find a free port starting from $1
+find_free_port() {
+    local port=$1
+    while lsof -i:$port >/dev/null 2>&1; do
+        ((port++))
+    done
+    echo $port
+}
 
-# Use script location as project root
-PROJECT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-cd "$PROJECT_ROOT"
+# 1. Configuration
+echo "🔍 Scanning for available ports..."
 
-echo ">> Project root: $PROJECT_ROOT"
+API_PORT=$(find_free_port 8000)
+WEB_PORT=$(find_free_port 3000)
 
-# Allow override: PYTHON_BIN=python3.11 ./bootstrap.sh
-PYTHON_BIN="${PYTHON_BIN:-python3}"
-
-echo ">> Using Python binary: $PYTHON_BIN"
-
-# ---------------------------------------------------------
-# 1. Create virtual environment
-# ---------------------------------------------------------
-if [ ! -d ".venv" ]; then
-  echo ">> Creating virtual environment in .venv"
-  "$PYTHON_BIN" -m venv .venv
-else
-  echo ">> Virtual environment .venv already exists, skipping creation"
+if [ "$WEB_PORT" -eq "$API_PORT" ]; then
+    WEB_PORT=$(find_free_port $((WEB_PORT + 1)))
 fi
 
-# Activate venv
-# shellcheck disable=SC1091
-source .venv/bin/activate
+echo "✅ Ports assigned:"
+echo "   ➜ API: http://localhost:$API_PORT"
+echo "   ➜ Web: http://localhost:$WEB_PORT"
 
-echo ">> Virtual environment activated."
+# 2. Python Environment Setup
+ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+API_DIR="$ROOT_DIR/apps/api"
+WEB_DIR="$ROOT_DIR/apps/web"
 
-# ---------------------------------------------------------
-# 2. Upgrade pip
-# ---------------------------------------------------------
-echo ">> Upgrading pip..."
-"$PYTHON_BIN" -m pip install --upgrade pip --break-system-packages
+if [ -f "$API_DIR/.venv/bin/python" ]; then
+    PYTHON_CMD="$API_DIR/.venv/bin/python"
+    echo "🐍 Using virtual environment: $PYTHON_CMD"
+else
+    PYTHON_CMD="python3"
+    echo "⚠️  No .venv found in apps/api, using system python."
+fi
 
-# ---------------------------------------------------------
-# 3. Install core dependencies
-# ---------------------------------------------------------
-echo ">> Installing core Python packages..."
+# 3. Cleanup Trap
+cleanup() {
+    echo ""
+    echo "🛑 Stopping services..."
+    kill $API_PID $WEB_PID 2>/dev/null
+    exit
+}
+trap cleanup SIGINT
 
-"$PYTHON_BIN" -m pip install --break-system-packages \
-  streamlit \
-  python-dotenv \
-  pandas \
-  requests \
-  watchdog
+# 4. Process Launch
+echo ""
+echo "🚀 Launching FastAPI backend..."
+cd "$API_DIR"
+$PYTHON_CMD -m uvicorn main:app --reload --port $API_PORT --host 127.0.0.1 &
+API_PID=$!
 
-# ---------------------------------------------------------
-# 4. Freeze requirements
-# ---------------------------------------------------------
-echo ">> Writing requirements.txt"
-"$PYTHON_BIN" -m pip freeze > requirements.txt
+echo "🚀 Launching Next.js frontend..."
+cd "$WEB_DIR"
+export NEXT_PUBLIC_API_URL="http://localhost:$API_PORT"
+export PORT=$WEB_PORT
+npm run dev &
+WEB_PID=$!
 
-echo ">> Bootstrap completed."
-echo
-echo ">> Launching app.py..."
-streamlit run app.py
+echo ""
+echo "✨ Both services are running! Press Ctrl+C to stop."
+echo ""
+
+wait
+

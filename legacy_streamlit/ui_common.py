@@ -241,23 +241,38 @@ def setup_page(page_title_suffix: str = "Home") -> None:
                 font-family: 'Material Symbols Outlined' !important;
             }
             
-            /* Custom sidebar nav hover styles */
+            /* Custom sidebar nav styles */
             section[data-testid="stSidebar"] a.sidebar-link {
                 display: flex;
                 align-items: center;
-                gap: 0.5rem;
+                gap: 0.6rem;
                 text-decoration: none;
                 color: #e8e8e8;
                 padding: 0.35rem 0.6rem;
                 border-radius: 999px;
                 transition: background-color 0.15s ease, color 0.15s ease;
             }
-            section[data-testid="stSidebar"] a.sidebar-link span:last-child {
+            section[data-testid="stSidebar"] a.sidebar-link span.sidebar-label {
                 font-size: 0.95rem;
             }
             section[data-testid="stSidebar"] a.sidebar-link:hover {
                 background-color: #3d3d3d;
                 color: #ffffff;
+            }
+            section[data-testid="stSidebar"] img.sidebar-avatar {
+                width: 24px;
+                height: 24px;
+                border-radius: 50%;
+                object-fit: cover;
+                border: 1px solid #4d4d4d;
+                filter: grayscale(100%);
+                transition: filter 0.2s ease;
+            }
+            section[data-testid="stSidebar"] a.sidebar-link.active img.sidebar-avatar {
+                filter: grayscale(0%);
+            }
+            section[data-testid="stSidebar"] a.sidebar-link:hover img.sidebar-avatar {
+                filter: grayscale(0%);
             }
             
             /* Style the built-in sidebar collapse/expand control to show a Material icon
@@ -275,38 +290,6 @@ def setup_page(page_title_suffix: str = "Home") -> None:
                 color: transparent !important;  /* just in case */
             }
             
-            /* Sidebar icon color palette (Pantone-inspired on graphite background) */
-            section[data-testid="stSidebar"] .sidebar-icon {
-                color: #f2f2f2; /* fallback */
-            }
-            section[data-testid="stSidebar"] ul li:nth-child(1) .sidebar-icon {
-                /* Home – soft warm yellow */
-                color: #F4D06F;
-            }
-            section[data-testid="stSidebar"] ul li:nth-child(2) .sidebar-icon {
-                /* Technical Expertise – teal */
-                color: #40C9A2;
-            }
-            section[data-testid="stSidebar"] ul li:nth-child(3) .sidebar-icon {
-                /* Technologies & Tools – sky blue */
-                color: #5BC0EB;
-            }
-            section[data-testid="stSidebar"] ul li:nth-child(4) .sidebar-icon {
-                /* GitHub – soft violet */
-                color: #9B5DE5;
-            }
-            section[data-testid="stSidebar"] ul li:nth-child(5) .sidebar-icon {
-                /* Connect – coral */
-                color: #FF6B6B;
-            }
-            section[data-testid="stSidebar"] ul li:nth-child(6) .sidebar-icon {
-                /* Catalyst AI – orange */
-                color: #FF9F1C;
-            }
-            section[data-testid="stSidebar"] ul li:nth-child(7) .sidebar-icon {
-                /* Authored Works – mint */
-                color: #7AE582;
-            }
             
             /* Hide default Streamlit page selector so we can use a custom one */
             section[data-testid="stSidebar"] [data-testid="stSidebarNav"] {
@@ -361,6 +344,19 @@ def fetch_github_repos(user: str):
         return []
 
 
+@st.cache_data(ttl=3600)
+def load_avatar_icon(path: str) -> str:
+    """Load an avatar image and return a base64 string, or empty string on error."""
+    avatar_file = Path(path)
+    if not avatar_file.exists():
+        return ""
+    try:
+        data = avatar_file.read_bytes()
+        return base64.b64encode(data).decode()
+    except Exception:
+        return ""
+
+
 def render_footer() -> None:
     """Render the standard footer."""
     st.markdown("---")
@@ -375,29 +371,34 @@ def render_footer() -> None:
 
 
 def render_sidebar_nav(active: str) -> None:
-    """Render a custom sidebar page list with Material Symbols."""
+    """Render a custom sidebar page list with per-page avatars."""
     pages = [
-        ("/", "app", "home", "Home"),
-        ("/Technical_Expertise", "Technical Expertise", "hub", "Technical Expertise"),
-        ("/GitHub_Projects", "GitHub", "code", "GitHub"),
-        ("/Connect", "Connect", "mail", "Connect"),
-        ("/Catalyst_AI", "Catalyst AI", "smart_toy", "Catalyst AI"),
-        ("/Authored_Works", "Authored Works", "menu_book", "Authored Works"),
+        ("/", "app", "avatar.png", "Home"),
+        ("/Technical_Expertise", "Technical Expertise", "current_focus.png", "Technical Expertise"),
+        ("/GitHub_Projects", "GitHub", "github.png", "GitHub"),
+        ("/Connect", "Connect", "authorified_scarf.png", "Connect"),
+        ("/Catalyst_AI", "Catalyst AI", "catalyst.png", "Catalyst AI"),
+        ("/Authored_Works", "Authored Works", "parisian_author.png", "Authored Works"),
     ]
 
     items_html: list[str] = []
-    for href, key, icon, label in pages:
+    for href, key, icon_path, label in pages:
         is_active = key == active
-        active_style = (
-            "background-color: #3d3d3d;"
-            if is_active
-            else ""
-        )
+        active_style = "background-color: #3d3d3d;" if is_active else ""
+        icon_data = load_avatar_icon(icon_path)
+        if icon_data:
+            icon_html = (
+                f'<img src="data:image/png;base64,{icon_data}" '
+                f'alt="{label} avatar" class="sidebar-avatar" />'
+            )
+        else:
+            icon_html = '<span class="sidebar-avatar" style="background-color:#4d4d4d;"></span>'
+        active_class = " active" if is_active else ""
         items_html.append(
             f'<li style="margin-bottom: 0.4rem; list-style: none;">'
-            f'<a href="{href}" class="sidebar-link" target="_self">'
-            f'<span class="material-symbols-outlined sidebar-icon" style="font-size: 1.1rem;">{icon}</span>'
-            f'<span style="{active_style}">{label}</span>'
+            f'<a href="{href}" class="sidebar-link{active_class}" target="_self">'
+            f'{icon_html}'
+            f'<span class="sidebar-label" style="{active_style}">{label}</span>'
             f"</a></li>"
         )
 
