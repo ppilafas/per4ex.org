@@ -46,7 +46,7 @@ export function ChatWidget() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ 
-            messages: [{ role: "user", content: userMsg }], // Simplified history for now
+            messages: [{ role: "user", content: userMsg }],
             session_id: sessionId
         }),
       })
@@ -62,27 +62,41 @@ export function ChatWidget() {
         if (done) break
         
         const chunk = decoder.decode(value)
-        // Catalyst SSE format might need parsing: "data: ... \n\n"
-        // For raw streaming, it might just be text chunks.
-        // Assuming raw text or simple SSE for this local test.
-        
-        // Simple SSE parser logic (very naive)
         const lines = chunk.split("\n")
+        
         for (const line of lines) {
             if (line.startsWith("data: ")) {
                 try {
-                    const data = JSON.parse(line.slice(6))
-                    // Check for session ID in first chunk
-                    if (data.session_id && !sessionId) setSessionId(data.session_id)
+                    const dataStr = line.slice(6)
+                    const data = JSON.parse(dataStr)
                     
-                    if (data.content) {
-                        assistantMessage += data.content
-                        setMessages(prev => {
-                            const newArr = [...prev]
-                            newArr[newArr.length - 1] = { role: "assistant", content: assistantMessage }
-                            return newArr
-                        })
+                    // 1. Metadata / Session Init
+                    if (data.session_id && !sessionId) {
+                        setSessionId(data.session_id)
+                        continue
                     }
+
+                    // 2. RAG Result (Full JSON Blob)
+                    // If we get a "hits" array or "grounded_answer", prefer grounded_answer
+                    if (data.grounded_answer) {
+                        assistantMessage = data.grounded_answer
+                    }
+                    // 3. Standard Text Streaming
+                    else if (data.content) {
+                        // Some endpoints stream full tokens
+                        assistantMessage += data.content
+                    }
+                    
+                    // Update UI
+                    setMessages(prev => {
+                        const newArr = [...prev]
+                        // Only update if we actually have text to show (avoid showing empty JSON blobs)
+                        if (assistantMessage) {
+                            newArr[newArr.length - 1] = { role: "assistant", content: assistantMessage }
+                        }
+                        return newArr
+                    })
+
                 } catch (e) {
                     // Ignore parse errors (might be [DONE])
                 }
@@ -140,7 +154,7 @@ export function ChatWidget() {
                {messages.map((msg, idx) => (
                   <div key={idx} className={cn("flex", msg.role === "user" ? "justify-end" : "justify-start")}>
                      <div className={cn(
-                        "max-w-[80%] p-3 rounded-lg text-sm leading-relaxed",
+                        "max-w-[80%] p-3 rounded-lg text-sm leading-relaxed whitespace-pre-wrap",
                         msg.role === "user" 
                            ? "bg-accent text-black rounded-tr-none" 
                            : "bg-card border border-card-border text-foreground rounded-tl-none"
@@ -149,7 +163,7 @@ export function ChatWidget() {
                      </div>
                   </div>
                ))}
-               {isLoading && (
+               {isLoading && !messages[messages.length-1].content && (
                    <div className="flex justify-start">
                        <div className="bg-card border border-card-border p-3 rounded-lg rounded-tl-none">
                            <Loader2 className="w-4 h-4 animate-spin text-muted" />
