@@ -68,31 +68,47 @@ export function ChatWidget() {
             if (line.startsWith("data: ")) {
                 try {
                     const dataStr = line.slice(6)
-                    if (!dataStr.trim()) continue; // Skip empty data lines
+                    if (!dataStr.trim()) continue;
 
                     const data = JSON.parse(dataStr)
-                    console.log("Stream Data:", data); // Debugging
+                    console.log("Stream Data:", data);
 
-                    // 1. Metadata / Session Init / Store Info (Ignore display)
+                    // 1. Metadata / Session Init
                     if (data.session_id && !sessionId) {
                         setSessionId(data.session_id)
                         continue
                     }
-                    if (data.store_type || data.hits) {
-                        // This is a RAG metadata chunk, do not display raw JSON
-                        continue 
+
+                    // 2. Check for Double-JSON Encoded RAG Response
+                    // "content": "{\"store_type\": ...}"
+                    let contentToAppend = data.content || data.text || "";
+                    
+                    if (contentToAppend && contentToAppend.trim().startsWith("{")) {
+                        try {
+                            const innerJson = JSON.parse(contentToAppend);
+                            if (innerJson.hits && Array.isArray(innerJson.hits)) {
+                                // This IS a RAG raw dump.
+                                // Instead of showing JSON, show the most relevant snippet or a fallback
+                                const bestHit = innerJson.hits[0];
+                                if (bestHit && bestHit.content) {
+                                    // Hack: If the LLM didn't wrap this, we treat the RAG content as the answer
+                                    // But prepending a meta-note
+                                    if (!assistantMessage) {
+                                         contentToAppend = `📚 *Accessing Knowledge Base...*\n\n${bestHit.content}`;
+                                    } else {
+                                         contentToAppend = `\n\n---\n📚 *Source Context:*\n${bestHit.content}`;
+                                    }
+                                } else {
+                                    contentToAppend = ""; // Hide empty RAG dumps
+                                }
+                            }
+                        } catch (e) {
+                            // Not JSON, just normal text starting with {
+                        }
                     }
 
-                    // 2. RAG Answer (Full Block)
-                    if (data.grounded_answer) {
-                        assistantMessage = data.grounded_answer
-                    }
-                    // 3. Streaming Text (Token)
-                    else if (data.content || data.text) {
-                        assistantMessage += (data.content || data.text || "")
-                    }
+                    assistantMessage += contentToAppend
                     
-                    // Update UI
                     setMessages(prev => {
                         const newArr = [...prev]
                         if (assistantMessage) {
@@ -102,7 +118,7 @@ export function ChatWidget() {
                     })
 
                 } catch (e) {
-                    // Ignore parse errors (might be [DONE] or empty lines)
+                    // Ignore parse errors
                 }
             }
         }
@@ -158,7 +174,7 @@ export function ChatWidget() {
                {messages.map((msg, idx) => (
                   <div key={idx} className={cn("flex", msg.role === "user" ? "justify-end" : "justify-start")}>
                      <div className={cn(
-                        "max-w-[80%] p-3 rounded-lg text-sm leading-relaxed whitespace-pre-wrap",
+                        "max-w-[80%] p-3 rounded-lg text-sm leading-relaxed whitespace-pre-wrap overflow-hidden", // Added overflow-hidden to prevent layout breaks
                         msg.role === "user" 
                            ? "bg-accent text-black rounded-tr-none" 
                            : "bg-card border border-card-border text-foreground rounded-tl-none"
