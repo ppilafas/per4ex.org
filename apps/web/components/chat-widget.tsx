@@ -68,29 +68,33 @@ export function ChatWidget() {
             if (line.startsWith("data: ")) {
                 try {
                     const dataStr = line.slice(6)
+                    if (!dataStr.trim()) continue; // Skip empty data lines
+
                     const data = JSON.parse(dataStr)
-                    
-                    // 1. Metadata / Session Init
+                    // console.log("Stream Data:", data); // Debugging
+
+                    // 1. Metadata / Session Init / Store Info (Ignore display)
                     if (data.session_id && !sessionId) {
                         setSessionId(data.session_id)
                         continue
                     }
+                    if (data.store_type || data.hits) {
+                        // This is a RAG metadata chunk, do not display raw JSON
+                        continue 
+                    }
 
-                    // 2. RAG Result (Full JSON Blob)
-                    // If we get a "hits" array or "grounded_answer", prefer grounded_answer
+                    // 2. RAG Answer (Full Block)
                     if (data.grounded_answer) {
                         assistantMessage = data.grounded_answer
                     }
-                    // 3. Standard Text Streaming
-                    else if (data.content) {
-                        // Some endpoints stream full tokens
-                        assistantMessage += data.content
+                    // 3. Streaming Text (Token)
+                    else if (data.content || data.text) {
+                        assistantMessage += (data.content || data.text || "")
                     }
                     
                     // Update UI
                     setMessages(prev => {
                         const newArr = [...prev]
-                        // Only update if we actually have text to show (avoid showing empty JSON blobs)
                         if (assistantMessage) {
                             newArr[newArr.length - 1] = { role: "assistant", content: assistantMessage }
                         }
@@ -98,7 +102,7 @@ export function ChatWidget() {
                     })
 
                 } catch (e) {
-                    // Ignore parse errors (might be [DONE])
+                    // Ignore parse errors (might be [DONE] or empty lines)
                 }
             }
         }
