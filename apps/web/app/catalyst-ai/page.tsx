@@ -22,6 +22,26 @@ export default function CatalystAI() {
         <div />
       </div>
 
+      {/* Cinematic Demo Video */}
+      <div className="w-full rounded-xl overflow-hidden border border-card-border shadow-2xl bg-black relative aspect-video group">
+        <video 
+          autoPlay 
+          loop 
+          muted 
+          playsInline 
+          className="w-full h-full object-cover opacity-90 group-hover:opacity-100 transition-opacity duration-500"
+        >
+          <source src="/catalyst-demo.mp4" type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
+        <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/80 to-transparent">
+           <p className="text-xs text-muted font-mono flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+              SYSTEM_DEMO_SEQ_01 // RENDER_CORE_ACTIVE
+           </p>
+        </div>
+      </div>
+
       {/* Philosophy Section - The "Flex" */}
       <div className="glass-panel border-l-4 border-l-accent">
          <h2 className="text-2xl font-bold text-foreground mb-4 flex items-center gap-3">
