@@ -31,8 +31,7 @@ export async function POST(req: NextRequest) {
         session_id: session_id, // Important for continuity
         config: {
             namespace: "per4ex-kb" // Scope RAG to our KB
-        },
-        tool_choice: "auto"
+        }
       }),
     });
 
