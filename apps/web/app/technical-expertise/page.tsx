@@ -22,7 +22,6 @@ export default function TechnicalExpertise() {
       </div>
 
       <div>
-        <h2 className="text-3xl font-bold text-foreground mb-6 border-b-2 border-sidebar-border pb-3">Technical Expertise</h2>
         
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
            <div className="glass-panel">
@@ -67,9 +66,9 @@ export default function TechnicalExpertise() {
         <h2 className="text-3xl font-bold text-foreground mt-12 mb-6 border-b-2 border-sidebar-border pb-3">Technologies & Tools</h2>
         <div className="glass-panel">
              <p className="text-lg leading-relaxed text-muted mb-6">
-                These technologies power the Catalyst Platform and other high-performance systems I build. 
-                The Catalyst backend, for example, runs as a persistent macOS <span className="bg-card-border px-2 py-0.5 rounded text-foreground text-sm">launchd</span> daemon 
-                to handle long-running state and proactive intelligence.
+                I treat these technologies as precision instruments, not just a checklist. 
+                For example, the Catalyst backend runs as a persistent macOS <span className="bg-card-border px-2 py-0.5 rounded text-foreground text-sm">launchd</span> daemon 
+                rather than a stateless script—unlocking proactive intelligence and local-first state management that standard architectures cannot deliver.
              </p>
              <div className="flex flex-wrap justify-center gap-2 mt-4">
                 {[
