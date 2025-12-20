@@ -1,9 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 
-// Configuration for Local Catalyst Service
+// Configuration
 const CATALYST_API_URL = process.env.CATALYST_API_URL || "http://localhost:8001/v1";
 const TENANT_ID = process.env.CATALYST_TENANT_ID || "catalyst-widget";
-const API_KEY = process.env.CATALYST_API_KEY || "tFPZOuFKpEy3it5cqrB0alHXAOG2iRuJpHGppFPnRuM"; 
+const API_KEY = process.env.CATALYST_API_KEY;
+
+if (!API_KEY) {
+  console.warn("CATALYST_API_KEY is not set. Chat functionality will fail.");
+} 
 
 export async function POST(req: NextRequest) {
   try {
