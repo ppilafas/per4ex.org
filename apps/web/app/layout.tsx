@@ -4,6 +4,7 @@ import { Sidebar } from "@/components/sidebar";
 import { MobileNav } from "@/components/mobile-nav";
 import { Footer } from "@/components/footer";
 import { BootLoader } from "@/components/boot-loader";
+import { ChatWidget } from "@/components/chat-widget";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -40,6 +41,7 @@ export default function RootLayout({
              <Footer />
            </div>
         </main>
+        <ChatWidget />
       </body>
     </html>
   );
