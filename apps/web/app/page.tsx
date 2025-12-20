@@ -26,7 +26,6 @@ export default function Home() {
 
       {/* About Section */}
       <div>
-        <h2 className="text-3xl font-bold text-foreground mt-12 mb-6 border-b-2 border-sidebar-border pb-3">About</h2>
         
         <div className="grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-8">
           <div className="glass-panel">
