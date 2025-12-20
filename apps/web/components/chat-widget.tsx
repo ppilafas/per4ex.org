@@ -156,18 +156,21 @@ export function ChatWidget() {
 
             {/* Messages */}
             <div className="flex-1 overflow-y-auto p-4 space-y-4">
-               {messages.map((msg, idx) => (
-                  <div key={idx} className={cn("flex", msg.role === "user" ? "justify-end" : "justify-start")}>
-                     <div className={cn(
-                        "max-w-[80%] p-3 rounded-lg text-sm leading-relaxed whitespace-pre-wrap",
-                        msg.role === "user" 
-                           ? "bg-accent text-black rounded-tr-none" 
-                           : "bg-card border border-card-border text-foreground rounded-tl-none"
-                     )}>
-                        {msg.content}
-                     </div>
-                  </div>
-               ))}
+               {messages.map((msg, idx) => {
+                  if (!msg.content) return null; // Don't render empty placeholder bubbles
+                  return (
+                    <div key={idx} className={cn("flex", msg.role === "user" ? "justify-end" : "justify-start")}>
+                       <div className={cn(
+                          "max-w-[80%] p-3 rounded-lg text-sm leading-relaxed whitespace-pre-wrap",
+                          msg.role === "user" 
+                             ? "bg-accent text-black rounded-tr-none" 
+                             : "bg-card border border-card-border text-foreground rounded-tl-none"
+                       )}>
+                          {msg.content}
+                       </div>
+                    </div>
+                  )
+               })}
                
                {/* Conversation Starters (Only show if only 1 message exists) */}
                {messages.length === 1 && (
