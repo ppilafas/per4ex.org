@@ -31,10 +31,8 @@ export async function POST(req: NextRequest) {
         session_id: session_id, // Important for continuity
         config: {
             namespace: "per4ex-kb" // Scope RAG to our KB
-        }
-        // Note: 'model' and 'stream' param (bool) handled by endpoint choice usually, 
-        // but some implementations still like stream:true in body. 
-        // Docs say endpoint is /chat/stream so implicit stream=true.
+        },
+        tool_choice: "auto"
       }),
     });
 
@@ -61,7 +59,7 @@ export async function POST(req: NextRequest) {
                     if (done) break;
                     
                     const chunk = decoder.decode(value);
-                    // console.log("Chunk:", chunk.substring(0, 50)); // Optional verbose logging
+                    console.log("Catalyst Stream Chunk:", chunk); // Log full chunk to terminal
                     controller.enqueue(encoder.encode(chunk));
                 }
                 console.log("--- PROXY REQUEST END ---");
