@@ -1,5 +1,6 @@
 import Image from "next/image"
 import { BookOpen } from "lucide-react"
+import { TypewriterSubtitle } from "@/components/typewriter"
 
 export default function AuthoredWorks() {
   return (
@@ -11,9 +12,13 @@ export default function AuthoredWorks() {
           <div className="relative w-[140px] h-[140px] mb-6 rounded-full overflow-hidden border-[3px] border-foreground">
              <Image src="/parisian_author.png" alt="Authored Works" fill className="object-cover" />
           </div>
-          <h1 className="text-4xl md:text-5xl font-bold text-center text-foreground flex items-center gap-3">
+          <h1 className="text-4xl md:text-5xl font-bold text-center text-foreground flex items-center gap-3 mb-2">
              <BookOpen className="w-10 h-10" /> Authored Works
           </h1>
+          <TypewriterSubtitle 
+             text="Philosophy, systems thinking, and published writing" 
+             className="mb-6 text-lg md:text-xl"
+          />
           <hr className="w-full border-t border-card-border mt-6" />
         </div>
         <div />

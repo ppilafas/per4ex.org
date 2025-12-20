@@ -1,4 +1,5 @@
 import Image from "next/image"
+import { TypewriterSubtitle } from "@/components/typewriter"
 
 export default function TechnicalExpertise() {
   return (
@@ -10,7 +11,11 @@ export default function TechnicalExpertise() {
           <div className="relative w-[140px] h-[140px] mb-6 rounded-full overflow-hidden border-[3px] border-foreground">
              <Image src="/current_focus.png" alt="Technical Expertise" fill className="object-cover" />
           </div>
-          <h1 className="text-4xl md:text-5xl font-bold text-center text-foreground">Technical Expertise</h1>
+          <h1 className="text-4xl md:text-5xl font-bold text-center text-foreground mb-2">Technical Expertise</h1>
+          <TypewriterSubtitle 
+             text="Building scalable, resilient, and intelligent systems" 
+             className="mb-6 text-lg md:text-xl"
+          />
           <hr className="w-full border-t border-card-border mt-6" />
         </div>
         <div />
@@ -83,4 +88,3 @@ export default function TechnicalExpertise() {
     </div>
   )
 }
-

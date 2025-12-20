@@ -4,6 +4,7 @@ import Image from "next/image"
 import useSWR from "swr"
 import { Code, Star } from "lucide-react"
 import { getApiUrl } from "@/lib/config"
+import { TypewriterSubtitle } from "@/components/typewriter"
 
 // Fetcher for SWR
 const fetcher = (url: string) => fetch(url).then((res) => res.json())
@@ -25,9 +26,13 @@ export default function GitHubProjects() {
           <div className="relative w-[140px] h-[140px] mb-6 rounded-full overflow-hidden border-[3px] border-foreground">
              <Image src="/github.png" alt="GitHub" fill className="object-cover" />
           </div>
-          <h1 className="text-4xl md:text-5xl font-bold text-center text-foreground flex items-center gap-3">
+          <h1 className="text-4xl md:text-5xl font-bold text-center text-foreground flex items-center gap-3 mb-2">
             <Code className="w-10 h-10" /> GitHub
           </h1>
+          <TypewriterSubtitle 
+             text="Open source contributions and public repositories" 
+             className="mb-6 text-lg md:text-xl"
+          />
           <hr className="w-full border-t border-card-border mt-6" />
         </div>
         <div />

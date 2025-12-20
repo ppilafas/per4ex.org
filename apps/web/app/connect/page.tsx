@@ -1,5 +1,6 @@
 import Image from "next/image"
 import { Mail, Code, Briefcase, Globe } from "lucide-react"
+import { TypewriterSubtitle } from "@/components/typewriter"
 
 export default function Connect() {
   return (
@@ -11,7 +12,11 @@ export default function Connect() {
           <div className="relative w-[140px] h-[140px] mb-6 rounded-full overflow-hidden border-[3px] border-foreground">
              <Image src="/avatar.png" alt="Connect" fill className="object-cover" />
           </div>
-          <h1 className="text-4xl md:text-5xl font-bold text-center text-foreground">Connect</h1>
+          <h1 className="text-4xl md:text-5xl font-bold text-center text-foreground mb-2">Connect</h1>
+          <TypewriterSubtitle 
+             text="Let's discuss systems, AI, and engineering" 
+             className="mb-6 text-lg md:text-xl"
+          />
           <hr className="w-full border-t border-card-border mt-6" />
         </div>
         <div />
