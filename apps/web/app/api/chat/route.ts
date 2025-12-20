@@ -48,6 +48,10 @@ export async function POST(req: NextRequest) {
         messages: augmentedMessages,
         stream: true,
         model: "gpt-4o",
+        // Explicitly set the namespace for RAG lookup
+        namespace: "per4ex-kb",
+        // Hint the service to prioritize RAG
+        tool_choice: "auto"
       }),
     });
 
