@@ -71,7 +71,7 @@ export function ChatWidget() {
                     if (!dataStr.trim()) continue; // Skip empty data lines
 
                     const data = JSON.parse(dataStr)
-                    // console.log("Stream Data:", data); // Debugging
+                    console.log("Stream Data:", data); // Debugging
 
                     // 1. Metadata / Session Init / Store Info (Ignore display)
                     if (data.session_id && !sessionId) {
