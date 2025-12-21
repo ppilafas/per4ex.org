@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { Analytics } from "@vercel/analytics/react";
 import { Sidebar } from "@/components/sidebar";
 import { MobileNav } from "@/components/mobile-nav";
 import { Footer } from "@/components/footer";
@@ -42,6 +43,7 @@ export default function RootLayout({
            </div>
         </main>
         {process.env.NODE_ENV === 'development' && <ChatWidget />}
+        <Analytics />
       </body>
     </html>
   );
