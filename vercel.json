@@ -11,7 +11,11 @@
   ],
   "routes": [
     {
-      "src": "/api/(.*)",
+      "src": "/api/github/(.*)",
+      "dest": "/apps/api/main.py"
+    },
+    {
+      "src": "/api/health",
       "dest": "/apps/api/main.py"
     },
     {
