@@ -41,7 +41,7 @@ export default function RootLayout({
              <Footer />
            </div>
         </main>
-        <ChatWidget />
+        {process.env.NODE_ENV === 'development' && <ChatWidget />}
       </body>
     </html>
   );
