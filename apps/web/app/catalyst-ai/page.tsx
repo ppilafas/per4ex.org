@@ -1,6 +1,7 @@
 import Image from "next/image"
 import { Cpu, Mic, Shield, Server, Terminal, Layers, Link as LinkIcon } from "lucide-react"
 import { TypewriterSubtitle } from "@/components/typewriter"
+import { VoiceWidget } from "@/components/voice-widget"
 
 export default function CatalystAI() {
   return (
@@ -183,6 +184,36 @@ export default function CatalystAI() {
 
         </div>
       </div>
+
+      {/* Live Voice Widget Demo */}
+      <div className="glass-panel border-l-4 border-l-accent">
+        <h2 className="text-2xl font-bold text-foreground mb-4 flex items-center gap-3">
+          <Mic className="w-6 h-6 text-accent" />
+          Live Voice Mode Demo
+        </h2>
+        <div className="space-y-4 text-muted leading-relaxed">
+          <p>
+            Experience Catalyst's real-time voice mode directly in your browser. This widget connects to the Catalyst production WebSocket endpoint and streams PCM16 audio for ultra-low latency conversations.
+          </p>
+          <div className="bg-background/50 p-4 rounded-lg border border-card-border">
+            <p className="text-sm text-foreground mb-2"><strong>How it works:</strong></p>
+            <ul className="text-sm space-y-1 list-disc pl-4">
+              <li>Click the microphone button in the bottom-right corner</li>
+              <li>Connect to the Catalyst WebSocket endpoint</li>
+              <li>Start recording to begin a real-time voice conversation</li>
+              <li>Audio is converted to PCM16 format and streamed via WebSocket</li>
+              <li>Responses are played back in real-time</li>
+            </ul>
+          </div>
+          <p className="text-xs text-muted/60 font-mono mt-4">
+            Note: This is a frontend mockup. Ensure the Catalyst backend WebSocket is running and accessible.
+            Configure the WebSocket URL via NEXT_PUBLIC_CATALYST_WS_URL environment variable.
+          </p>
+        </div>
+      </div>
+
+      {/* Voice Widget - Floating */}
+      <VoiceWidget />
     </div>
   )
 }
