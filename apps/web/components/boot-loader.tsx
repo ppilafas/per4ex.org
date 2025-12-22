@@ -3,7 +3,15 @@
 import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 
+// Toggle to enable/disable boot sequence video
+const ENABLE_BOOT_SEQUENCE = process.env.NEXT_PUBLIC_ENABLE_BOOT_SEQUENCE !== "false" && false // Set to true to enable
+
 export function BootLoader() {
+  // If disabled, return null immediately
+  if (!ENABLE_BOOT_SEQUENCE) {
+    return null
+  }
+
   const [isVisible, setIsVisible] = useState(false) // Default to false to avoid flash on server render
   const [hasPlayed, setHasPlayed] = useState(false)
 
