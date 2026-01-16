@@ -8,8 +8,8 @@ export default function TechnicalExpertise() {
       <div className="grid grid-cols-1 md:grid-cols-[1fr_2fr_1fr] gap-4 mb-8">
         <div />
         <div className="flex flex-col items-center">
-          <div className="relative w-[140px] h-[140px] mb-6 rounded-full overflow-hidden border-[3px] border-foreground">
-             <Image src="/current_focus.png" alt="Technical Expertise" fill className="object-cover" />
+          <div className="relative w-[140px] h-[140px] mb-6 rounded-full overflow-hidden">
+             <Image src="/current_focus.png" alt="Technical Expertise" fill className="object-cover p-2" priority />
           </div>
           <h1 className="text-4xl md:text-5xl font-bold text-center text-foreground mb-2">Technical Expertise</h1>
           <TypewriterSubtitle 
@@ -67,8 +67,8 @@ export default function TechnicalExpertise() {
         <div className="glass-panel">
              <p className="text-lg leading-relaxed text-muted mb-6">
                 I treat these technologies as precision instruments, not just a checklist. 
-                For example, the Catalyst backend runs as a persistent macOS <span className="bg-card-border px-2 py-0.5 rounded text-foreground text-sm">launchd</span> daemon 
-                rather than a stateless script—unlocking proactive intelligence and local-first state management that standard architectures cannot deliver.
+                For example, Catalyst is deployed as a production-ready multi-tenant platform on <span className="bg-card-border px-2 py-0.5 rounded text-foreground text-sm">Fly.io</span> with PostgreSQL, 
+                maintaining persistent state and proactive intelligence capabilities that standard stateless architectures cannot deliver.
              </p>
              <div className="flex flex-wrap justify-center gap-2 mt-4">
                 {[

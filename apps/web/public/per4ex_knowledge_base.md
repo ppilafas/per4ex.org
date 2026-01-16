@@ -22,23 +22,56 @@ Panagiotis is not a "glue code" developer; he is a systems engineer. His philoso
 ---
 
 ## 2. Core Platform: Catalyst AI
-**Type:** Proprietary AI Operating System / Backend Service  
-**Architecture:** Python 3.11+, FastAPI (REST), WebSockets, macOS launchd daemon.
+**Type:** Production-Ready Multi-Tenant AI Assistant Platform  
+**Status:** Fully operational in production  
+**Architecture:** Python 3.11+, FastAPI (REST), WebSockets, PostgreSQL + pgvector  
+**Deployment:** 
+- Backend: Fly.io (https://catalyst-service.fly.dev/v1)
+- Frontend: Vercel (catalyst-chat.per4ex.org, catalyst-dashboard.per4ex.org)
+- Database: Fly.io Managed PostgreSQL with pgvector extension
 
 ### Key Capabilities
 1.  **Multi-Modal Voice:**
     - **Realtime Mode (Beta):** Uses GPT Realtime API + Binary PCM16 audio over WebSockets for <300ms latency fluid conversation.
     - **Chained Mode:** Uses STT (Whisper) -> LLM Router -> TTS. Higher latency but lower cost and strictly typed tool execution.
-2.  **Hard Security:**
-    - **Tenant Isolation:** Enforced via `X-Tenant-Id` header and Postgres Row Level Security (RLS).
-    - **No-Leakage Proxy:** Clients never talk to LLMs directly; Catalyst sanitizes and routes all traffic.
-3.  **RAG Engine:**
-    - **Storage:** Hybrid search using `pgvector` (cosine similarity) + Keyword search in Postgres.
-    - **Ingestion:** Supports multi-part file uploads (PDF, DOCX) and raw text.
-    - **One-Shot Copilot:** `POST /v1/copilot/analyze-file` endpoint for instant document analysis without permanent storage.
-4.  **Native Clients:**
-    - **SwiftUI (macOS):** Fully native app connecting via WebSockets for raw audio handling.
-    - **Tauri:** Cross-platform wrapper for the web dashboard.
+    - Voice Activity Detection (VAD) and Push-to-Talk (PTT) modes
+
+2.  **Hard Multi-Tenancy:**
+    - **API Key Authentication:** Tenant binding with strict isolation
+    - **Database-Level Isolation:** PostgreSQL Row Level Security (RLS)
+    - **Per-Tenant Policies:** Rate limits, logging, encryption scoped per tenant
+    - **No-Leakage Proxy:** Clients never talk to LLMs directly; Catalyst sanitizes and routes all traffic
+
+3.  **Advanced RAG Engine:**
+    - **Vector Search:** PostgreSQL with pgvector extension for cosine similarity
+    - **Hybrid Search:** Combines vector similarity + keyword matching
+    - **Multiple Vector Stores:** Per-tenant support for multiple knowledge bases
+    - **Encrypted Storage:** Optional AES-256-GCM encryption for files and content
+    - **File Support:** PDF, DOCX, TXT with server-side extraction
+    - **Namespace Scoping:** Organize content by case/matter/project within tenants
+    - **OpenAI Integration:** Optional OpenAI file_search vector stores
+    - **One-Shot Copilot:** `POST /v1/copilot/analyze-file` endpoint for instant document analysis without permanent storage
+
+4.  **Integrated Tools & Services:**
+    - **Google Integration:** Gmail, Calendar, Drive (with explicit user consent and OAuth 2.0)
+    - **Web Search:** Real-time information retrieval
+    - **SQL Tools:** Read-only database queries with allowlisting
+    - **Structured Extraction:** Legal document metadata, deadlines, automation workflows
+
+5.  **Enterprise Features:**
+    - **User Management:** Role-based access control
+    - **Token Allowances:** System for test users and usage limits
+    - **Audit Logging:** Comprehensive observability and compliance
+    - **Per-Tenant LLM Routing:** Server-side model selection and cost optimization
+    - **Proactive Messaging:** Context-aware proactive suggestions
+    - **Background Data Fetching:** Gmail, news, calendar integration
+    - **Session Management:** Automatic conversation summarization
+    - **Token Tracking:** Per-turn analytics and usage monitoring
+
+6.  **Native Clients:**
+    - **SwiftUI (macOS):** Fully native app connecting via WebSockets for raw audio handling with zero-latency overhead
+    - **Tauri:** Cross-platform wrapper for the web dashboard
+    - **Next.js Dashboard:** Modern dashboard replacing legacy Streamlit UI
 
 ---
 
@@ -76,5 +109,5 @@ Legal data is highly sensitive. Standard "Chat with PDF" wrappers are not secure
 ## 6. This Portfolio (Per4ex.org)
 **Built With:** Next.js 16, Tailwind CSS, Framer Motion.  
 **Hosted On:** Vercel.  
-**Feature:** Includes a "Retro Boot Loader" easter egg and a live "Chat with Catalyst" widget (experimental local build) that connects to a local AI daemon.
+**Feature:** Includes a "Retro Boot Loader" easter egg and a live "Chat with Catalyst" widget that connects to the production Catalyst API (https://catalyst-service.fly.dev/v1).
 

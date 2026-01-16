@@ -12,10 +12,10 @@ export default function PrivacyPolicy() {
       {/* Introduction */}
       <div className="glass-panel">
         <p className="text-lg leading-relaxed text-muted mb-4">
-          At Per4ex.org, we are committed to protecting your privacy and ensuring transparency about how we collect, use, and safeguard your information. This Privacy Policy explains our practices regarding data collection and usage when you visit our website or interact with our services.
+          At Per4ex.org, we are committed to protecting your privacy and ensuring transparency about how we collect, use, and safeguard your information. This Privacy Policy explains our practices regarding data collection and usage when you visit our website or interact with our services, including <strong className="text-foreground">Catalyst</strong>, our personal AI operating system and intelligent assistant platform.
         </p>
         <p className="text-muted">
-          By using Per4ex.org, you agree to the collection and use of information in accordance with this policy.
+          By using Per4ex.org or <strong className="text-foreground">Catalyst</strong>, you agree to the collection and use of information in accordance with this policy.
         </p>
       </div>
 
@@ -45,11 +45,12 @@ export default function PrivacyPolicy() {
             </ul>
           </div>
           <div>
-            <h3 className="text-xl font-semibold text-foreground mb-2">AI Service Interactions</h3>
+            <h3 className="text-xl font-semibold text-foreground mb-2">Catalyst AI Service Interactions</h3>
             <ul className="space-y-2 list-disc pl-6">
-              <li>Conversation history and messages when using Catalyst AI chat or voice features</li>
-              <li>Session identifiers for maintaining conversation context</li>
-              <li>Audio data (if using voice features) - processed in real-time and not stored</li>
+              <li>Conversation history and messages when using <strong className="text-foreground">Catalyst</strong> AI chat or voice features</li>
+              <li>Session identifiers for maintaining conversation context in <strong className="text-foreground">Catalyst</strong></li>
+              <li>Audio data (if using <strong className="text-foreground">Catalyst</strong> voice features) - processed in real-time and not stored</li>
+              <li>User queries and interactions with the <strong className="text-foreground">Catalyst</strong> knowledge base and tool system</li>
             </ul>
           </div>
         </div>
@@ -93,7 +94,7 @@ export default function PrivacyPolicy() {
           <div>
             <h3 className="text-xl font-semibold text-foreground mb-2">Data Retention</h3>
             <p>
-              We retain your personal information only for as long as necessary to fulfill the purposes outlined in this policy, unless a longer retention period is required by law. Conversation data from AI interactions may be retained for service improvement purposes but can be deleted upon request.
+              We retain your personal information only for as long as necessary to fulfill the purposes outlined in this policy, unless a longer retention period is required by law. Conversation data from <strong className="text-foreground">Catalyst</strong> AI interactions may be retained for service improvement purposes but can be deleted upon request.
             </p>
           </div>
         </div>

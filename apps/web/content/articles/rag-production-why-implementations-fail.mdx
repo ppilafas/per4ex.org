@@ -1,0 +1,155 @@
+---
+title: "RAG in Production: Why Most Implementations Fail"
+date: "2024-12-20"
+description: "Retrieval-Augmented Generation sounds simple: embed documents, retrieve relevant chunks, generate answers. So why do most RAG systems disappoint in production?"
+tags: ["rag", "retrieval", "production", "technical"]
+category: "technical"
+featured: false
+---
+
+RAG (Retrieval-Augmented Generation) is the most common pattern for enterprise AI. The idea is elegant: instead of relying on the LLM's training data, retrieve relevant documents and include them in the prompt.
+
+It sounds simple. It rarely works well on the first try.
+
+After building RAG systems for legal search (π.Law), customer support, and internal knowledge bases, I've collected the failure modes. Here's what goes wrong and how to fix it.
+
+## Failure Mode 1: Chunk Boundaries Destroy Context
+
+The standard approach: split documents into chunks of ~500 tokens, embed each chunk, retrieve similar chunks.
+
+The problem: arbitrary chunk boundaries cut through sentences, paragraphs, and ideas. You retrieve half a thought.
+
+**Example:**
+
+Original document:
+> "The court ruled that the defendant was liable. **However, this liability was limited** to direct damages only, excluding consequential losses."
+
+Chunk 1 (retrieved):
+> "The court ruled that the defendant was liable."
+
+Chunk 2 (not retrieved):
+> "However, this liability was limited to direct damages only, excluding consequential losses."
+
+The user asks about liability limits. You retrieve chunk 1. Your answer is wrong.
+
+### The Fix: Overlap + Smart Splitting
+
+1. **Use overlapping chunks** — Each chunk includes the last ~100 tokens of the previous chunk
+2. **Split at semantic boundaries** — Paragraphs, sections, not arbitrary token counts
+3. **Retrieve parent context** — When you retrieve a chunk, also include surrounding chunks
+
+## Failure Mode 2: Similarity ≠ Relevance
+
+Vector similarity finds text that looks similar. But similar isn't always relevant.
+
+**Example:** User asks about "remote work policy."
+
+Retrieved chunks (high similarity):
+- "Remote work has become increasingly common..."
+- "Working remotely requires discipline..."
+- "Remote workers should maintain regular hours..."
+
+But what the user actually wanted:
+- "Employees may work remotely up to 3 days per week with manager approval."
+
+The retrieved chunks are about remote work. They're not the company's actual policy.
+
+### The Fix: Hybrid Retrieval + Reranking
+
+1. **Combine vector and keyword search** — BM25 catches exact terminology the user expects
+2. **Use a reranker** — Cross-encoder models score query-document relevance, not just similarity
+3. **Boost authoritative sources** — Policy documents rank higher than blog posts
+
+## Failure Mode 3: Too Much Context Confuses the Model
+
+You retrieve 10 chunks. Each is 500 tokens. You stuff 5,000 tokens of context into the prompt.
+
+The LLM has to sift through all of it to find the answer. Often, it gets confused:
+- Contradictory information across chunks
+- Irrelevant chunks dilute the signal
+- Important information buried in the middle (the "lost in the middle" problem)
+
+### The Fix: Quality Over Quantity
+
+1. **Retrieve more, use less** — Retrieve 20 chunks, rerank, use top 3-5
+2. **Summarize before prompting** — Compress retrieved content to key facts
+3. **Put critical info at the start and end** — LLMs attend better to edges
+
+## Failure Mode 4: No Feedback Loop
+
+You deploy RAG. Users ask questions. Some answers are wrong.
+
+How do you know which ones? How do you improve?
+
+Most RAG systems have zero observability into answer quality.
+
+### The Fix: Instrument Everything
+
+1. **Log query-context-response triples** — You need this data to debug
+2. **Add thumbs up/down feedback** — Let users flag bad answers
+3. **Track citation clicks** — If users check sources, the answer might have been unclear
+4. **Review a sample regularly** — Automated metrics miss nuance
+
+## Failure Mode 5: Embedding Model Mismatch
+
+You use OpenAI's `text-embedding-3-small` because it's convenient. But:
+- Your documents are in Greek (embeddings trained mostly on English)
+- Your domain has specialized vocabulary (embeddings trained on general text)
+- Your documents are very long (embeddings optimized for sentences)
+
+### The Fix: Match Model to Domain
+
+1. **Evaluate on your data** — Test retrieval quality before committing
+2. **Consider fine-tuned embeddings** — For specialized domains, it's worth the investment
+3. **Use domain-specific chunking** — Legal documents chunk differently than support tickets
+
+## Failure Mode 6: Ignoring Metadata
+
+Pure vector search throws away structured information. But metadata is often more reliable than semantic similarity.
+
+**Example:** User asks for "Q3 2024 financial results."
+
+Vector search might retrieve:
+- Q2 2024 results (similar content)
+- Q3 2023 results (similar content)
+- A blog post mentioning Q3 2024 (similar words)
+
+But if you filter by metadata first:
+- Document type: "financial report"
+- Date: Q3 2024
+
+You get exactly what the user wants.
+
+### The Fix: Pre-filter, Then Retrieve
+
+1. **Extract structured metadata at ingestion** — Dates, document types, authors
+2. **Apply filters before vector search** — Reduce the search space first
+3. **Expose filters to users** — Let them narrow down if needed
+
+## A Production RAG Checklist
+
+Before deploying RAG, verify:
+
+- [ ] Chunks preserve semantic meaning
+- [ ] Retrieval is hybrid (vector + keyword)
+- [ ] A reranker scores final results
+- [ ] Context quantity is limited
+- [ ] Metadata is extracted and filterable
+- [ ] Logging captures query + context + response
+- [ ] Feedback mechanism exists
+- [ ] Fallback for low-confidence responses
+
+## The Hard Truth
+
+RAG isn't a pattern you implement once. It's a system you tune continuously.
+
+The first version will disappoint. That's expected. What matters is:
+- Logging to see what's failing
+- Feedback to prioritize improvements
+- Iteration speed to deploy fixes quickly
+
+Most RAG projects fail because teams expect plug-and-play. The ones that succeed treat retrieval quality as an ongoing optimization problem.
+
+---
+
+*Building a RAG system and hitting walls? [Let's debug it together](/connect).*

@@ -19,8 +19,8 @@ export default function GitHubProjects() {
       <div className="grid grid-cols-1 md:grid-cols-[1fr_2fr_1fr] gap-4 mb-8">
         <div />
         <div className="flex flex-col items-center">
-          <div className="relative w-[140px] h-[140px] mb-6 rounded-full overflow-hidden border-[3px] border-foreground">
-             <Image src="/github.png" alt="GitHub" fill className="object-cover" />
+          <div className="relative w-[140px] h-[140px] mb-6 rounded-full overflow-hidden">
+             <Image src="/github.png" alt="GitHub" fill className="object-cover p-2" priority />
           </div>
           <h1 className="text-4xl md:text-5xl font-bold text-center text-foreground mb-2">
             GitHub

@@ -1,0 +1,145 @@
+---
+title: "The Per4ex.org Show: Building Multi-Agent Live Debates"
+date: "2024-12-28"
+description: "How I built a live broadcast system where AI agents debate topics in real-time—the architecture, the challenges, and why it's the ultimate AI engineering flex."
+tags: ["multi-agent", "realtime", "broadcast", "websockets"]
+category: "project"
+featured: false
+---
+
+What if two AI agents could debate each other live, with an audience watching in real-time?
+
+That's The Per4ex.org Show—a live broadcast where AI guests discuss topics while viewers watch the conversation unfold. It's part tech demo, part entertainment, and part proof that AI systems can be genuinely engaging.
+
+## The Concept
+
+The show has a simple format:
+- A **host** (AI) introduces topics and moderates
+- Two **guests** (different AI personas) debate
+- Viewers watch the live stream with real-time message updates
+- The conversation is unscripted—AI agents respond to each other dynamically
+
+It sounds simple. The implementation is anything but.
+
+## Architecture Overview
+
+```
+┌─────────────────┐     ┌─────────────────┐
+│  Triadic Host   │────▶│  Ably Realtime  │
+│   (Producer)    │     │   (Broadcast)   │
+└─────────────────┘     └────────┬────────┘
+                                 │
+                                 ▼
+              ┌──────────────────────────────┐
+              │         Viewers              │
+              │  (per4ex.org, show.per4ex)   │
+              └──────────────────────────────┘
+```
+
+### The Producer (Triadic)
+
+Triadic is the orchestration layer. It:
+1. Manages the conversation flow between agents
+2. Streams each agent's response as it generates
+3. Broadcasts to Ably in real-time
+4. Handles topic transitions and timing
+
+The key insight: each agent's response streams *as it generates*. Viewers see words appear in real-time, not complete messages after a delay. This creates the feeling of watching someone think.
+
+### The Broadcast Layer (Ably)
+
+Ably handles the pub/sub fanout. When an agent speaks, the message structure is:
+
+```typescript
+{
+  type: "chunk",
+  payload: {
+    messageId: "msg_123",
+    content: "I disagree because...",
+    speaker: "gpt_a"
+  }
+}
+```
+
+Chunk messages are sent every few tokens, giving that live typing effect. When a turn completes, a `turn_end` message provides the final content.
+
+### The Viewer Experience
+
+On per4ex.org, a PiP widget shows the live broadcast. Viewers see:
+- Speaker attribution with distinct colors
+- Real-time streaming text
+- LIVE/PAUSED/REPLAY status
+- Topic display
+
+The widget caches recent messages, so even if you join mid-conversation, you get context.
+
+## Challenges Solved
+
+### 1. Conversation Coherence
+
+Two AI agents responding to each other can quickly become incoherent. They might agree too much, repeat each other, or go off-topic.
+
+Solution: The host agent actively moderates. It has explicit instructions to:
+- Challenge both guests periodically
+- Redirect if the conversation stalls
+- Introduce counter-arguments if consensus forms too quickly
+
+### 2. Timing and Pacing
+
+Real conversations have rhythm. Pure back-and-forth without pauses feels robotic.
+
+We added artificial pacing:
+- Brief pauses between turns
+- Variable response lengths
+- Occasional "thinking" delays
+
+This makes the conversation feel more natural.
+
+### 3. Viewer Catch-Up
+
+What if someone joins mid-debate? They need context but can't watch from the beginning.
+
+The widget maintains a rolling buffer of recent messages. When you connect, you immediately see the last few exchanges. A separate `/live` page shows the full conversation history.
+
+### 4. Error Recovery
+
+AI APIs fail. WebSocket connections drop. The show must go on.
+
+Triadic implements:
+- Automatic retry with exponential backoff
+- Graceful degradation (skip a turn if an agent fails)
+- Health monitoring and alerting
+- Automatic topic advancement if conversation stalls
+
+## Why Build This?
+
+Honestly? Because it's cool.
+
+But also: it demonstrates capabilities that clients ask about:
+- **Multi-agent orchestration** — coordination between AI systems
+- **Real-time streaming** — live data to multiple clients
+- **Production reliability** — handling failures gracefully
+- **User experience** — making AI feel engaging, not mechanical
+
+When someone asks "Can you build [complex AI system]?", I point them to the live show. It's running right now, unattended, producing novel content. That's the proof.
+
+## Technical Stack
+
+- **Orchestration:** Python, async/await
+- **LLM:** OpenAI GPT-4 (multiple concurrent sessions)
+- **Broadcast:** Ably Realtime
+- **Frontend:** Next.js, React, TypeScript
+- **Hosting:** Fly.io (producer), Vercel (viewers)
+
+## Watch It Live
+
+The show runs periodically. You can:
+- Watch the PiP widget at the bottom of this page
+- Visit [show.per4ex.org/live](https://show.per4ex.org/live) for the full experience
+- See past conversations in the archive
+
+It's AI agents having conversations you can't predict. Sometimes brilliant, sometimes bizarre, always interesting.
+
+---
+
+*Want to build something with multi-agent AI? [Let's explore what's possible](/connect).*

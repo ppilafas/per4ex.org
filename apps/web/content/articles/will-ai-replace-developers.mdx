@@ -1,0 +1,168 @@
+---
+title: "Will AI Replace Developers? A Practitioner's Perspective"
+date: "2024-12-15"
+description: "As someone who uses AI daily to write code, here's my honest take on what AI can and can't replace—and what it means for hiring technical talent."
+tags: ["future-of-work", "ai-development", "hiring", "career"]
+category: "insights"
+featured: false
+---
+
+"If AI can write code, why should I hire a developer?"
+
+I've heard this question from founders, executives, and even developers themselves. It's a fair question given the hype. Here's my honest answer after 2+ years of using AI to build production systems.
+
+## What AI Actually Does Well
+
+Let me be specific about where AI excels in my workflow:
+
+### Boilerplate and Scaffolding
+
+"Create a Next.js page with a form that posts to an API endpoint."
+
+AI nails this. The pattern is well-established, the code is predictable, and there's little ambiguity. I can generate a working form in 30 seconds that would take me 10 minutes to write manually.
+
+### Translation Between Patterns
+
+"Convert this REST endpoint to GraphQL."
+"Refactor this class component to hooks."
+"Rewrite this Python script in TypeScript."
+
+AI handles mechanical transformations well because it's pattern matching. The logic stays the same; the syntax changes.
+
+### Documentation and Explanation
+
+"Explain what this regex does."
+"Add JSDoc comments to these functions."
+"Write a README for this project."
+
+AI produces decent first drafts of documentation faster than I can write them myself.
+
+### Debugging Assistance
+
+"This error says X. What's likely wrong?"
+"Why would this query be slow?"
+
+AI is a good rubber duck that actually talks back. It suggests things I might not have considered.
+
+## What AI Does Poorly
+
+### Architecture Decisions
+
+"Should we use microservices or a monolith?"
+"How should we model this domain?"
+"What's the right database for this workload?"
+
+AI will give you an answer. But it doesn't know your team's expertise, your scale requirements, your budget, or your timeline. These decisions require judgment that comes from experience.
+
+### Novel Problem Solving
+
+When the problem isn't a variant of something in the training data, AI struggles. I've seen it confidently produce plausible-looking solutions that are fundamentally wrong.
+
+This is especially true for:
+- Performance optimization of specific systems
+- Debugging race conditions
+- Security vulnerability analysis
+- Complex business logic with many edge cases
+
+### Knowing What to Build
+
+The hardest part of software isn't writing code. It's figuring out what code to write.
+
+- What problem are we actually solving?
+- What's the simplest solution that works?
+- What can we defer until later?
+- What are the constraints I need to work within?
+
+AI can't interview users. It can't understand organizational politics. It can't make tradeoffs based on business priorities.
+
+### Maintaining Systems Over Time
+
+AI can write code. It can't:
+- Wake up at 3 AM when the system crashes
+- Investigate why performance degraded over 6 months
+- Navigate legacy code written by five different people
+- Make incremental improvements without breaking things
+
+Production systems need stewardship, not just authorship.
+
+## The Actual Impact on Hiring
+
+Here's what I'm seeing in practice:
+
+### Junior Role Compression
+
+Entry-level tasks—CRUD operations, simple scripts, basic debugging—are exactly what AI handles best. This compresses the bottom of the ladder.
+
+But it doesn't eliminate it. Someone still needs to review AI output. Someone still needs to understand why the code works. Someone still needs to handle the edge cases AI misses.
+
+### Senior Roles Become More Important
+
+If you can generate more code faster, you need better judgment about what to generate. Senior engineers who can:
+- Design systems
+- Make architectural decisions
+- Review and refine AI output
+- Debug production issues
+
+...become more valuable, not less.
+
+### New Skill: AI Fluency
+
+The developers I work with who are most effective have learned to:
+- Write clear prompts
+- Recognize when AI output is wrong
+- Edit AI code efficiently
+- Know when to use AI vs. write manually
+
+This is a skill. Not everyone has it yet. But it's learnable.
+
+## What I'd Tell Someone Hiring
+
+### Don't Hire for Code Production
+
+If you're hiring to maximize lines of code written, you're already thinking about it wrong. AI has made raw code production nearly free.
+
+### Hire for Judgment
+
+Can this person:
+- Understand your business problem?
+- Design a solution that fits your constraints?
+- Recognize when something is overengineered?
+- Debug the weird production issues?
+- Make the right tradeoffs?
+
+These skills are harder to find and more valuable than ever.
+
+### Look for AI Fluency
+
+Candidates who use AI effectively aren't cheating—they're demonstrating a skill you want. Ask them:
+- How do you use AI in your workflow?
+- When does AI help vs. hurt?
+- Show me something you built with AI assistance
+
+### Value Production Experience
+
+The gap between "can write code" and "can ship products" is wider than ever. Anyone can generate code. Few can ship reliable systems.
+
+## My Honest Prediction
+
+In 5 years:
+
+- Pure coding jobs will shrink
+- System design + AI-augmented implementation jobs will grow
+- "Prompt engineer" will not be a job (it'll be assumed)
+- Debugging and operations roles will remain critical
+- The 10x engineer becomes the 100x engineer
+
+AI is a multiplier. It doesn't replace what you can do; it amplifies it. A good engineer with AI is phenomenal. A bad engineer with AI produces bad code faster.
+
+## What This Means for You
+
+If you're hiring: Look for judgment, not just technical skills. The ability to wield AI effectively is increasingly important.
+
+If you're a developer: Learn to use AI tools. Invest in system design, architecture, and debugging skills. Those are the moats.
+
+If you're building with AI: You still need humans. AI is a tool. Tools need operators.
+
+---
+
+*Want to discuss how AI fits into your team structure? [Let's talk](/connect).*

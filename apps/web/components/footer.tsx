@@ -4,6 +4,15 @@ export function Footer() {
   return (
     <footer className="mt-12 pt-8 border-t border-card-border text-center text-muted text-sm pb-8">
       <p className="mb-4">© {new Date().getFullYear()} Systems Engineer | AI Ecosystems Specialist — Built with Next.js & Tailwind</p>
+      
+      {/* Catalyst App Description - Discreet */}
+      <p className="mb-3 text-xs text-muted/70 max-w-2xl mx-auto leading-relaxed">
+        <strong className="text-muted">Catalyst</strong> is a personal AI operating system and intelligent assistant platform providing real-time voice and text interactions, knowledge base access, and integrated tool capabilities.{" "}
+        <Link href="/catalyst-ai" className="text-muted/60 hover:text-accent transition-colors duration-200">
+          Learn more
+        </Link>
+      </p>
+      
       <div className="flex flex-wrap items-center justify-center gap-4 text-xs">
         <Link 
           href="/privacy" 

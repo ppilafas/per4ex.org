@@ -1,5 +1,5 @@
 import Image from "next/image"
-import { Scale, Database, Lock, Server, ArrowRight } from "lucide-react"
+import { Database, Lock, Server, ArrowRight } from "lucide-react"
 import { TypewriterSubtitle } from "@/components/typewriter"
 
 export default function PiLaw() {
@@ -9,8 +9,8 @@ export default function PiLaw() {
       <div className="grid grid-cols-1 md:grid-cols-[1fr_2fr_1fr] gap-4 mb-8">
         <div />
         <div className="flex flex-col items-center">
-          <div className="relative w-[140px] h-[140px] mb-6 rounded-full overflow-hidden border-[3px] border-foreground flex items-center justify-center bg-card">
-             <Scale className="w-16 h-16 text-foreground" />
+          <div className="relative w-[180px] h-[180px] mb-6 rounded-full overflow-hidden hover:scale-105 transition-transform duration-500 drop-shadow-[0_0_20px_rgba(16,185,129,0.3)]">
+             <Image src="/pilaw3d.png" alt="π.Law" fill className="object-cover p-2" sizes="180px" priority />
           </div>
           <h1 className="text-4xl md:text-5xl font-bold text-center text-foreground mb-2">π.Law</h1>
           <TypewriterSubtitle 

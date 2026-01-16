@@ -1,0 +1,163 @@
+---
+title: "\"AI-Generated Code is Bloated\" — The Reality"
+date: "2025-01-08"
+description: "Addressing a common concern from technical leaders: is AI-assisted development producing lower quality code? Here's what I've learned from shipping production systems."
+tags: ["ai-development", "code-quality", "vibe-coding", "best-practices"]
+category: "insights"
+featured: true
+---
+
+I hear this concern often from CTOs and engineering leads:
+
+> "Aren't you worried that AI-generated code is bloated and low quality?"
+
+It's a fair question. And honestly? The concern isn't entirely wrong. But it's also not the whole story.
+
+## Yes, AI Code Can Be Bloated
+
+Let's be honest about the problem. AI models often produce code like this:
+
+```javascript
+// AI loves this pattern
+const handleSubmit = async () => {
+  try {
+    setIsLoading(true);
+    setError(null);
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    const data = await response.json();
+    if (data && data.success && data.result) {
+      setResult(data.result);
+    }
+  } catch (error) {
+    console.error('Error:', error);
+    setError(error instanceof Error ? error.message : 'Unknown error');
+  } finally {
+    setIsLoading(false);
+  }
+};
+```
+
+When you might only need:
+
+```javascript
+const handleSubmit = async () => {
+  const { result } = await fetch(url).then(r => r.json());
+  setResult(result);
+};
+```
+
+The AI errs toward "defensive" code. Extra null checks, verbose error handling, enterprise patterns where simple patterns suffice.
+
+## Why This Happens
+
+AI models are trained on massive code corpuses that include:
+- Enterprise Java patterns applied to simple scripts
+- Stack Overflow answers optimized for "looks complete"
+- Production code with edge cases that don't apply to your situation
+
+The model doesn't know your constraints. It defaults to "probably production, probably needs error handling, probably enterprise."
+
+## But Here's What Matters
+
+The question isn't "Is AI code perfect?" It's "Is AI code good enough to ship, and can you improve it?"
+
+### 1. Shipped Beats Perfect
+
+A working feature with verbose code is infinitely more valuable than a perfect feature that doesn't exist. The per4ex.org portfolio you're reading was built largely with AI assistance. It works. It ships. Users don't care about code elegance.
+
+### 2. AI Code is Editable
+
+The real skill isn't accepting AI output verbatim—it's knowing what to trim. I treat AI like a fast junior developer who overengineers everything. Great for scaffolding, needs editing.
+
+### 3. The Alternative is Slower
+
+Before AI assistance, I'd write the same code manually. It would be slightly cleaner, but take 5x longer. For prototypes and MVPs, velocity wins.
+
+## How I Actually Work
+
+My workflow with AI isn't "generate and ship." It's:
+
+1. **Generate** — Let AI write the first draft
+2. **Review** — Read what it produced
+3. **Trim** — Remove unnecessary abstraction
+4. **Refactor** — Clean up the hot paths later
+
+The first pass might be bloated. The final code isn't.
+
+### Example: Real Refactoring
+
+AI gave me this for a simple utility:
+
+```typescript
+export function formatDate(date: Date | string | number): string {
+  let dateObj: Date;
+  if (typeof date === 'string') {
+    dateObj = new Date(date);
+  } else if (typeof date === 'number') {
+    dateObj = new Date(date);
+  } else if (date instanceof Date) {
+    dateObj = date;
+  } else {
+    throw new Error('Invalid date input');
+  }
+  
+  if (isNaN(dateObj.getTime())) {
+    throw new Error('Invalid date');
+  }
+  
+  return dateObj.toLocaleDateString('en-US', {
+    month: 'short',
+    day: 'numeric', 
+    year: 'numeric'
+  });
+}
+```
+
+I simplified to:
+
+```typescript
+export const formatDate = (date: Date | string) =>
+  new Date(date).toLocaleDateString('en-US', { 
+    month: 'short', day: 'numeric', year: 'numeric' 
+  });
+```
+
+AI gave me correctness. I gave it elegance.
+
+## When Bloat Doesn't Matter
+
+Honestly? Most code doesn't need to be optimized. 
+
+The 80/20 rule applies: 20% of your code handles 80% of the load. AI can write the 80% that doesn't matter. You optimize the 20% that does.
+
+For a portfolio site like this:
+- Does it matter if a utility function has extra null checks? **No.**
+- Does it matter if the AI chat widget responds quickly? **Yes.**
+
+I spend my optimization time where it counts.
+
+## What To Tell Your Team
+
+If you're a technical leader worried about AI code quality, here's my advice:
+
+1. **Set clear review standards** — AI output should pass the same review as human code
+2. **Focus reviews on architecture, not style** — Style can be fixed; bad architecture can't
+3. **Measure what matters** — Page load time, API latency, bug rates. Not lines of code.
+4. **Invest in refactoring later** — Ship first, clean up when you know what's important
+
+## The Bottom Line
+
+AI code is often verbose. But:
+- It's correct more often than it's wrong
+- It's fast to generate
+- It's editable by humans
+- It ships
+
+The question isn't whether AI code is perfect. It's whether it helps you ship faster while maintaining acceptable quality. For me, the answer is yes.
+
+---
+
+*Have concerns about AI-assisted development for your project? [Let's discuss what would work for your team](/connect).*

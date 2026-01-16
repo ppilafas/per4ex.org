@@ -1,11 +1,10 @@
-import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
 import { Analytics } from "@vercel/analytics/react";
-import { Sidebar } from "@/components/sidebar";
-import { MobileNav } from "@/components/mobile-nav";
+import { NextIntlClientProvider } from 'next-intl';
+import { getMessages } from 'next-intl/server';
+import { Geist, Geist_Mono, Archivo_Black } from "next/font/google";
+import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
-import { BootLoader } from "@/components/boot-loader";
-import { ChatWidget } from "@/components/chat-widget";
+import { ClientBootLoader, ClientWidgets } from "@/components/client-widgets";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -18,32 +17,48 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-export const metadata: Metadata = {
+const archivoBlack = Archivo_Black({
+  variable: "--font-display",
+  subsets: ["latin"],
+  weight: "400", // Archivo Black only has one weight (it's already black/bold)
+});
+
+export const metadata = {
   title: "Per4ex.org | Systems Engineer",
   description: "Systems-focused portfolio for AI-related ecosystems.",
+  icons: {
+    icon: "/catalyst3d.png",
+  },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
+  // Providing all messages to the client
+  const messages = await getMessages();
+
   return (
-    <html lang="en">
+    <html suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen flex flex-col md:flex-row bg-background text-foreground`}
+        className={`${geistSans.variable} ${geistMono.variable} ${archivoBlack.variable} antialiased`}
+        suppressHydrationWarning
       >
-        <BootLoader />
-        <Sidebar />
-        <MobileNav />
-        <main className="flex-1 md:pl-[280px] w-full min-h-screen flex flex-col pt-16 md:pt-0">
-           <div className="max-w-[1100px] w-full px-6 md:px-10 py-8 md:py-12 flex-1 mx-auto">
-             {children}
-             <Footer />
-           </div>
-        </main>
-        {process.env.NODE_ENV === 'development' && <ChatWidget />}
-        <Analytics />
+        <NextIntlClientProvider messages={messages}>
+          <div className="min-h-screen bg-background text-foreground relative">
+            <ClientBootLoader />
+            <Navbar />
+            <main className="w-full min-h-screen flex flex-col pt-24">
+               <div className="max-w-7xl w-full px-6 flex-1 mx-auto">
+        {children}
+                 <Footer />
+               </div>
+            </main>
+            <ClientWidgets />
+            <Analytics />
+          </div>
+        </NextIntlClientProvider>
       </body>
     </html>
   );

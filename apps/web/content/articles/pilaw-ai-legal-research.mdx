@@ -1,0 +1,102 @@
+---
+title: "π.Law: How AI is Transforming Legal Research"
+date: "2025-01-05"
+description: "Building an AI-powered legal research platform for the Greek legal system—the unique challenges of domain-specific AI and why RAG alone isn't enough."
+tags: ["legal-tech", "rag", "enterprise", "domain-specific"]
+category: "project"
+featured: true
+---
+
+Legal research is stuck in the 1990s. Lawyers spend hours searching through case law databases using keyword searches, reading irrelevant results, and hoping they don't miss the one precedent that matters.
+
+π.Law (Pi Law) is my attempt to fix this—an AI-powered legal research platform built specifically for the Greek legal system.
+
+## The Unique Challenge of Legal AI
+
+Legal is different from general-purpose AI applications. Here's why:
+
+### 1. Precision is Non-Negotiable
+
+When a lawyer cites a case, it needs to be real. Hallucinated citations aren't just embarrassing—they're malpractice. This ruled out naive LLM implementations immediately.
+
+### 2. The Corpus is Massive and Structured
+
+Greek legal databases contain millions of documents: court decisions, legislation, legal commentary. Each document has specific structure (parties, court, date, legal principles). This structure is valuable—throwing it away for pure text embeddings wastes information.
+
+### 3. Language Complexity
+
+Legal Greek is not everyday Greek. The vocabulary is archaic, the sentence structure is complex, and concepts have precise meanings that differ from common usage. General-purpose embeddings struggle with this.
+
+## The Architecture
+
+### Hybrid Retrieval
+
+Pure vector similarity isn't enough for legal search. We use a hybrid approach:
+
+```
+Query → [Vector Search] → Top 100 candidates
+      → [BM25 Search]   → Top 100 candidates
+      → [Reranker]      → Final 20 results
+```
+
+The vector search catches semantic similarity ("cases about tenant eviction rights"). The keyword search catches exact matches ("Article 574 Civil Code"). The reranker combines and orders them intelligently.
+
+### Structured Metadata
+
+Every document is tagged with structured metadata:
+- Court level (Supreme, Appeal, First Instance)
+- Legal domain (Civil, Criminal, Administrative)
+- Key legal principles cited
+- Date and jurisdiction
+
+This metadata enables filtering that vector search alone can't provide: "Show me Supreme Court decisions from the last 5 years about data protection."
+
+### Citation Verification
+
+Before any case is shown to the user, we verify it exists in the source database. If the LLM mentions a case we can't verify, we flag it clearly. No silent hallucinations.
+
+## Why RAG Alone Fails for Legal
+
+The standard RAG pattern (embed documents, retrieve similar chunks, generate answer) has fundamental problems for legal:
+
+**Chunk boundaries break context.** A legal principle might span multiple paragraphs. Chunking at arbitrary boundaries loses this context.
+
+**Relevance ≠ Similarity.** A case might be highly relevant because it's a *counter-example*, not because it's similar. Pure similarity search misses this.
+
+**Authority matters.** A Supreme Court decision overrules a lower court decision. But they might have identical embeddings. You need to know the hierarchy.
+
+Our solution: treat the LLM as a reasoning layer on top of structured legal data, not a replacement for it.
+
+## Lessons for Domain-Specific AI
+
+### 1. Work with Domain Experts Early
+
+I partnered with practicing lawyers from the start. They caught assumptions that would have been fatal:
+- "You can't just show the holding—lawyers need to see the reasoning"
+- "Court names have changed over time—you need to handle aliases"
+- "This classification scheme hasn't been used since 2015"
+
+### 2. Build for Trust, Not Wow
+
+Lawyers are conservative. They won't trust a system that's occasionally wrong. We prioritized:
+- Always showing sources
+- Clear confidence indicators
+- Audit trails for every search
+- Manual override capabilities
+
+### 3. Integrate with Existing Workflows
+
+Nobody wants to learn a new tool. π.Law integrates with existing legal databases and document management systems. The AI enhances their current workflow rather than replacing it.
+
+## The Road Ahead
+
+Legal AI is still early. Current limitations:
+- Document analysis (contracts, briefs) is next
+- Multi-jurisdiction search (EU law integration)
+- Predictive analytics (case outcome modeling)
+
+But the foundation is in place. π.Law is already helping lawyers find relevant precedents in minutes instead of hours.
+
+---
+
+*Building AI for a specialized domain? [I'd love to hear about your challenges](/connect).*

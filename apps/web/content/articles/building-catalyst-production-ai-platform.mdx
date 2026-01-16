@@ -1,0 +1,113 @@
+---
+title: "Building Catalyst: Lessons from a Production AI Platform"
+date: "2025-01-10"
+description: "What I learned building a multi-tenant AI platform that handles real workloads—from architecture decisions to the problems nobody warns you about."
+tags: ["catalyst", "production", "architecture", "multi-tenant"]
+category: "project"
+featured: true
+---
+
+When I started building Catalyst, I thought the hard part would be the AI. I was wrong.
+
+The hard part is everything else: authentication, rate limiting, tenant isolation, streaming responses, graceful degradation, observability. The AI is almost the easy part—OpenAI and Anthropic have done the heavy lifting. Your job is to make it production-ready.
+
+## The Problem Catalyst Solves
+
+Most AI integrations follow the same pattern:
+
+1. Developer gets excited about ChatGPT
+2. Developer adds OpenAI API call to their app
+3. App works in demo
+4. App fails in production (rate limits, latency, costs, security)
+5. Developer spends 6 months building infrastructure
+
+Catalyst is that infrastructure, pre-built. A multi-tenant AI platform that handles the boring-but-critical stuff so teams can focus on their actual product.
+
+## Architecture Decisions That Mattered
+
+### 1. Streaming-First Design
+
+Every AI response in Catalyst streams by default. This wasn't just a nice-to-have—it's essential for user experience. Nobody wants to stare at a spinner for 30 seconds.
+
+```python
+async def stream_response(messages, tenant_id):
+    async for chunk in llm.stream(messages):
+        yield ServerSentEvent(
+            data=json.dumps({"content": chunk.content}),
+            event="message"
+        )
+```
+
+But streaming introduces complexity: error handling mid-stream, client disconnection detection, partial response caching. Each of these took longer to solve than the actual LLM integration.
+
+### 2. Tenant Isolation Without Performance Penalty
+
+Multi-tenancy in AI is tricky. You need:
+- Separate API keys per tenant
+- Usage tracking and billing
+- Rate limiting per tenant
+- Data isolation (critical for enterprise)
+
+The naive approach is separate deployments per tenant. This doesn't scale. Instead, Catalyst uses a single deployment with tenant context passed through every layer:
+
+```python
+@middleware
+async def tenant_context(request, call_next):
+    tenant_id = request.headers.get("X-Tenant-ID")
+    with tenant_scope(tenant_id):
+        response = await call_next(request)
+    return response
+```
+
+### 3. Tool Calling as First-Class Citizen
+
+Agentic AI—where the model can take actions—is where the real value is. But tool calling in production requires:
+
+- Schema validation for tool inputs
+- Permission checking before execution
+- Audit logging of all tool invocations
+- Graceful handling of tool failures
+
+Catalyst treats tools as registered capabilities with full lifecycle management, not ad-hoc function calls.
+
+## Problems Nobody Warns You About
+
+### Token Estimation is a Lie
+
+You need to know how many tokens a request will use *before* you send it. OpenAI's tokenizer gives you an estimate, but context window management is still painful. We ended up building a token budget system that reserves headroom for responses.
+
+### Latency Variance is Wild
+
+The same prompt can take 2 seconds or 20 seconds depending on model load. Your architecture needs to handle this gracefully. We implemented:
+- Aggressive timeouts with automatic retry
+- Request queuing with priority levels
+- Fallback to smaller models when latency spikes
+
+### Observability is Non-Negotiable
+
+When something goes wrong (and it will), you need to know:
+- Which tenant was affected
+- What prompt was sent
+- What model was used
+- How long each step took
+- What the model returned
+
+We log everything. Every request, every response, every token count. This has saved us countless hours of debugging.
+
+## What I'd Do Differently
+
+**Start with rate limiting.** We added it late and had to retrofit it everywhere. Build it into the core from day one.
+
+**Invest in local development earlier.** Running against production APIs during development is expensive and slow. We eventually built a mock LLM server for local testing.
+
+**Design for model switching.** Models change fast. Anthropic releases Claude 3.5, OpenAI releases GPT-4o. Your architecture should make swapping models trivial.
+
+## The Result
+
+Catalyst now powers multiple production applications, including the chat widget on this very site. It handles thousands of requests daily with 99.9% uptime.
+
+The AI part took weeks. The production infrastructure took months. That's the reality of shipping AI systems.
+
+---
+
+*Interested in using Catalyst for your project? [Let's talk](/connect).*

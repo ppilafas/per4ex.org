@@ -1,0 +1,162 @@
+---
+title: "From Demo to Production: Why 90% of AI Projects Never Ship"
+date: "2025-01-03"
+description: "The demo worked perfectly. Six months later, you're still 'almost ready' for production. Here's why AI projects get stuck and how to actually ship."
+tags: ["production", "shipping", "strategy", "enterprise"]
+category: "insights"
+featured: true
+---
+
+The demo went great. Leadership was impressed. Budget was approved.
+
+Six months later, the project is still "almost ready."
+
+This happens to most AI projects. According to Gartner, only 53% of AI projects make it from prototype to production. My experience suggests that's optimistic.
+
+Here's why AI projects get stuck—and how to break free.
+
+## The Demo Trap
+
+Demos are seductive. In a controlled environment with curated data, AI looks magical. But demos hide the problems:
+
+| Demo | Production |
+|------|------------|
+| 50 test queries | 50,000 queries/day |
+| Handpicked examples | Adversarial users |
+| "It mostly works" | "It must always work" |
+| Developer testing | Real customers |
+| Minutes of latency okay | Seconds matter |
+
+The gap between "works in demo" and "works in production" is where projects die.
+
+## The Five Killers
+
+### 1. Edge Cases Multiply Exponentially
+
+Your demo covered 20 scenarios. Production has 2,000. Each edge case seems small, but they compound:
+
+- User asks in a different language
+- Input contains special characters
+- Request times out mid-response
+- User uploads a 50MB file
+- Two users ask the same question simultaneously
+
+You can't anticipate all edge cases. But you can build systems that fail gracefully when they occur.
+
+### 2. The "One More Feature" Loop
+
+After the demo, stakeholders have ideas:
+- "Can it also handle X?"
+- "What if we added Y?"
+- "It should integrate with Z."
+
+Each addition seems reasonable. But scope creep kills more AI projects than technical challenges. The project that does one thing well ships. The project that does ten things poorly doesn't.
+
+### 3. Data Quality Isn't a One-Time Fix
+
+The demo used clean, curated data. Production data is messy:
+- Inconsistent formats
+- Missing fields
+- Duplicates
+- Stale information
+- Contradictory sources
+
+Data quality isn't a problem you solve once. It's an ongoing operational concern that needs dedicated attention.
+
+### 4. Latency Compounds
+
+In a demo, 5-second response times are fine. In production, they're not.
+
+But it's not just the AI call. It's:
+- Network latency to your API
+- Database queries for context
+- LLM inference time
+- Response processing
+- Network latency back to client
+
+Each step adds 100-500ms. By the time you're done, you're at 10 seconds. Users leave.
+
+### 5. Nobody Owns It
+
+Demos are built by excited engineers. Production systems need:
+- On-call rotations
+- Monitoring and alerting
+- Incident response procedures
+- Documentation
+- Ongoing maintenance
+
+Without clear ownership, production systems decay. And AI systems decay faster than traditional software because models change, APIs deprecate, and data drifts.
+
+## How to Actually Ship
+
+### Strategy 1: Shrink the Scope Ruthlessly
+
+Your AI doesn't need to solve every problem. Find the smallest useful capability and ship that.
+
+Instead of: "AI assistant that handles all customer inquiries"
+Ship: "AI that answers questions about order status"
+
+The smaller scope ships faster and teaches you what production actually requires.
+
+### Strategy 2: Build for Day 2
+
+Day 1 is launch. Day 2 is when things break.
+
+Build from the start:
+- Logging for every request/response
+- Metrics for latency, error rates, token usage
+- Fallback paths when AI fails
+- Easy rollback mechanisms
+
+These aren't nice-to-haves. They're how you survive production.
+
+### Strategy 3: Ship to Internal Users First
+
+Your production environment isn't production until real users touch it. But those users don't have to be customers.
+
+Ship internally first:
+- Customer support team uses the AI tool
+- Sales team tests the demo
+- Engineering tests edge cases
+
+Internal users find bugs without hurting customers. They also become advocates when you ship externally.
+
+### Strategy 4: Set a Ship Date and Cut Scope to Meet It
+
+Parkinson's Law: work expands to fill the time available. Without a hard deadline, projects drift.
+
+Pick a date. When you realize you can't ship everything by that date, cut features—don't move the date. You can always add features after launch.
+
+### Strategy 5: Accept Imperfection
+
+Your AI will make mistakes in production. That's okay if:
+- Users can report errors
+- Errors are logged and reviewed
+- Critical paths have human fallback
+- You iterate based on real usage
+
+Waiting for perfection means never shipping. Ship, learn, improve.
+
+## A Real Example
+
+One of my projects was stuck in demo hell for months. The AI was "95% accurate" but that 5% was unacceptable for production.
+
+The solution: **Human-in-the-loop for uncertain cases.**
+
+When the AI's confidence was below a threshold, it flagged for human review instead of guessing. This let us ship with 100% "accuracy" (humans caught the errors) while the AI handled 80% of volume automatically.
+
+Within a month of production usage, we had enough data to improve the model. The 5% error rate dropped to 2%. We never would have collected that data without shipping.
+
+## The Only Metric That Matters
+
+Is it in production?
+
+Not "is it accurate?" Not "is it feature-complete?" Not "is it optimized?"
+
+Is it in production, handling real requests, from real users?
+
+Everything else is a distraction until you can answer "yes."
+
+---
+
+*Stuck in demo hell? [Let's figure out how to ship](/connect).*

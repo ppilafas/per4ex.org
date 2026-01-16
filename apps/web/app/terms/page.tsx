@@ -12,10 +12,10 @@ export default function TermsOfService() {
       {/* Introduction */}
       <div className="glass-panel">
         <p className="text-lg leading-relaxed text-muted mb-4">
-          These Terms of Service ("Terms") govern your access to and use of Per4ex.org ("we," "our," or "us"). By accessing or using our website and services, you agree to be bound by these Terms.
+          These Terms of Service ("Terms") govern your access to and use of Per4ex.org and <strong className="text-foreground">Catalyst</strong> ("we," "our," or "us"). By accessing or using our website and services, including <strong className="text-foreground">Catalyst</strong>, our personal AI operating system and intelligent assistant platform, you agree to be bound by these Terms.
         </p>
         <p className="text-muted">
-          If you do not agree to these Terms, please do not use our services.
+          If you do not agree to these Terms, please do not use our services, including <strong className="text-foreground">Catalyst</strong>.
         </p>
       </div>
 
@@ -27,10 +27,10 @@ export default function TermsOfService() {
         </h2>
         <div className="space-y-3 text-muted">
           <p>
-            By accessing or using Per4ex.org, you acknowledge that you have read, understood, and agree to be bound by these Terms and our Privacy Policy. These Terms constitute a legally binding agreement between you and Per4ex.org.
+            By accessing or using Per4ex.org or <strong className="text-foreground">Catalyst</strong>, you acknowledge that you have read, understood, and agree to be bound by these Terms and our Privacy Policy. These Terms constitute a legally binding agreement between you and Per4ex.org.
           </p>
           <p>
-            We reserve the right to modify these Terms at any time. Your continued use of our services after any such changes constitutes your acceptance of the new Terms.
+            We reserve the right to modify these Terms at any time. Your continued use of our services, including <strong className="text-foreground">Catalyst</strong>, after any such changes constitutes your acceptance of the new Terms.
           </p>
         </div>
       </div>

@@ -1,0 +1,29 @@
+{
+  "HomePage": {
+    "title": "Systems Engineer",
+    "subtitle": "Specialized in AI-Related Ecosystems",
+    "about": "About",
+    "aboutText": "I build systems that bridge the gap between experimental AI demos and production-ready platforms. My work focuses on deterministic control, hard multi-tenancy, and micro-latency architectures—essential for real-time AI applications.",
+    "focusAreas": "Core Focus Areas",
+    "aiSystems": "AI Systems",
+    "aiSystemsDesc": "Building agentic AI platforms with explicit state management, tool orchestration, and RAG capabilities.",
+    "infrastructure": "Infrastructure",
+    "infrastructureDesc": "Designing scalable, secure systems with PostgreSQL, pgvector, and multi-tenant architectures.",
+    "voiceAI": "Voice AI",
+    "voiceAIDesc": "Ultra-low latency voice interfaces with real-time streaming and adaptive cost optimization."
+  },
+  "Navigation": {
+    "home": "Home",
+    "technicalExpertise": "Technical Expertise",
+    "github": "GitHub",
+    "connect": "Connect",
+    "catalystAI": "Catalyst AI",
+    "authoredWorks": "Authored Works",
+    "pilaw": "π.Law Case Study"
+  },
+  "Footer": {
+    "builtWith": "Built with Next.js, FastAPI, and Tailwind CSS",
+    "deployedOn": "Deployed on Vercel"
+  }
+}
+
