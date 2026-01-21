@@ -18,7 +18,7 @@ export interface Article extends ArticleMeta {
   content: string
 }
 
-const articlesDirectory = path.join(process.cwd(), 'content/articles')
+const articlesDirectory = path.join(process.cwd(), '../../content/articles')
 
 export function getAllArticles(): ArticleMeta[] {
   if (!fs.existsSync(articlesDirectory)) {
