@@ -13,7 +13,7 @@ const navItems = [
   { href: "/solutions", label: "Solutions" },
   { href: "/articles", label: "Articles" },
   { href: "/catalyst-ai", label: "Catalyst AI" },
-  { href: "/show", label: "The Show" },
+  { href: "/silicon-smackdown", label: "Silicon Smackdown" },
   { href: "/authored-works", label: "Authored Works" },
   { href: "/connect", label: "Connect" },
 ]

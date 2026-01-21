@@ -181,7 +181,7 @@ export default function Home() {
       {/* 8. Featured Work */}
       <div className="py-20 px-6 bg-[#0c0c0c] border-t border-white/5">
         <h2 className="text-3xl font-bold text-foreground mb-12 text-center">Featured Work</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto">
           
           {/* π.Law Card */}
           <Link href="/pilaw" className="group block rounded-xl overflow-hidden border border-white/10 hover:border-accent/40 transition-all bg-[#0a0a0a]">
@@ -229,6 +229,31 @@ export default function Home() {
               <div className="flex flex-wrap gap-2">
                 <span className="bg-white/5 text-white/60 px-2 py-0.5 rounded text-xs">Multi-Agent</span>
                 <span className="bg-white/5 text-white/60 px-2 py-0.5 rounded text-xs">WebSockets</span>
+              </div>
+            </div>
+          </Link>
+
+          {/* Silicon Smackdown Card */}
+          <Link href="/silicon-smackdown" className="group block rounded-xl overflow-hidden border border-white/10 hover:border-accent/40 transition-all bg-[#0a0a0a]">
+            <div className="h-56 relative bg-gradient-to-br from-purple-900/20 to-[#0a0a0a] flex items-center justify-center">
+               <div className="relative w-44 h-44">
+                 <Image 
+                   src="/silicon_smacdown/big_hero_logo.png" 
+                   alt="Silicon Smackdown" 
+                   fill 
+                   className="object-contain transition-transform duration-500 group-hover:scale-110" 
+                 />
+               </div>
+            </div>
+            <div className="p-5 border-t border-white/5">
+              <div className="flex items-center gap-2 mb-2">
+                <h3 className="text-xl font-bold text-white group-hover:text-accent transition-colors">Silicon Smackdown</h3>
+                <span className="bg-purple-500/20 text-purple-400 border border-purple-500/30 px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider">Voice AI</span>
+              </div>
+              <p className="text-gray-400 text-sm mb-3 leading-relaxed">Real-time AI talk show with full-duplex voice debates. 20+ personalities powered by Gemini Live API.</p>
+              <div className="flex flex-wrap gap-2">
+                <span className="bg-white/5 text-white/60 px-2 py-0.5 rounded text-xs">Gemini Live</span>
+                <span className="bg-white/5 text-white/60 px-2 py-0.5 rounded text-xs">&lt;100ms</span>
               </div>
             </div>
           </Link>

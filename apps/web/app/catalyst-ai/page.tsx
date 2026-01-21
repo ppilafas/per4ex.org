@@ -1,7 +1,7 @@
 import Image from "next/image"
 import { Cpu, Mic, Shield, Server, Terminal, Layers, Link as LinkIcon, Globe, Database, Zap, Brain, MessageSquare, Clock, ArrowRight, User, Users, ChevronRight } from "lucide-react"
 import { TypewriterSubtitle } from "@/components/typewriter"
-import { VoiceWidget } from "@/components/voice-widget"
+// import { VoiceWidget } from "@/components/voice-widget"
 import { DashboardFeatures } from "@/components/dashboard-features"
 import { cn } from "@/lib/utils"
 import Link from "next/link"
@@ -404,7 +404,7 @@ export default function CatalystAI() {
       </div>
 
       {/* Live Voice Widget Demo */}
-      <div className="glass-panel border-l-4 border-l-accent relative overflow-hidden">
+      {/* <div className="glass-panel border-l-4 border-l-accent relative overflow-hidden">
         <div className="absolute -right-10 -bottom-10 opacity-5">
            <Mic className="w-64 h-64" />
         </div>
@@ -427,10 +427,10 @@ export default function CatalystAI() {
             </div>
             </div>
         </div>
-      </div>
+      </div> */}
 
       {/* Voice Widget - Floating */}
-      <VoiceWidget />
+      {/* <VoiceWidget /> */}
     </div>
   )
 }
