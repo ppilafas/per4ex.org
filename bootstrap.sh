@@ -13,7 +13,12 @@ find_free_port() {
 echo "🔍 Scanning for available ports..."
 
 API_PORT=$(find_free_port 8000)
-WEB_PORT=$(find_free_port 3000)
+WEB_PORT=3008
+
+if lsof -i:3008 >/dev/null 2>&1; then
+    echo "⚠️  Port 3008 is busy. Finding next available..."
+    WEB_PORT=$(find_free_port 3008)
+fi
 
 if [ "$WEB_PORT" -eq "$API_PORT" ]; then
     WEB_PORT=$(find_free_port $((WEB_PORT + 1)))
@@ -54,8 +59,16 @@ API_PID=$!
 
 echo "🚀 Launching Next.js frontend..."
 cd "$WEB_DIR"
+echo "🧹 Clearing Next.js cache..."
+rm -rf .next
 export NEXT_PUBLIC_API_URL="http://localhost:$API_PORT"
 export PORT=$WEB_PORT
+
+# Force Local Config
+export CATALYST_API_URL="http://localhost:8001/v1"
+export CATALYST_TENANT_ID="catalyst_widget"
+export NEXT_PUBLIC_CATALYST_WS_URL="ws://localhost:8765"
+
 npm run dev &
 WEB_PID=$!
 
