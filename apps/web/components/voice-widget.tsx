@@ -47,13 +47,11 @@ type ConnectionStatus = "disconnected" | "connecting" | "connected" | "error"
 
 interface VoiceWidgetProps {
   wsUrl?: string
-  apiKey?: string
   tenantId?: string
 }
 
 export function VoiceWidget({ 
   wsUrl = process.env.NEXT_PUBLIC_CATALYST_WS_URL || "wss://catalyst-service.fly.dev:8765",
-  apiKey = process.env.CATALYST_API_KEY,
   tenantId = process.env.CATALYST_TENANT_ID || "anonymous"
 }: VoiceWidgetProps) {
   const [isOpen, setIsOpen] = useWidgetState('voice')
@@ -99,11 +97,8 @@ export function VoiceWidget({
     setError(null)
 
     try {
-      // Construct WebSocket URL with auth if needed
+      // Construct WebSocket URL
       const url = new URL(wsUrl)
-      if (apiKey) {
-        url.searchParams.set("api_key", apiKey)
-      }
       url.searchParams.set("tenant_id", tenantId)
       url.searchParams.set("mode", "realtime")
       url.searchParams.set("sample_rate", SAMPLE_RATE.toString())
@@ -166,7 +161,7 @@ export function VoiceWidget({
       setConnectionStatus("error")
       setError(err.message || "Failed to connect to Catalyst")
     }
-  }, [wsUrl, apiKey, tenantId, isRecording])
+  }, [wsUrl, tenantId, isRecording])
 
   // Handle WebSocket JSON messages (Catalyst API format)
   const handleWebSocketMessage = (data: any) => {
