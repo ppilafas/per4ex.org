@@ -5,7 +5,6 @@ import { TypewriterSubtitle } from "@/components/typewriter"
 import { Navbar } from "@/components/navbar"
 import { HeroActions } from "@/components/hero-actions"
 import { SolutionsGrid } from "@/components/solutions-grid"
-import { Search } from "lucide-react"
 import { CTAButton } from "@/components/cta-button"
 
 export default function Home() {
@@ -14,21 +13,69 @@ export default function Home() {
       {/* 1. Hero Section */}
       <div className="flex flex-col items-center relative mb-12">
         <div className="absolute inset-0 hero-grid -z-10" />
-        
-        <div className="flex flex-col items-center z-10 text-center px-4">
-          <h1 className="text-5xl md:text-7xl font-bold text-center text-foreground mb-6 tracking-tight">
-            Ship Production AI <br/>
-            <span className="text-accent">Faster.</span>
-          </h1>
-          
-          <TypewriterSubtitle 
-             text="I help teams escape demo hell. RAG systems, voice agents, autonomous workflows — built to actually ship."
-             className="text-xl md:text-2xl text-muted max-w-2xl mb-10 leading-relaxed font-sans"
-             cursorColor="bg-accent"
-             speed={30}
-          />
 
-          <HeroActions />
+        <div className="w-full max-w-7xl px-4 z-10 pt-10 md:pt-14 pb-10 md:pb-14">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-14 lg:items-start items-center">
+            <div className="flex flex-col items-center lg:items-start text-center lg:text-left lg:pr-6">
+              <h1 className="text-5xl md:text-7xl font-bold text-foreground mb-5 md:mb-6 tracking-tight">
+                Ship Production <br />
+                <span className="whitespace-nowrap">
+                  AI <span className="text-accent">Faster.</span>
+                </span>
+              </h1>
+
+              <TypewriterSubtitle
+                text="I help teams escape demo hell. RAG systems, voice agents, autonomous workflows — built to actually ship."
+                className="text-xl md:text-2xl text-muted max-w-2xl mb-8 md:mb-10 leading-relaxed font-sans text-left mx-auto lg:mx-0"
+                cursorColor="bg-accent"
+                speed={30}
+              />
+
+              <HeroActions />
+            </div>
+
+            <div className="relative mx-auto w-full max-w-[520px] lg:max-w-[560px] lg:justify-self-end">
+              <div className="relative aspect-[4/3] sm:aspect-square overflow-hidden rounded-2xl border border-white/10 shadow-2xl">
+                <div className="absolute bottom-4 right-4 z-30">
+                  <Image
+                    src="/supecore.png"
+                    alt="Supercore"
+                    width={170}
+                    height={68}
+                    className="h-7 md:h-8 w-auto drop-shadow-[0_0_18px_rgba(0,0,0,0.65)] [filter:brightness(0)_invert(1)]"
+                    priority
+                  />
+                </div>
+                <Image
+                  src="/speedbot.gif"
+                  alt="Assistant ship illustration"
+                  fill
+                  sizes="(max-width: 640px) 92vw, (max-width: 1024px) 520px, 560px"
+                  className="object-cover"
+                  priority
+                />
+                <div className="pointer-events-none absolute inset-0 bg-emerald-500/25 mix-blend-color" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-r from-black/35 via-transparent to-transparent" />
+                <div className="pointer-events-none absolute -inset-8 bg-[radial-gradient(circle_at_center,rgba(16,185,129,0.10),transparent_55%)]" />
+
+                <div className="hero-ticker hidden sm:block">
+                  <div className="hero-ticker-row hero-ticker-1">
+                    <div className="hero-ticker-track v-fast">
+                      <span><strong>Enterprise RAG</strong> [//] <span className="hollow">vector search</span> [+] citations [//] <span className="hollow">private data</span> ⚡</span>
+                      <span><strong>Enterprise RAG</strong> [//] <span className="hollow">vector search</span> [+] citations [//] <span className="hollow">private data</span> ⚡</span>
+                    </div>
+                  </div>
+                  <div className="hero-ticker-row hero-ticker-2">
+                    <div className="hero-ticker-track rev medium">
+                      <span><strong>Realtime Voice AI</strong> ⚡ <span className="hollow">low latency</span> [//] turn-taking [+] <span className="hollow">interruptions</span> [//]</span>
+                      <span><strong>Realtime Voice AI</strong> ⚡ <span className="hollow">low latency</span> [//] turn-taking [+] <span className="hollow">interruptions</span> [//]</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -214,7 +261,7 @@ export default function Home() {
                <div className="relative w-52 h-52">
                  <Image 
                    src="/per4ex_new.png" 
-                   alt="The Per4ex.org Show" 
+                   alt="The Supercore Show" 
                    fill 
                    className="object-contain transition-transform duration-500 group-hover:scale-110" 
                  />
@@ -222,7 +269,7 @@ export default function Home() {
             </div>
             <div className="p-5 border-t border-white/5 bg-[#0a0a0a]">
               <div className="flex items-center gap-2 mb-2">
-                <h3 className="text-xl font-bold text-white group-hover:text-accent transition-colors">The Per4ex.org Show</h3>
+                <h3 className="text-xl font-bold text-white group-hover:text-accent transition-colors">The Supercore Show</h3>
                 <span className="bg-red-500/20 text-red-400 border border-red-500/30 px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider">Live</span>
               </div>
               <p className="text-gray-400 text-sm mb-3 leading-relaxed">A live talk show where I moderate conversations between AI guests. Real-time via Ably.</p>

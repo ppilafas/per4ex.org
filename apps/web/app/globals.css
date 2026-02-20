@@ -69,6 +69,95 @@ code, .font-mono, .technical-label {
   50% { opacity: 0.8; }
 }
 
+@keyframes hero-ticker {
+  0% { transform: translate3d(0, 0, 0); }
+  100% { transform: translate3d(-50%, 0, 0); }
+}
+
+@keyframes hero-ticker-rev {
+  0% { transform: translate3d(-50%, 0, 0); }
+  100% { transform: translate3d(0, 0, 0); }
+}
+
+@keyframes hero-playful-drift {
+  0%, 100% { transform: translate3d(0, 0, 0); }
+  50% { transform: translate3d(0, -8px, 0); }
+}
+
+/* 
+   Smooth, GPU-accelerated ticker animations.
+   Removed hover-duration changes to prevent timeline jumps.
+*/
+.hero-ticker {
+  @apply absolute inset-0 z-20 overflow-hidden pointer-events-auto;
+  perspective: 1000px;
+}
+
+.hero-ticker-row {
+  @apply absolute left-0 right-0 whitespace-nowrap;
+  font-size: clamp(3.5rem, 6.5vw, 6.2rem);
+  line-height: 0.92;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  /* Hardware isolation */
+  transform: translate3d(0,0,0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+.hero-ticker-1 { top: 20%; }
+.hero-ticker-2 { top: 58%; }
+
+.hero-ticker-row span {
+  color: rgba(255, 255, 255, 0.9);
+  font-family: var(--font-sans);
+  font-weight: 900;
+  text-shadow: 0 4px 15px rgba(0,0,0,0.3);
+  mix-blend-mode: screen;
+  display: inline-block;
+  will-change: transform;
+  backface-visibility: hidden;
+  -webkit-font-smoothing: antialiased;
+  transform: translate3d(0,0,0);
+}
+
+.hero-ticker-row strong {
+  font-family: inherit;
+  font-weight: 900;
+  color: inherit;
+}
+
+.hero-ticker:hover strong {
+  color: var(--accent);
+  text-shadow: 0 0 15px var(--accent);
+}
+
+.hero-ticker-track {
+  display: inline-flex;
+  gap: 4rem;
+  width: max-content;
+  animation: hero-ticker 30s linear infinite;
+  will-change: transform;
+  transform: translate3d(0,0,0);
+  backface-visibility: hidden;
+  transform-style: preserve-3d;
+}
+
+.hero-ticker-track.rev { animation-name: hero-ticker-rev; }
+
+/* varied speed classes */
+.hero-ticker-track.v-fast { animation-duration: 15s; }
+.hero-ticker-track.fast { animation-duration: 22s; }
+.hero-ticker-track.medium { animation-duration: 32s; }
+.hero-ticker-track.slow { animation-duration: 45s; }
+
+.hero-ticker-row .hollow {
+  -webkit-text-stroke: 1px rgba(255, 255, 255, 0.5);
+  color: transparent;
+  text-shadow: none;
+  opacity: 0.5;
+}
+
 h1, h2, h3, h4, strong {
   font-family: var(--font-sans);
 }
