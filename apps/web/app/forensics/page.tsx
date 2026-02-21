@@ -1,4 +1,5 @@
 import { cn } from "@/lib/utils"
+import Image from "next/image"
 import { Search, Database, Brain, Mic, Shield, FileText, Network, Clock, Zap, Terminal, Server, Eye, Layers, GitBranch, AudioLines, ScrollText, Lock, ChevronRight, Activity } from "lucide-react"
 
 export const metadata = {
@@ -16,6 +17,18 @@ export default function ForensicsPage() {
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-background -z-10" />
 
         <div className="max-w-5xl mx-auto text-center">
+          <div className="flex justify-center mb-8">
+            <div className="relative w-36 h-36 drop-shadow-[0_0_40px_rgba(16,185,129,0.4)] hover:scale-105 transition-transform duration-500">
+              <Image
+                src="/detective.png"
+                alt="Forensic AI Studio"
+                fill
+                className="object-contain"
+                priority
+              />
+            </div>
+          </div>
+
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-accent/10 text-accent text-xs font-bold tracking-widest border border-accent/20 mb-8 uppercase">
             <Lock className="w-3 h-3" />
             Private Tool · Not a Product

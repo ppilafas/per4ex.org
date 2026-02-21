@@ -304,6 +304,31 @@ export default function Home() {
               </div>
             </div>
           </Link>
+
+          {/* Forensic AI Studio Card */}
+          <Link href="/forensics" className="group block rounded-xl overflow-hidden border border-white/10 hover:border-accent/40 transition-all bg-[#0a0a0a]">
+            <div className="h-56 relative bg-gradient-to-br from-emerald-950/40 to-[#0a0a0a] flex items-center justify-center">
+               <div className="relative w-44 h-44 drop-shadow-[0_0_30px_rgba(16,185,129,0.3)] group-hover:drop-shadow-[0_0_40px_rgba(16,185,129,0.5)] transition-all duration-500">
+                 <Image 
+                   src="/detective.png" 
+                   alt="Forensic AI Studio" 
+                   fill 
+                   className="object-contain transition-transform duration-500 group-hover:scale-110" 
+                 />
+               </div>
+            </div>
+            <div className="p-5 border-t border-white/5">
+              <div className="flex items-center gap-2 mb-2">
+                <h3 className="text-xl font-bold text-white group-hover:text-accent transition-colors">Forensic AI Studio</h3>
+                <span className="bg-accent/20 text-accent border border-accent/30 px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider">Personal</span>
+              </div>
+              <p className="text-gray-400 text-sm mb-3 leading-relaxed">Private AI investigator built for a real legal case. Ingests evidence, maps entities, analyzes audio, reasons across 100K+ documents.</p>
+              <div className="flex flex-wrap gap-2">
+                <span className="bg-white/5 text-white/60 px-2 py-0.5 rounded text-xs">28+ Agent Tools</span>
+                <span className="bg-white/5 text-white/60 px-2 py-0.5 rounded text-xs">pgvector</span>
+              </div>
+            </div>
+          </Link>
           
         </div>
       </div>
