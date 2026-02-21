@@ -12,10 +12,10 @@ export default function PrivacyPolicy() {
       {/* Introduction */}
       <div className="glass-panel">
         <p className="text-lg leading-relaxed text-muted mb-4">
-          At Per4ex.org, we are committed to protecting your privacy and ensuring transparency about how we collect, use, and safeguard your information. This Privacy Policy explains our practices regarding data collection and usage when you visit our website or interact with our services, including <strong className="text-foreground">Catalyst</strong>, our personal AI operating system and intelligent assistant platform.
+          At Supercore, we are committed to protecting your privacy and ensuring transparency about how we collect, use, and safeguard your information. This Privacy Policy explains our practices regarding data collection and usage when you visit our website or interact with our services, including <strong className="text-foreground">Catalyst</strong>, our personal AI operating system and intelligent assistant platform.
         </p>
         <p className="text-muted">
-          By using Per4ex.org or <strong className="text-foreground">Catalyst</strong>, you agree to the collection and use of information in accordance with this policy.
+          By using Supercore or <strong className="text-foreground">Catalyst</strong>, you agree to the collection and use of information in accordance with this policy.
         </p>
       </div>
 
@@ -188,9 +188,9 @@ export default function PrivacyPolicy() {
             If you have any questions about this Privacy Policy or wish to exercise your rights, please contact us:
           </p>
           <div className="bg-background/50 p-4 rounded-lg border border-card-border">
-            <p className="text-foreground font-medium mb-2">Per4ex.org</p>
-            <p>Email: <a href="mailto:contact@per4ex.org" className="text-accent hover:underline">contact@per4ex.org</a></p>
-            <p className="mt-2">Website: <a href="https://per4ex.org" className="text-accent hover:underline">https://per4ex.org</a></p>
+            <p className="text-foreground font-medium mb-2">SuperCore.tech</p>
+            <p>Email: <a href="mailto:contact@supercore.tech" className="text-accent hover:underline">contact@supercore.tech</a></p>
+            <p className="mt-2">Website: <a href="https://supercore.tech" className="text-accent hover:underline">https://supercore.tech</a></p>
           </div>
         </div>
       </div>

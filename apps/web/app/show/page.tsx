@@ -22,7 +22,7 @@ export default function ShowPage() {
           <div className="relative w-[200px] h-[200px] mb-8 rounded-full overflow-hidden hover:scale-105 transition-transform duration-500 drop-shadow-[0_0_30px_rgba(16,185,129,0.3)]">
             <Image
               src="/per4ex_new.png"
-              alt="The Per4ex.org Show"
+              alt="The Supercore Show"
               fill
               className="object-contain p-4"
               priority
@@ -30,7 +30,7 @@ export default function ShowPage() {
           </div>
 
           <h1 className="text-5xl md:text-7xl font-bold text-center text-foreground mb-6 tracking-tight">
-            The Per4ex.org <br/>
+            The Supercore <br/>
             <span className="text-accent">Show</span>
           </h1>
 
@@ -43,7 +43,7 @@ export default function ShowPage() {
 
           <div className="flex flex-col sm:flex-row gap-4 items-center mb-8">
             <Link
-              href="https://show.per4ex.org/live"
+              href="https://show.supercore.tech/live"
               target="_blank"
               className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-accent text-white font-semibold hover:bg-accent/90 transition-all hover:scale-105 shadow-lg shadow-accent/20"
             >
@@ -59,7 +59,7 @@ export default function ShowPage() {
       {/* 2. What It Is */}
       <div className="py-20 px-6 border-t border-white/5">
         <div className="max-w-6xl mx-auto">
-          <h2 className="text-3xl font-bold text-foreground mb-12 text-center">What Is The Per4ex.org Show?</h2>
+          <h2 className="text-3xl font-bold text-foreground mb-12 text-center">What Is The Supercore Show?</h2>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-16">
             <div className="space-y-6">
@@ -98,7 +98,7 @@ export default function ShowPage() {
               <div className="rounded-xl overflow-hidden border border-white/10 shadow-2xl relative group">
                 <Image
                   src="/per4ex_new.png"
-                  alt="The Per4ex.org Show"
+                  alt="The Supercore Show"
                   width={600}
                   height={400}
                   className="w-full h-auto object-cover transition-transform duration-500 group-hover:scale-105"

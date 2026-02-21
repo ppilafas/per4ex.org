@@ -1,11 +1,11 @@
-# Per4ex.org Knowledge Base - Panagiotis Pilafas
+# Supercore Knowledge Base - Panagiotis Pilafas
 
 ## 1. Professional Profile
 **Name:** Panagiotis Pilafas  
 **Role:** Systems Engineer / AI Architect / Full Stack Engineer  
 **Tagline:** "Specialized in AI-Related Ecosystems. From 6502 Assembly to Distributed Intelligent Agents."  
-**Website:** https://per4ex.org  
-**Contact:** contact@per4ex.org  
+**Website:** https://supercore.tech  
+**Contact:** contact@supercore.tech  
 
 ### Engineering Philosophy
 Panagiotis is not a "glue code" developer; he is a systems engineer. His philosophy is defined by:
@@ -27,7 +27,7 @@ Panagiotis is not a "glue code" developer; he is a systems engineer. His philoso
 **Architecture:** Python 3.11+, FastAPI (REST), WebSockets, PostgreSQL + pgvector  
 **Deployment:** 
 - Backend: Fly.io (https://catalyst-service.fly.dev/v1)
-- Frontend: Vercel (catalyst-chat.per4ex.org, catalyst-dashboard.per4ex.org)
+- Frontend: Vercel (catalyst-chat.supercore.tech, catalyst-dashboard.supercore.tech)
 - Database: Fly.io Managed PostgreSQL with pgvector extension
 
 ### Key Capabilities
@@ -106,7 +106,7 @@ Legal data is highly sensitive. Standard "Chat with PDF" wrappers are not secure
 
 ---
 
-## 6. This Portfolio (Per4ex.org)
+## 6. This Portfolio (Supercore)
 **Built With:** Next.js 16, Tailwind CSS, Framer Motion.  
 **Hosted On:** Vercel.  
 **Feature:** Includes a "Retro Boot Loader" easter egg and a live "Chat with Catalyst" widget that connects to the production Catalyst API (https://catalyst-service.fly.dev/v1).

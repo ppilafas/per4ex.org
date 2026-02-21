@@ -23,13 +23,13 @@ class Settings(BaseSettings):
     catalyst_base_url: str = "http://localhost:8001/v1"
     catalyst_api_key: str = ""
     catalyst_tenant_id: str = "default"
-    cors_origins: str = "http://localhost:3000,http://localhost:3001,http://localhost:3002,https://per4ex.org,https://www.per4ex.org"
+    cors_origins: str = "http://localhost:3000,http://localhost:3001,http://localhost:3002,https://supercore.tech,https://www.supercore.tech"
     cache_max_size: int = 100
     cache_ttl: int = 3600  # 1 hour
 
 settings = Settings()
 
-app = FastAPI(title="Per4ex API")
+app = FastAPI(title="Supercore API")
 
 # Configure CORS with environment-based origins
 def get_cors_origins() -> List[str]:
@@ -49,8 +49,8 @@ def get_cors_origins() -> List[str]:
         "http://localhost:3000",
         "http://localhost:3001",
         "http://localhost:3002",
-        "https://per4ex.org",
-        "https://www.per4ex.org"
+        "https://supercore.tech",
+        "https://www.supercore.tech"
     ]
 
 app.add_middleware(

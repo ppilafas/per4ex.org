@@ -18,7 +18,7 @@ function useWidgetState(widgetType: 'chat' | 'voice') {
 
   // Load initial state from localStorage
   useEffect(() => {
-    const stored = localStorage.getItem('per4ex-widget-state')
+    const stored = localStorage.getItem('supercore-widget-state')
     if (stored) {
       const state = JSON.parse(stored)
       setIsOpen(state[widgetType] || false)
@@ -27,7 +27,7 @@ function useWidgetState(widgetType: 'chat' | 'voice') {
 
   // Update localStorage when state changes
   const setWidgetOpen = (open: boolean) => {
-    const currentState = JSON.parse(localStorage.getItem('per4ex-widget-state') || '{}')
+    const currentState = JSON.parse(localStorage.getItem('supercore-widget-state') || '{}')
     const newState = { ...currentState }
 
     // If opening this widget, close the other one
@@ -38,7 +38,7 @@ function useWidgetState(widgetType: 'chat' | 'voice') {
       newState[widgetType] = false
     }
 
-    localStorage.setItem('per4ex-widget-state', JSON.stringify(newState))
+    localStorage.setItem('supercore-widget-state', JSON.stringify(newState))
 
     // Dispatch custom event for same-tab synchronization
     window.dispatchEvent(new CustomEvent('widgetStateChange', { detail: newState }))
@@ -144,7 +144,7 @@ export function ChatWidget() {
     }
 
     const handleStorageChange = (e: StorageEvent) => {
-      if (e.key === 'per4ex-widget-state') {
+      if (e.key === 'supercore-widget-state') {
         const state = JSON.parse(e.newValue || '{}')
         handleStateChange(state)
       }
@@ -178,31 +178,41 @@ export function ChatWidget() {
       // Auto-send the project inquiry after a short delay
       const projectMessage = `I'm interested in the "${context.solutionTitle}" solution. I'd like to discuss a project.`
       setTimeout(() => {
-        console.log('Auto-sending project message:', projectMessage);
+        console.log('[ChatWidget] 🚀 Auto-sending project message:', projectMessage);
         // Call the direct send function
         const userMessage: Message = { role: "user", content: projectMessage }
         setMessages(prev => [...prev, userMessage])
         setIsLoading(true)
         setMessages(prev => [...prev, { role: "assistant", content: "" }])
         
+        const autoPayload = { 
+          messages: [...initialMessages, userMessage].filter(m => m.content.trim() !== "").map(m => ({ role: m.role, content: m.content })),
+          session_id: null,
+          solution_context: context
+        }
+        
+        console.log('[ChatWidget] 📤 Auto-send request:', autoPayload)
+        
         // Make the API call
         fetch("/api/chat", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ 
-            messages: [...initialMessages, userMessage].filter(m => m.content.trim() !== "").map(m => ({ role: m.role, content: m.content })),
-            session_id: null,
-            solution_context: context
-          }),
+          body: JSON.stringify(autoPayload),
         }).then(async response => {
+          console.log('[ChatWidget] 📥 Auto-send response:', response.status, response.statusText)
           if (!response.body) throw new Error("No response body")
           const reader = response.body.getReader()
           const decoder = new TextDecoder()
           let assistantMessage = ""
+          let autoChunkCount = 0
           
           while (true) {
             const { done, value } = await reader.read()
-            if (done) break
+            if (done) {
+              console.log('[ChatWidget] ✅ Auto-send complete. Total chunks:', autoChunkCount)
+              break
+            }
+            autoChunkCount++
             const chunk = decoder.decode(value)
             const lines = chunk.split("\n")
             for (const line of lines) {
@@ -221,14 +231,14 @@ export function ChatWidget() {
                     }
                     return newArr
                   })
-                } catch {
-                  // Ignore parse errors
+                } catch (e) {
+                  console.warn('[ChatWidget] ⚠️ Auto-send parse error:', e)
                 }
               }
             }
           }
         }).catch(error => {
-          console.error("Auto-send error:", error)
+          console.error("[ChatWidget] 💥 Auto-send error:", error)
           setMessages(prev => {
             const newArr = [...prev]
             newArr[newArr.length - 1] = { role: "assistant", content: "Sorry, there was an error. Please try again." }
@@ -236,8 +246,6 @@ export function ChatWidget() {
           })
         }).finally(() => {
           setIsLoading(false)
-          // Keep projectContext active throughout the conversation
-          // It will be cleared when widget closes or a new project intake starts
         })
       }, 200)
     }
@@ -285,44 +293,96 @@ export function ChatWidget() {
     // Add placeholder for assistant response
     setMessages(prev => [...prev, { role: "assistant", content: "" }])
 
+    // Build request payload for tracing
+    const messagesToSend = hasExistingSession && sessionId
+      ? [{ role: userMessage.role, content: userMessage.content }]
+      : messages
+          .filter(msg => msg.content.trim() !== "")
+          .concat([userMessage])
+          .map(msg => ({ role: msg.role, content: msg.content }))
+
+    const requestPayload = { 
+      messages: messagesToSend,
+      session_id: sessionId,
+      solution_context: projectContext
+    }
+
+    console.log('[ChatWidget] 📤 Sending request to /api/chat:', {
+      url: '/api/chat',
+      method: 'POST',
+      sessionId: sessionId || 'none (new session)',
+      messageCount: messagesToSend.length,
+      hasProjectContext: !!projectContext,
+      payload: requestPayload
+    })
+
+    const startTime = performance.now()
+
     try {
       // Refresh session timestamp on user activity
       refreshSessionTimestamp()
-      
-      // If we have an existing session, send only the latest message
-      // Catalyst will manage the full context history server-side
-      const messagesToSend = hasExistingSession && sessionId
-        ? [{ role: userMessage.role, content: userMessage.content }]
-        : messages
-            .filter(msg => msg.content.trim() !== "")
-            .concat([userMessage])
-            .map(msg => ({ role: msg.role, content: msg.content }))
 
       const response = await fetch("/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ 
-            messages: messagesToSend,
-            session_id: sessionId,
-            solution_context: projectContext // Pass project context for intake flow
-        }),
+        body: JSON.stringify(requestPayload),
       })
 
-      if (!response.body) throw new Error("No response body")
+      const responseTime = performance.now() - startTime
+      console.log('[ChatWidget] 📥 Response received:', {
+        status: response.status,
+        statusText: response.statusText,
+        responseTimeMs: Math.round(responseTime),
+        hasBody: !!response.body,
+        headers: Object.fromEntries(response.headers.entries())
+      })
+
+      if (!response.body) {
+        console.error('[ChatWidget] ❌ No response body')
+        throw new Error("No response body")
+      }
+
+      if (!response.ok) {
+        const errorText = await response.text().catch(() => 'Unknown error')
+        console.error('[ChatWidget] ❌ HTTP error:', {
+          status: response.status,
+          errorText: errorText.slice(0, 500)
+        })
+        throw new Error(`HTTP ${response.status}: ${errorText.slice(0, 200)}`)
+      }
       
       const reader = response.body.getReader()
       const decoder = new TextDecoder()
       let assistantMessage = ""
+      let chunkCount = 0
+      let dataEvents = 0
+
+      console.log('[ChatWidget] 🔄 Starting to read stream...')
 
       while (true) {
         const { done, value } = await reader.read()
-        if (done) break
+        if (done) {
+          console.log('[ChatWidget] ✅ Stream complete:', {
+            totalChunks: chunkCount,
+            totalDataEvents: dataEvents,
+            finalMessageLength: assistantMessage.length
+          })
+          break
+        }
         
+        chunkCount++
         const chunk = decoder.decode(value)
         const lines = chunk.split("\n")
         
+        console.log(`[ChatWidget] 📦 Chunk #${chunkCount}:`, {
+          bytes: value?.byteLength || 0,
+          lines: lines.length,
+          preview: chunk.slice(0, 200).replace(/\n/g, '\\n')
+        })
+        
         for (const line of lines) {
             if (line.startsWith("data: ")) {
+                dataEvents++
                 try {
                     const dataStr = line.slice(6)
                     if (!dataStr.trim()) continue;
@@ -331,16 +391,25 @@ export function ChatWidget() {
 
                     // 1. Metadata / Session Init
                     if (data.session_id && !sessionId) {
+                        console.log('[ChatWidget] 🆕 New session created:', data.session_id)
                         setSessionId(data.session_id)
-                        setCatalystSessionId(data.session_id) // Persist to sessionStorage
+                        setCatalystSessionId(data.session_id)
                         setHasExistingSession(true)
-                        console.log('New Catalyst session created:', data.session_id)
                         continue
                     }
 
                     // 2. Standard Text Streaming
                     if (data.content || data.text) {
-                        assistantMessage += (data.content || data.text || "")
+                        const delta = data.content || data.text || ""
+                        assistantMessage += delta
+                        
+                        if (dataEvents <= 5 || dataEvents % 20 === 0) {
+                          console.log(`[ChatWidget] ✍️ Content update #${dataEvents}:`, {
+                            deltaLength: delta.length,
+                            totalLength: assistantMessage.length,
+                            delta: delta.slice(0, 100).replace(/\n/g, '\\n')
+                          })
+                        }
                     }
                     
                     // Update UI
@@ -353,7 +422,7 @@ export function ChatWidget() {
                     })
 
                 } catch (e) {
-                    // Ignore parse errors
+                    console.warn('[ChatWidget] ⚠️ Parse error for line:', line.slice(0, 100), e)
                 }
             }
         }
@@ -361,9 +430,10 @@ export function ChatWidget() {
 
       // Increment message count on successful send
       setMessageCount(prev => prev + 1)
+      console.log('[ChatWidget] 🎉 Message sent successfully. Count:', messageCount + 1)
 
     } catch (error) {
-      console.error("Chat error:", error)
+      console.error("[ChatWidget] 💥 Chat error:", error)
       setMessages(prev => {
          const newArr = [...prev]
          newArr[newArr.length - 1] = { role: "assistant", content: "Error: Unable to connect to Catalyst Service." }
@@ -371,6 +441,8 @@ export function ChatWidget() {
       })
     } finally {
       setIsLoading(false)
+      const totalTime = performance.now() - startTime
+      console.log('[ChatWidget] ⏱️ Total request time:', Math.round(totalTime), 'ms')
     }
   }
 

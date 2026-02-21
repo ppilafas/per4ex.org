@@ -7,8 +7,8 @@ const BootLoader = dynamic(
   { ssr: false, loading: () => null }
 )
 
-const ChatWidget = dynamic(
-  () => import("@/components/chat-widget").then((m) => m.ChatWidget),
+const AssistantWidget = dynamic(
+  () => import("@/components/assistant-widget").then((m) => m.AssistantWidget),
   { ssr: false, loading: () => null }
 )
 
@@ -24,7 +24,7 @@ export function ClientBootLoader() {
 export function ClientWidgets() {
   return (
     <>
-      <ChatWidget />
+      <AssistantWidget />
       <LiveShowPiP />
     </>
   )

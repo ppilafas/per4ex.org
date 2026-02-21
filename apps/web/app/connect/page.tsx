@@ -30,7 +30,7 @@ export default function Connect() {
               <strong className="text-foreground text-lg mb-4">Email</strong>
               <div className="flex items-center gap-2 bg-card border border-card-border px-4 py-2 rounded text-foreground">
                  <Mail className="w-5 h-5" /> 
-                 <span className="select-all">pi@per4ex.org</span>
+                 <span className="select-all">pi@supercore.tech</span>
               </div>
            </div>
 

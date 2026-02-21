@@ -31,7 +31,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   }
 
   return {
-    title: `${article.title} | per4ex.org`,
+    title: `${article.title} | supercore.tech`,
     description: article.description,
     openGraph: {
       title: article.title,

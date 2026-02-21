@@ -75,7 +75,7 @@ export function DashboardFeatures() {
           </p>
           <div className="mt-8">
             <a 
-              href="https://catalyst-dashboard.per4ex.org/" 
+              href="https://catalyst-dashboard.supercore.tech/" 
               target="_blank" 
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 bg-accent/10 hover:bg-accent/20 text-accent font-medium px-6 py-3 rounded-full border border-accent/20 transition-all duration-300 hover:scale-105"

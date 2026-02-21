@@ -5,9 +5,9 @@
  * Uses sessionStorage so sessions persist across page navigations within the same tab.
  */
 
-const WEB_SESSION_KEY = 'per4ex-web-session'
-const CATALYST_SESSION_KEY = 'per4ex-catalyst-session'
-const SESSION_TIMESTAMP_KEY = 'per4ex-session-timestamp'
+const WEB_SESSION_KEY = 'supercore-web-session'
+const CATALYST_SESSION_KEY = 'supercore-catalyst-session'
+const SESSION_TIMESTAMP_KEY = 'supercore-session-timestamp'
 
 // Session timeout matching Catalyst's in-memory TTL (2 hours)
 const SESSION_TIMEOUT_MS = 2 * 60 * 60 * 1000

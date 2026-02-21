@@ -271,7 +271,7 @@ export function LiveShowPiP() {
             ) : (
               <Radio className="w-4 h-4 sm:w-3 sm:h-3 text-lime-400/50 flex-shrink-0" />
             )}
-            <span className="text-sm sm:text-xs text-white/50 flex-shrink-0">The Per4ex.org Show</span>
+            <span className="text-sm sm:text-xs text-white/50 flex-shrink-0">The Supercore Show</span>
             <span className="text-sm sm:text-xs text-white/25 flex-shrink-0 hidden sm:inline">—</span>
             {currentTopic ? (
               <span className="text-sm sm:text-xs text-lime-400/70 truncate min-w-0 hidden sm:inline">{currentTopic}</span>
@@ -340,7 +340,7 @@ export function LiveShowPiP() {
               </div>
             )}
             <div className="flex items-center gap-1.5">
-              <span className="text-xs text-white/50">The Per4ex.org Show</span>
+              <span className="text-xs text-white/50">The Supercore Show</span>
               <span className="text-xs text-white/25">—</span>
               <span className="text-xs text-white/30 italic">AI guests debate live</span>
             </div>

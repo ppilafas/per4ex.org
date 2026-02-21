@@ -24,10 +24,10 @@ const archivoBlack = Archivo_Black({
 });
 
 export const metadata = {
-  title: "Per4ex.org | Systems Engineer",
+  title: "Supercore | Systems Engineer",
   description: "Systems-focused portfolio for AI-related ecosystems.",
   icons: {
-    icon: "/catalyst3d.png",
+    icon: "/supecore.png",
   },
 };
 

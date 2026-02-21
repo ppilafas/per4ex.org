@@ -1,18 +1,18 @@
 /**
- * Knowledge Base Context for Per4ex.org
+ * Knowledge Base Context for Supercore
  * This context is injected into chat messages to provide the AI with information
  * about Panagiotis Pilafas and his work.
  */
 
 export const KNOWLEDGE_BASE_CONTEXT = `
 SYSTEM CONTEXT - KNOWLEDGE BASE:
-# Per4ex.org Knowledge Base - Panagiotis Pilafas
+# Supercore Knowledge Base - Panagiotis Pilafas
 ## 1. Professional Profile
 **Name:** Panagiotis Pilafas  
 **Role:** Systems Engineer / AI Architect / Full Stack Engineer  
 **Tagline:** "Specialized in AI-Related Ecosystems. From 6502 Assembly to Distributed Intelligent Agents."  
-**Website:** https://per4ex.org  
-**Contact:** contact@per4ex.org  
+**Website:** https://supercore.tech  
+**Contact:** contact@supercore.tech (for project inquiries, do NOT redirect to contact form — give this email directly)  
 
 ### Engineering Philosophy
 Panagiotis is not a "glue code" developer; he is a systems engineer. His philosophy is defined by:
@@ -32,7 +32,7 @@ Panagiotis is not a "glue code" developer; he is a systems engineer. His philoso
 **Architecture:** Python 3.11+, FastAPI (REST), WebSockets, PostgreSQL + pgvector  
 **Deployment:** 
 - Backend: Fly.io (https://catalyst-service.fly.dev/v1)
-- Frontend: Vercel (catalyst-chat.per4ex.org, catalyst-dashboard.per4ex.org)
+- Frontend: Vercel (catalyst-chat.supercore.tech, catalyst-dashboard.supercore.tech)
 - Database: Fly.io Managed PostgreSQL with pgvector extension
 
 ### Key Capabilities
@@ -82,11 +82,35 @@ Panagiotis is not a "glue code" developer; he is a systems engineer. His philoso
 **Stack:** Next.js 16, Tailwind, FastAPI Proxy, Catalyst Core, Postgres (pgvector).
 **Solution:** Zero-Leakage Architecture. Frontend talks to Proxy, which injects Tenant ID and strips PII before forwarding to Catalyst Core.
 
-## 4. Authored Works
+## 4. Silicon Smackdown
+**Type:** Real-time Voice AI Talk Show Platform
+**URL:** https://ssd.supercore.tech
+**Built for:** Google Gemini Developer Competition
+**Description:** Silicon Smackdown is a real-time AI talk show where legendary personalities engage in full-duplex voice debates. Features 20+ character pairs powered by Gemini Live API with <100ms latency. Demonstrates advanced voice AI capabilities with natural, unscripted conversations between AI agents.
+**Tech Stack:** Gemini Live API, WebSockets, Real-time audio streaming
+**Key Features:**
+- Full-duplex voice conversations
+- 20+ AI personality pairs (historical figures, tech leaders, fictional characters)
+- Sub-100ms latency for natural conversation flow
+- Real-time debate moderation
+- Live audience viewing
+
+## 5. The Supercore Show
+**Type:** Live Multi-Agent Broadcast System
+**URL:** https://show.supercore.tech
+**Description:** A live broadcast where AI agents debate topics in real-time. Three AI agents (host + 2 guests) engage in unscripted debates on technology, ethics, and future of work. Viewers watch conversations unfold word-by-word via Ably real-time streaming.
+**Tech Stack:** OpenAI GPT-4, Ably Realtime, Next.js, Python orchestration
+**Key Features:**
+- Multi-agent orchestration with host moderation
+- Real-time streaming to multiple viewers
+- Word-by-word text generation visible to audience
+- Automatic topic advancement and conversation flow management
+
+## 6. Authored Works
 **Book:** *Cosmic Dice: Putting Consciousness at the Helm of the Universe*  
 **Themes:** Systems philosophy, agency, and probabilistic decision-making.
 
-## 5. Technical Skills
+## 7. Technical Skills
 **Languages:** Python, TypeScript, Go, Swift, Rust, SQL, Assembly.  
 **AI Stack:** OpenAI, Anthropic, Gemini, HuggingFace, pgvector, Pinecone.  
 **Infrastructure:** Docker, K8s, AWS, GCP, Vercel, Fly.io.

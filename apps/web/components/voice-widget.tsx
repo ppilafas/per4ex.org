@@ -11,7 +11,7 @@ function useWidgetState(widgetType: 'chat' | 'voice') {
 
   // Load initial state from localStorage
   useEffect(() => {
-    const stored = localStorage.getItem('per4ex-widget-state')
+    const stored = localStorage.getItem('supercore-widget-state')
     if (stored) {
       const state = JSON.parse(stored)
       setIsOpen(state[widgetType] || false)
@@ -20,7 +20,7 @@ function useWidgetState(widgetType: 'chat' | 'voice') {
 
   // Update localStorage when state changes
   const setWidgetOpen = (open: boolean) => {
-    const currentState = JSON.parse(localStorage.getItem('per4ex-widget-state') || '{}')
+    const currentState = JSON.parse(localStorage.getItem('supercore-widget-state') || '{}')
     const newState = { ...currentState }
 
     // If opening this widget, close the other one
@@ -31,7 +31,7 @@ function useWidgetState(widgetType: 'chat' | 'voice') {
       newState[widgetType] = false
     }
 
-    localStorage.setItem('per4ex-widget-state', JSON.stringify(newState))
+    localStorage.setItem('supercore-widget-state', JSON.stringify(newState))
 
     // Dispatch custom event for same-tab synchronization
     window.dispatchEvent(new CustomEvent('widgetStateChange', { detail: newState }))
@@ -122,7 +122,7 @@ export function VoiceWidget({
           ws.send(JSON.stringify({
             type: "session.create",
             config: {
-              namespace: "per4ex-kb"
+              namespace: "supercore-kb"
             }
           }))
         }
@@ -638,7 +638,7 @@ export function VoiceWidget({
     }
 
     const handleStorageChange = (e: StorageEvent) => {
-      if (e.key === 'per4ex-widget-state') {
+      if (e.key === 'supercore-widget-state') {
         const state = JSON.parse(e.newValue || '{}')
         handleStateChange(state)
       }

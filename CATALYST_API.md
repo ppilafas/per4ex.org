@@ -331,7 +331,7 @@ data: {"session_id": "widget_session_123", "tenant_id": "catalyst-widget", "requ
 event: reasoning
 data: {"type": "reasoning", "data": {"steps": [{"step": 1, "thought": "...", "conclusion": null}], "summary": "...", "source": "provider", "model": "gpt-4o"}}
 
-data: {"content": "Per4ex", "text": "Per4ex"}
+data: {"content": "Supercore", "text": "Supercore"}
 data: {"content": " is", "text": " is"}
 data: {"content": " a platform...", "text": " a platform..."}
 

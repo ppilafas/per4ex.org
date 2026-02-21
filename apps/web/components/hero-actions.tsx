@@ -1,7 +1,6 @@
 "use client"
 
-import Link from "next/link"
-import { MessageSquare, Brain } from "lucide-react"
+import { MessageSquare } from "lucide-react"
 
 export function HeroActions() {
   return (
@@ -16,14 +15,6 @@ export function HeroActions() {
         <MessageSquare className="w-4 h-4" />
         <span>Start a Project</span>
       </button>
-      
-      <Link 
-        href="/catalyst-ai"
-        className="px-6 py-3 rounded-full font-bold border border-accent/40 hover:border-accent hover:bg-accent/10 transition-colors flex items-center justify-center gap-2"
-      >
-        <Brain className="w-4 h-4" />
-        <span>View Architecture</span>
-      </Link>
     </div>
   )
 }

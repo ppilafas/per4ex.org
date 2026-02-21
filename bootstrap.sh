@@ -28,8 +28,31 @@ echo "✅ Ports assigned:"
 echo "   ➜ API: http://localhost:$API_PORT"
 echo "   ➜ Web: http://localhost:$WEB_PORT"
 
-# 2. Python Environment Setup
+# 2. Load .env.local files for secrets (NGROK_AUTHTOKEN, ELEVENLABS_*)
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+load_env_file() {
+    local file="$1"
+    [ -f "$file" ] || return
+    echo "📦 Loading $file..."
+    while IFS= read -r line || [ -n "$line" ]; do
+        [[ "$line" =~ ^\s*# ]] && continue
+        [[ -z "${line// }" ]] && continue
+        if [[ "$line" =~ ^([A-Za-z_][A-Za-z0-9_]*)=(.*)$ ]]; then
+            key="${BASH_REMATCH[1]}"
+            val="${BASH_REMATCH[2]}"
+            val="${val%\"}"; val="${val#\"}"
+            val="${val%\'}"; val="${val#\'}"
+            export "$key=$val"
+        fi
+    done < "$file"
+}
+
+# Load root first, then web — web values take precedence
+load_env_file "$ROOT_DIR/.env.local"
+load_env_file "$ROOT_DIR/apps/web/.env.local"
+
+# 3. Python Environment Setup
 API_DIR="$ROOT_DIR/apps/api"
 WEB_DIR="$ROOT_DIR/apps/web"
 
@@ -41,16 +64,109 @@ else
     echo "⚠️  No .venv found in apps/api, using system python."
 fi
 
-# 3. Cleanup Trap
+# 4. Cloudflare tunnel helper (replaces ngrok — no interstitial page blocking external services)
+TUNNEL_PID=""
+
+start_tunnel() {
+    # Kill any stale tunnel processes
+    pkill -f "cloudflared tunnel" 2>/dev/null
+    pkill -f "ngrok http" 2>/dev/null
+    sleep 1
+
+    echo "🌐 Starting Cloudflare tunnel for port $WEB_PORT..."
+    # Use cloudflared quick tunnel — free, no auth required, no interstitial page
+    cloudflared tunnel --url "http://localhost:$WEB_PORT" > /tmp/tunnel-bootstrap.log 2>&1 &
+    TUNNEL_PID=$!
+
+    # Wait up to 30s for tunnel to expose a URL
+    local tunnel_url=""
+    local attempts=0
+    while [ -z "$tunnel_url" ] && [ $attempts -lt 60 ]; do
+        sleep 0.5
+        # cloudflared outputs: "Your quick Tunnel has been created! Visit it at: https://xxx.trycloudflare.com"
+        tunnel_url=$(grep -oE 'https://[a-zA-Z0-9-]+\.trycloudflare\.com' /tmp/tunnel-bootstrap.log 2>/dev/null | head -1)
+        ((attempts++))
+    done
+
+    if [ -z "$tunnel_url" ]; then
+        echo "⚠️  Cloudflare tunnel URL not available after 30s — ElevenLabs agent not patched"
+        echo "   Check /tmp/tunnel-bootstrap.log for details"
+        return
+    fi
+
+    echo "🔗 Cloudflare tunnel: $tunnel_url"
+    patch_elevenlabs_agent "$tunnel_url"
+}
+
+patch_elevenlabs_agent() {
+    local tunnel_url="$1"
+    local custom_llm_url="${tunnel_url}/api/voice/llm"
+
+    if [ -z "$ELEVENLABS_API_KEY" ] || [ -z "$ELEVENLABS_AGENT_ID" ]; then
+        echo "⚠️  ELEVENLABS_API_KEY or ELEVENLABS_AGENT_ID not set — skipping agent patch"
+        return
+    fi
+
+    echo "🔧 Patching ElevenLabs agent $ELEVENLABS_AGENT_ID → $custom_llm_url"
+
+    # Check the current LLM setting on the agent before patching.
+    # Only update the custom_llm URL if the agent is already set to custom-llm.
+    # If it's set to a managed LLM (e.g. Qwen), skip the patch to preserve that setting.
+    local current_llm
+    current_llm=$(curl -s \
+        "https://api.elevenlabs.io/v1/convai/agents/$ELEVENLABS_AGENT_ID" \
+        -H "xi-api-key: $ELEVENLABS_API_KEY" | \
+        python3 -c "import sys,json; d=json.load(sys.stdin); print(d.get('conversation_config',{}).get('agent',{}).get('prompt',{}).get('llm','unknown'))" 2>/dev/null)
+
+    echo "   Current LLM: $current_llm"
+
+    if [ "$current_llm" = "custom-llm" ]; then
+        echo "   Agent is on custom LLM — updating tunnel URL..."
+        local http_status
+        http_status=$(curl -s -o /tmp/el-patch-response.json -w "%{http_code}" \
+            -X PATCH \
+            "https://api.elevenlabs.io/v1/convai/agents/$ELEVENLABS_AGENT_ID" \
+            -H "xi-api-key: $ELEVENLABS_API_KEY" \
+            -H "Content-Type: application/json" \
+            -d "{
+              \"conversation_config\": {
+                \"agent\": {
+                  \"prompt\": {
+                    \"llm\": \"custom-llm\",
+                    \"custom_llm\": {
+                      \"url\": \"$custom_llm_url\"
+                    }
+                  }
+                }
+              }
+            }")
+
+        if [ "$http_status" = "200" ]; then
+            echo "✅ ElevenLabs agent patched — custom LLM URL updated to tunnel"
+        else
+            echo "❌ Failed to patch ElevenLabs agent (HTTP $http_status):"
+            cat /tmp/el-patch-response.json
+        fi
+    else
+        echo "✅ Agent is using managed LLM ($current_llm) — skipping LLM patch to preserve setting"
+        echo "   Custom LLM fallback URL would be: $custom_llm_url"
+    fi
+}
+
+# 5. Cleanup Trap
 cleanup() {
     echo ""
     echo "🛑 Stopping services..."
     kill $API_PID $WEB_PID 2>/dev/null
+    if [ -n "$TUNNEL_PID" ]; then
+        kill $TUNNEL_PID 2>/dev/null
+        echo "🌐 Cloudflare tunnel closed"
+    fi
     exit
 }
-trap cleanup SIGINT
+trap cleanup SIGINT SIGTERM
 
-# 4. Process Launch
+# 6. Process Launch
 echo ""
 echo "🚀 Launching FastAPI backend..."
 cd "$API_DIR"
@@ -72,8 +188,26 @@ export NEXT_PUBLIC_CATALYST_WS_URL="ws://localhost:8765"
 npm run dev &
 WEB_PID=$!
 
+# 7. Wait for Next.js to be ready, then start tunnel
 echo ""
-echo "✨ Both services are running! Press Ctrl+C to stop."
+echo "⏳ Waiting for Next.js to be ready on port $WEB_PORT..."
+attempts=0
+while ! curl -s "http://localhost:$WEB_PORT/" > /dev/null 2>&1; do
+    sleep 1
+    ((attempts++))
+    if [ $attempts -ge 60 ]; then
+        echo "⚠️  Next.js not ready after 60s — skipping tunnel"
+        break
+    fi
+done
+
+if curl -s "http://localhost:$WEB_PORT/" > /dev/null 2>&1; then
+    echo "✅ Next.js is ready"
+    start_tunnel
+fi
+
+echo ""
+echo "✨ All services running! Press Ctrl+C to stop."
 echo ""
 
 wait

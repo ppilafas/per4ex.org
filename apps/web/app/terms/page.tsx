@@ -12,7 +12,7 @@ export default function TermsOfService() {
       {/* Introduction */}
       <div className="glass-panel">
         <p className="text-lg leading-relaxed text-muted mb-4">
-          These Terms of Service ("Terms") govern your access to and use of Per4ex.org and <strong className="text-foreground">Catalyst</strong> ("we," "our," or "us"). By accessing or using our website and services, including <strong className="text-foreground">Catalyst</strong>, our personal AI operating system and intelligent assistant platform, you agree to be bound by these Terms.
+          These Terms of Service ("Terms") govern your access to and use of Supercore and <strong className="text-foreground">Catalyst</strong> ("we," "our," or "us"). By accessing or using our website and services, including <strong className="text-foreground">Catalyst</strong>, our personal AI operating system and intelligent assistant platform, you agree to be bound by these Terms.
         </p>
         <p className="text-muted">
           If you do not agree to these Terms, please do not use our services, including <strong className="text-foreground">Catalyst</strong>.
@@ -27,7 +27,7 @@ export default function TermsOfService() {
         </h2>
         <div className="space-y-3 text-muted">
           <p>
-            By accessing or using Per4ex.org or <strong className="text-foreground">Catalyst</strong>, you acknowledge that you have read, understood, and agree to be bound by these Terms and our Privacy Policy. These Terms constitute a legally binding agreement between you and Per4ex.org.
+            By accessing or using Supercore or <strong className="text-foreground">Catalyst</strong>, you acknowledge that you have read, understood, and agree to be bound by these Terms and our Privacy Policy. These Terms constitute a legally binding agreement between you and Supercore.
           </p>
           <p>
             We reserve the right to modify these Terms at any time. Your continued use of our services, including <strong className="text-foreground">Catalyst</strong>, after any such changes constitutes your acceptance of the new Terms.
@@ -105,7 +105,7 @@ export default function TermsOfService() {
         <h2 className="text-2xl font-bold text-foreground mb-4">Intellectual Property</h2>
         <div className="space-y-3 text-muted">
           <p>
-            All content on Per4ex.org, including but not limited to text, graphics, logos, images, software, and code, is the property of Per4ex.org or its content suppliers and is protected by copyright, trademark, and other intellectual property laws.
+            All content on Supercore, including but not limited to text, graphics, logos, images, software, and code, is the property of Supercore or its content suppliers and is protected by copyright, trademark, and other intellectual property laws.
           </p>
           <p>
             You may not reproduce, distribute, modify, create derivative works of, publicly display, or otherwise use our content without our prior written permission.
@@ -143,7 +143,7 @@ export default function TermsOfService() {
         </h2>
         <div className="space-y-3 text-muted">
           <p>
-            To the maximum extent permitted by law, Per4ex.org and its operators shall not be liable for any indirect, incidental, special, consequential, or punitive damages, or any loss of profits or revenues, whether incurred directly or indirectly, or any loss of data, use, goodwill, or other intangible losses resulting from:
+            To the maximum extent permitted by law, Supercore and its operators shall not be liable for any indirect, incidental, special, consequential, or punitive damages, or any loss of profits or revenues, whether incurred directly or indirectly, or any loss of data, use, goodwill, or other intangible losses resulting from:
           </p>
           <ul className="space-y-2 list-disc pl-6">
             <li>Your use or inability to use our services</li>
@@ -159,7 +159,7 @@ export default function TermsOfService() {
       <div className="glass-panel">
         <h2 className="text-2xl font-bold text-foreground mb-4">Indemnification</h2>
         <p className="text-muted">
-          You agree to indemnify, defend, and hold harmless Per4ex.org and its operators from any claims, damages, losses, liabilities, and expenses (including legal fees) arising out of or relating to your use of our services, violation of these Terms, or infringement of any rights of another party.
+          You agree to indemnify, defend, and hold harmless Supercore and its operators from any claims, damages, losses, liabilities, and expenses (including legal fees) arising out of or relating to your use of our services, violation of these Terms, or infringement of any rights of another party.
         </p>
       </div>
 
@@ -203,9 +203,9 @@ export default function TermsOfService() {
             If you have any questions about these Terms of Service, please contact us:
           </p>
           <div className="bg-background/50 p-4 rounded-lg border border-card-border">
-            <p className="text-foreground font-medium mb-2">Per4ex.org</p>
-            <p>Email: <a href="mailto:contact@per4ex.org" className="text-accent hover:underline">contact@per4ex.org</a></p>
-            <p className="mt-2">Website: <a href="https://per4ex.org" className="text-accent hover:underline">https://per4ex.org</a></p>
+            <p className="text-foreground font-medium mb-2">SuperCore.tech</p>
+            <p>Email: <a href="mailto:contact@supercore.tech" className="text-accent hover:underline">contact@supercore.tech</a></p>
+            <p className="mt-2">Website: <a href="https://supercore.tech" className="text-accent hover:underline">https://supercore.tech</a></p>
           </div>
         </div>
       </div>

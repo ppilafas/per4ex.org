@@ -117,6 +117,6 @@ export default function ArticlesPage() {
 }
 
 export const metadata = {
-  title: "Articles & Insights | per4ex.org",
+  title: "Articles & Insights | supercore.tech",
   description: "Thoughts on building production AI systems, case studies, and industry insights from an AI engineer.",
 }
