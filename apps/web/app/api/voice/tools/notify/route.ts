@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from "next/server"
 const ELEVENLABS_AGENT_SECRET = process.env.ELEVENLABS_AGENT_SECRET
 
 const RESEND_API_KEY = process.env.RESEND_API_KEY
-const OWNER_EMAIL = process.env.OWNER_EMAIL || "pi@supercore.tech"
+const OWNER_EMAIL = process.env.OWNER_EMAIL || "ppilafas@gmail.com"
 
 const TWILIO_ACCOUNT_SID = process.env.TWILIO_ACCOUNT_SID
 const TWILIO_AUTH_TOKEN = process.env.TWILIO_AUTH_TOKEN
@@ -39,7 +39,7 @@ async function sendEmail(subject: string, body: string, fromName: string): Promi
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      from: "Supercore Voice Agent <agent@supercore.tech>",
+      from: "Supercore Voice Agent <onboarding@resend.dev>",
       to: [OWNER_EMAIL],
       subject: `[Voice Agent] ${subject}`,
       text: `Message from visitor: ${fromName}\n\n${body}\n\n---\nSent via Supercore voice agent`,
@@ -48,8 +48,8 @@ async function sendEmail(subject: string, body: string, fromName: string): Promi
 
   if (!res.ok) {
     const text = await res.text()
-    console.error("❌ Resend error:", text)
-    return { ok: false, error: `Resend API error: ${res.status}` }
+    console.error("❌ Resend error:", res.status, text)
+    return { ok: false, error: `Resend API error: ${res.status} — ${text}` }
   }
 
   console.log(`✅ Email sent to ${OWNER_EMAIL} — subject: ${subject}`)
