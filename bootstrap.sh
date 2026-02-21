@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Supercore local dev bootstrap
-# Launches the Next.js app with env loaded from .env.local files
+# Launches the Next.js app with env loaded from .env.local
 
 set -e
 
@@ -14,7 +14,6 @@ find_free_port() {
 }
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-WEB_DIR="$ROOT_DIR/apps/web"
 
 # Find available port
 WEB_PORT=3008
@@ -42,7 +41,6 @@ load_env_file() {
 }
 
 load_env_file "$ROOT_DIR/.env.local"
-load_env_file "$WEB_DIR/.env.local"
 
 # Cleanup trap
 cleanup() {
@@ -55,7 +53,7 @@ trap cleanup SIGINT SIGTERM
 
 # Launch Next.js
 echo "🚀 Launching Next.js..."
-cd "$WEB_DIR"
+cd "$ROOT_DIR"
 rm -rf .next
 export PORT=$WEB_PORT
 npm run dev &
