@@ -177,22 +177,34 @@ patch_elevenlabs_agent() {
             local new_url="${tool_base_url}?tool=${tool_name}"
             echo "   Patching tool $tool_name ($tool_id) → $new_url"
 
+            # Build full patch payload via python3 to safely handle JSON escaping
+            local patch_payload
+            patch_payload=$(echo "$tool_json" | python3 -c "
+import sys, json
+d = json.load(sys.stdin)
+tc = d.get('tool_config', {})
+payload = {
+    'tool_config': {
+        'type': 'webhook',
+        'name': tc.get('name', ''),
+        'description': tc.get('description', ''),
+        'api_schema': {
+            'url': '$new_url',
+            'method': 'POST',
+            'request_body_schema': tc.get('api_schema', {}).get('request_body_schema', {})
+        }
+    }
+}
+print(json.dumps(payload))
+" 2>/dev/null)
+
             local patch_status
-            patch_status=$(curl -s -o /tmp/el-tool-patch.json -w "%{http_code}" \
+            patch_status=$(echo "$patch_payload" | curl -s -o /tmp/el-tool-patch.json -w "%{http_code}" \
                 -X PATCH \
                 "https://api.elevenlabs.io/v1/convai/tools/$tool_id" \
                 -H "xi-api-key: $ELEVENLABS_API_KEY" \
                 -H "Content-Type: application/json" \
-                -d "{
-                  \"tool_config\": {
-                    \"type\": \"webhook\",
-                    \"name\": \"$tool_name\",
-                    \"api_schema\": {
-                      \"url\": \"$new_url\",
-                      \"method\": \"POST\"
-                    }
-                  }
-                }")
+                -d @-)
 
             if [ "$patch_status" = "200" ]; then
                 echo "   ✅ $tool_name → $new_url"
