@@ -19,6 +19,12 @@ export async function POST(req: NextRequest) {
   const body = await req.json()
   const { message, conversation_id } = body
 
+  console.log('🔍 ElevenLabs chat request:', {
+    message: message?.slice(0, 50),
+    conversation_id: conversation_id || 'new',
+    agent_id: agentId,
+  })
+
   if (!message || typeof message !== "string") {
     return NextResponse.json({ error: "Missing message" }, { status: 400 })
   }
@@ -50,6 +56,13 @@ export async function POST(req: NextRequest) {
     }
 
     const data = await response.json()
+    
+    console.log('🔍 ElevenLabs chat response:', {
+      conversation_id: data.conversation_id,
+      response_preview: data.response?.slice(0, 100),
+      has_tool_calls: !!data.tool_calls && data.tool_calls.length > 0,
+      tool_calls: data.tool_calls || [],
+    })
     
     // Format response for chat widget compatibility
     return NextResponse.json({
