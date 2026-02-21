@@ -108,53 +108,13 @@ patch_elevenlabs_agent() {
         return
     fi
 
-    echo "🔧 Patching ElevenLabs agent $ELEVENLABS_AGENT_ID → $custom_llm_url"
+    echo "ℹ️  LLM stays on production (supercore.tech) — no tunnel patch needed"
 
-    # Fetch current agent config
+    # Fetch current agent config (needed for tool patching below)
     local agent_json
     agent_json=$(curl -s \
         "https://api.elevenlabs.io/v1/convai/agents/$ELEVENLABS_AGENT_ID" \
         -H "xi-api-key: $ELEVENLABS_API_KEY")
-
-    local current_llm
-    current_llm=$(echo "$agent_json" | \
-        python3 -c "import sys,json; d=json.load(sys.stdin); print(d.get('conversation_config',{}).get('agent',{}).get('prompt',{}).get('llm','unknown'))" 2>/dev/null)
-
-    echo "   Current LLM: $current_llm"
-
-    if [ "$current_llm" = "custom-llm" ]; then
-        echo "   Agent is on custom LLM — updating tunnel URL..."
-        local http_status
-        http_status=$(curl -s -o /tmp/el-patch-response.json -w "%{http_code}" \
-            -X PATCH \
-            "https://api.elevenlabs.io/v1/convai/agents/$ELEVENLABS_AGENT_ID" \
-            -H "xi-api-key: $ELEVENLABS_API_KEY" \
-            -H "Content-Type: application/json" \
-            -d "{
-              \"conversation_config\": {
-                \"agent\": {
-                  \"prompt\": {
-                    \"llm\": \"custom-llm\",
-                    \"cascade_timeout_seconds\": 15,
-                    \"custom_llm\": {
-                      \"url\": \"$custom_llm_url\",
-                      \"model_id\": \"gpt-4o-mini\"
-                    }
-                  }
-                }
-              }
-            }")
-
-        if [ "$http_status" = "200" ]; then
-            echo "✅ ElevenLabs agent patched — custom LLM URL updated to tunnel"
-        else
-            echo "❌ Failed to patch ElevenLabs agent (HTTP $http_status):"
-            cat /tmp/el-patch-response.json
-        fi
-    else
-        echo "✅ Agent is using managed LLM ($current_llm) — skipping LLM patch to preserve setting"
-        echo "   Custom LLM fallback URL would be: $custom_llm_url"
-    fi
 
     # Patch tool webhook URLs to point to the tunnel
     echo "🔧 Patching tool webhook URLs → $tool_base_url"
