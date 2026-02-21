@@ -6,6 +6,15 @@ const OPENAI_API_KEY = process.env.OPENAI_API_KEY
 const ELEVENLABS_AGENT_SECRET = process.env.ELEVENLABS_AGENT_SECRET
 const VECTOR_STORE_ID = process.env.OPENAI_VECTOR_STORE_ID
 
+// Cache system instructions at module level — avoids fs read on every request
+let _cachedSystemInstructions: string | null = null
+async function getCachedSystemInstructions(): Promise<string> {
+  if (!_cachedSystemInstructions) {
+    _cachedSystemInstructions = await getSystemInstructions()
+  }
+  return _cachedSystemInstructions
+}
+
 interface OAIMessage {
   role: "system" | "user" | "assistant"
   content: string
@@ -136,9 +145,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json(empty)
   }
 
-  console.log(`⏳ [${reqId}] Fetching system instructions...`)
-  const systemInstructions = await getSystemInstructions()
-  console.log(`✅ [${reqId}] Context ready — instructions=${systemInstructions.length}chars`)
+  const systemInstructions = await getCachedSystemInstructions()
 
   const enrichedSystem = `${systemInstructions}
 
@@ -178,6 +185,7 @@ NOTE: ElevenLabs provides you with knowledge base context from the crawled websi
         model: "gpt-4o-mini",
         messages: enrichedMessages,
         stream: isStreaming,
+        max_tokens: 150,
       }),
     })
   } catch (e) {
@@ -197,41 +205,8 @@ NOTE: ElevenLabs provides you with knowledge base context from the crawled websi
   }
 
   if (isStreaming) {
-    console.log(`🌊 [${reqId}] Streaming response back to ElevenLabs`)
-    
-    // Create a transform stream to log chunks as they pass through
-    const { readable, writable } = new TransformStream()
-    const reader = openaiResponse.body!.getReader()
-    const writer = writable.getWriter()
-    const decoder = new TextDecoder()
-    let fullResponse = ''
-    
-    ;(async () => {
-      try {
-        while (true) {
-          const { done, value } = await reader.read()
-          if (done) break
-          
-          const chunk = decoder.decode(value, { stream: true })
-          fullResponse += chunk
-          
-          // Log first few chunks to see what's being streamed
-          if (fullResponse.length < 500) {
-            console.log(`📦 [${reqId}] Chunk: ${chunk.slice(0, 100)}`)
-          }
-          
-          await writer.write(value)
-        }
-        console.log(`✅ [${reqId}] Streaming complete. Total response length: ${fullResponse.length} chars`)
-        console.log(`📄 [${reqId}] Response preview: ${fullResponse.slice(0, 300)}`)
-        await writer.close()
-      } catch (error) {
-        console.error(`❌ [${reqId}] Streaming error:`, error)
-        await writer.abort(error)
-      }
-    })()
-    
-    return new NextResponse(readable, {
+    console.log(`🌊 [${reqId}] Piping stream → ElevenLabs`)
+    return new NextResponse(openaiResponse.body, {
       status: 200,
       headers: {
         "Content-Type": "text/event-stream",
