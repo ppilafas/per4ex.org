@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-import { streamText } from "ai";
+import { streamText, tool } from "ai";
 import { openai } from "@ai-sdk/openai";
+import { z } from "zod";
 import { KNOWLEDGE_BASE_CONTEXT } from "@/lib/knowledge-base";
 import { getAISettings } from "@/lib/ai-config";
 import { getSystemInstructions } from "@/lib/system-instructions";
@@ -359,6 +360,38 @@ export async function POST(req: NextRequest) {
         const result = streamText({
           model: openai(settings.vercelAiModel || "gpt-5-mini"),
           messages: enrichedMessages.map((msg) => ({ role: msg.role === "system" ? "user" : msg.role, content: msg.content })),
+          tools: {
+            send_widget_contact_email: tool({
+              description: "Send a contact email to Panagiotis from a website visitor",
+              parameters: z.object({
+                name: z.string().describe("Visitor name"),
+                email: z.string().describe("Visitor email address"),
+                message: z.string().describe("Message content"),
+              }),
+              execute: async ({ name, email, message }) => {
+                const resendKey = process.env.RESEND_API_KEY
+                const ownerEmail = process.env.OWNER_EMAIL || "ppilafas@gmail.com"
+                if (!resendKey) return "Email service not configured."
+                const res = await fetch("https://api.resend.com/emails", {
+                  method: "POST",
+                  headers: { Authorization: `Bearer ${resendKey}`, "Content-Type": "application/json" },
+                  body: JSON.stringify({
+                    from: "Supercore Chat <onboarding@resend.dev>",
+                    to: [ownerEmail],
+                    subject: `[Chat] Message from ${name}`,
+                    text: `From: ${name} <${email}>\n\n${message}\n\n---\nSent via Supercore chat widget`,
+                  }),
+                })
+                if (!res.ok) {
+                  console.error("❌ Chat widget email error:", res.status, await res.text())
+                  return "Failed to send email. Please try again."
+                }
+                console.log(`✅ Chat widget email sent to ${ownerEmail} from ${email}`)
+                return "Email sent successfully."
+              },
+            }),
+          },
+          maxSteps: 3,
         });
 
         console.log(`✅ [${requestId}] streamText initiated, creating SSE stream...`)
