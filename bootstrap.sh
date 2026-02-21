@@ -100,7 +100,7 @@ start_tunnel() {
 
 patch_elevenlabs_agent() {
     local tunnel_url="$1"
-    local custom_llm_url="${tunnel_url}/api/voice/llm/chat/completions"
+    local custom_llm_url="${tunnel_url}/api/voice/llm"
     local tool_base_url="${tunnel_url}/api/voice/tools/notify"
 
     if [ -z "$ELEVENLABS_API_KEY" ] || [ -z "$ELEVENLABS_AGENT_ID" ]; then
