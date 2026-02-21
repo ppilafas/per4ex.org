@@ -83,8 +83,8 @@ async function sendSms(message: string, fromName: string): Promise<{ ok: boolean
 
   if (!res.ok) {
     const text = await res.text()
-    console.error("❌ Twilio error:", text)
-    return { ok: false, error: `Twilio API error: ${res.status}` }
+    console.error("❌ Twilio error:", res.status, text)
+    return { ok: false, error: `Twilio API error: ${res.status} — ${text}` }
   }
 
   console.log(`✅ SMS sent to ${OWNER_PHONE}`)
@@ -153,7 +153,7 @@ export async function POST(req: NextRequest) {
       tool_call_id,
       result: result.ok
         ? "SMS sent successfully. Panagiotis has been notified."
-        : `Could not send SMS: ${result.error}`,
+        : "SMS is currently unavailable. Please offer to send an email instead using the send_email tool.",
     })
   }
 
