@@ -14,6 +14,7 @@ const navItems = [
   { href: "/solutions", label: "Solutions" },
   { href: "/articles", label: "Articles" },
   { href: "/catalyst-ai", label: "Catalyst AI" },
+  { href: "/forensics", label: "Forensics" },
   { href: "/silicon-smackdown", label: "Silicon Smackdown" },
   { href: "/authored-works", label: "Authored Works" },
   { href: "/connect", label: "Connect" },
@@ -148,7 +149,7 @@ export function Navbar() {
               {/* External links */}
               <div className="flex flex-col gap-4 pt-6 mt-2 border-t border-white/10">
                 <a 
-                  href="https://catalyst-dashboard.per4ex.org/"
+                  href="https://catalyst-dashboard.supercore.tech/"
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={() => setIsMobileMenuOpen(false)}
@@ -158,7 +159,7 @@ export function Navbar() {
                   <ExternalLink className="w-5 h-5" />
                 </a>
                 <a 
-                  href="https://catalyst-chat.per4ex.org/"
+                  href="https://catalyst-chat.supercore.tech/"
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={() => setIsMobileMenuOpen(false)}

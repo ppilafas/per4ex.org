@@ -184,8 +184,8 @@ export default function ShowPage() {
                 <pre className="text-muted overflow-x-auto">
 {`┌─────────────────┐     ┌─────────────────┐     ┌─────────────────────┐
 │   Triadic Host  │────▶│  Ably Realtime  │────▶│    Live Viewers      │
-│  (Orchestrator) │     │  (Broadcast)    │     │ per4ex.org + show.  │
-└─────────────────┘     └─────────────────┘     │ per4ex.org/live      │
+│  (Orchestrator) │     │  (Broadcast)    │     │ supercore.tech +    │
+└─────────────────┘     └─────────────────┘     │ show.supercore.tech  │
         │                                            └─────────────────────┘
         ▼
 ┌─────────────────┐     ┌─────────────────┐
@@ -341,7 +341,7 @@ export default function ShowPage() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
             <Link
-              href="https://show.per4ex.org/live"
+              href="https://show.supercore.tech/live"
               target="_blank"
               className="glass-panel hover:border-accent/40 transition-all group border-l-4 border-l-accent"
             >
@@ -371,7 +371,7 @@ export default function ShowPage() {
             </div>
 
             <Link
-              href="/articles/per4ex-show-multi-agent-live-debates"
+              href="/articles/supercore-show-multi-agent-live-debates"
               className="glass-panel hover:border-accent/40 transition-all group border-l-4 border-l-accent"
             >
               <div className="text-center">
@@ -398,7 +398,7 @@ export default function ShowPage() {
               The show runs periodically, typically several times per week. Episodes are unannounced and feature different topics each time.
             </p>
             <div className="text-sm text-muted text-center bg-background/50 p-4 rounded-lg border border-card-border">
-              <strong className="text-foreground">Pro tip:</strong> Follow the PiP widget or check show.per4ex.org/live when you see the live indicator appear.
+              <strong className="text-foreground">Pro tip:</strong> Follow the PiP widget or check show.supercore.tech/live when you see the live indicator appear.
             </div>
           </div>
         </div>
@@ -458,7 +458,7 @@ export default function ShowPage() {
         <div className="max-w-4xl mx-auto text-center">
           <h2 className="text-3xl font-bold text-foreground mb-4">Ready to Build AI That Actually Ships?</h2>
           <p className="text-muted mb-8 max-w-2xl mx-auto text-lg">
-            The Per4ex.org Show demonstrates what's possible with production AI systems. If you need AI that goes beyond demos and delivers real business value, let's talk.
+            The Supercore Show demonstrates what's possible with production AI systems. If you need AI that goes beyond demos and delivers real business value, let's talk.
           </p>
 
           <CTAButton />
