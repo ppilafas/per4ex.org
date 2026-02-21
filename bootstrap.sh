@@ -100,7 +100,7 @@ start_tunnel() {
 
 patch_elevenlabs_agent() {
     local tunnel_url="$1"
-    local custom_llm_url="${tunnel_url}/api/voice/llm"
+    local custom_llm_url="${tunnel_url}/api/voice/llm/chat/completions"
     local tool_base_url="${tunnel_url}/api/voice/tools/notify"
 
     if [ -z "$ELEVENLABS_API_KEY" ] || [ -z "$ELEVENLABS_AGENT_ID" ]; then
@@ -135,8 +135,10 @@ patch_elevenlabs_agent() {
                 \"agent\": {
                   \"prompt\": {
                     \"llm\": \"custom-llm\",
+                    \"cascade_timeout_seconds\": 15,
                     \"custom_llm\": {
-                      \"url\": \"$custom_llm_url\"
+                      \"url\": \"$custom_llm_url\",
+                      \"model_id\": \"gpt-4o-mini\"
                     }
                   }
                 }
