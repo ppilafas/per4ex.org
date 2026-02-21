@@ -1,6 +1,6 @@
 "use client"
 
-import { useMemo, useState } from "react"
+import { useState } from "react"
 import type { AISettings } from "@/lib/ai-config"
 
 interface Props {
@@ -15,10 +15,6 @@ export function AdminAISettings({ initialSettings, initialSystemInstructions }: 
   const [isSavingInstructions, setIsSavingInstructions] = useState(false)
   const [status, setStatus] = useState<string | null>(null)
   const [instructionsStatus, setInstructionsStatus] = useState<string | null>(null)
-
-  const providerLabel = useMemo(() => {
-    return `${settings.aiProvider}/${settings.voiceProvider}`
-  }, [settings.aiProvider, settings.voiceProvider])
 
   const save = async () => {
     setIsSaving(true)
@@ -107,7 +103,7 @@ export function AdminAISettings({ initialSettings, initialSystemInstructions }: 
       <div className="glass-panel border border-card-border/50 flex items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold text-foreground">AI Runtime Settings</h1>
-          <p className="text-sm text-muted">Current route: {providerLabel}</p>
+          <p className="text-sm text-muted">Model: {settings.model}</p>
         </div>
         <button onClick={logout} className="px-4 py-2 rounded-lg border border-card-border text-sm hover:bg-card/30">
           Logout
@@ -116,85 +112,15 @@ export function AdminAISettings({ initialSettings, initialSystemInstructions }: 
 
       <div className="glass-panel border border-card-border/50 space-y-4">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <Field label="AI Provider">
-            <select
-              className="input"
-              value={settings.aiProvider}
-              onChange={(e) => setSettings((s) => ({ ...s, aiProvider: e.target.value as AISettings["aiProvider"] }))}
-            >
-              <option value="catalyst">catalyst</option>
-              <option value="vercel">vercel</option>
-            </select>
-          </Field>
-
-          <Field label="Voice Provider">
-            <select
-              className="input"
-              value={settings.voiceProvider}
-              onChange={(e) => setSettings((s) => ({ ...s, voiceProvider: e.target.value as AISettings["voiceProvider"] }))}
-            >
-              <option value="catalyst">catalyst</option>
-              <option value="elevenlabs">elevenlabs</option>
-            </select>
-          </Field>
-
-          <Field label="Vercel/OpenAI Chat Model">
+          <Field label="Chat Model">
             <input
               className="input"
-              value={settings.vercelAiModel}
-              onChange={(e) => setSettings((s) => ({ ...s, vercelAiModel: e.target.value, openaiModel: e.target.value }))}
-            />
-          </Field>
-
-          <Field label="ElevenLabs Agent ID">
-            <input
-              className="input"
-              value={settings.elevenlabsAgentId}
-              onChange={(e) => setSettings((s) => ({ ...s, elevenlabsAgentId: e.target.value }))}
-            />
-          </Field>
-
-          <Field label="ElevenLabs Voice ID">
-            <input
-              className="input"
-              value={settings.elevenlabsVoiceId}
-              onChange={(e) => setSettings((s) => ({ ...s, elevenlabsVoiceId: e.target.value }))}
-            />
-          </Field>
-
-          <Field label="ElevenLabs Model ID">
-            <input
-              className="input"
-              value={settings.elevenlabsModelId}
-              onChange={(e) => setSettings((s) => ({ ...s, elevenlabsModelId: e.target.value }))}
-            />
-          </Field>
-
-          <Field label="Catalyst API URL">
-            <input
-              className="input"
-              value={settings.catalystApiUrl}
-              onChange={(e) => setSettings((s) => ({ ...s, catalystApiUrl: e.target.value }))}
-            />
-          </Field>
-
-          <Field label="Catalyst Tenant ID">
-            <input
-              className="input"
-              value={settings.catalystTenantId}
-              onChange={(e) => setSettings((s) => ({ ...s, catalystTenantId: e.target.value }))}
+              value={settings.model}
+              onChange={(e) => setSettings((s) => ({ ...s, model: e.target.value }))}
+              placeholder="gemini-2.0-flash"
             />
           </Field>
         </div>
-
-        <label className="flex items-center gap-2 text-sm text-foreground">
-          <input
-            type="checkbox"
-            checked={settings.catalystFallbackEnabled}
-            onChange={(e) => setSettings((s) => ({ ...s, catalystFallbackEnabled: e.target.checked }))}
-          />
-          Enable Catalyst fallback if Vercel path fails
-        </label>
 
         <div className="flex items-center gap-3">
           <button onClick={save} disabled={isSaving} className="px-5 py-2.5 rounded-xl bg-accent text-black font-semibold disabled:opacity-60">

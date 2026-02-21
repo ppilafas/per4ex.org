@@ -14,7 +14,7 @@ export default function PiLaw() {
           </div>
           <h1 className="text-4xl md:text-5xl font-bold text-center text-foreground mb-2">π.Law</h1>
           <TypewriterSubtitle 
-             text="Enterprise Legal AI CRM built on the Catalyst Platform" 
+             text="Enterprise Legal AI CRM with zero-leakage architecture" 
              className="mb-6 text-lg md:text-xl"
              cursorColor="bg-blue-500"
           />
@@ -30,7 +30,7 @@ export default function PiLaw() {
             Engineering Case Study
          </h2>
          <p className="text-lg text-muted leading-relaxed">
-            π.Law represents a production implementation of the Catalyst Platform. 
+            π.Law is a production-ready enterprise legal AI system.
             It solves the challenge of <strong>"Safe Enterprise AI"</strong> by decoupling the sensitive legal data layer from the AI reasoning layer using a zero-leakage proxy architecture.
          </p>
       </div>

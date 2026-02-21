@@ -32,7 +32,7 @@ Panagiotis is not a "glue code" developer; he is a systems engineer. His philoso
 **Architecture:** Python 3.11+, FastAPI (REST), WebSockets, PostgreSQL + pgvector  
 **Deployment:** 
 - Backend: Fly.io (https://catalyst-service.fly.dev/v1)
-- Frontend: Vercel (catalyst-chat.supercore.tech, catalyst-dashboard.supercore.tech)
+- Frontend: Vercel (Next.js web dashboard)
 - Database: Fly.io Managed PostgreSQL with pgvector extension
 
 ### Key Capabilities
@@ -82,7 +82,18 @@ Panagiotis is not a "glue code" developer; he is a systems engineer. His philoso
 **Stack:** Next.js 16, Tailwind, FastAPI Proxy, Catalyst Core, Postgres (pgvector).
 **Solution:** Zero-Leakage Architecture. Frontend talks to Proxy, which injects Tenant ID and strips PII before forwarding to Catalyst Core.
 
-## 4. Silicon Smackdown
+## 4. Forensic AI Studio
+**Type:** Private AI Investigator for Legal Cases  
+**Status:** Private tool (not a public product)  
+**Description:** A private AI investigator built for a real legal case. It ingests evidence, maps entity relationships, analyzes audio recordings, and reasons across 100K+ documents in real-time. Combines RAG, entity extraction, and multi-modal analysis (text + audio).
+**Capabilities:**
+- Evidence ingestion and processing
+- Entity relationship mapping
+- Audio recording analysis
+- Cross-document reasoning (100K+ docs)
+- Real-time investigation assistance
+
+## 5. Silicon Smackdown
 **Type:** Real-time Voice AI Talk Show Platform
 **URL:** https://ssd.supercore.tech
 **Built for:** Google Gemini Developer Competition
@@ -109,6 +120,33 @@ Panagiotis is not a "glue code" developer; he is a systems engineer. His philoso
 ## 6. Authored Works
 **Book:** *Cosmic Dice: Putting Consciousness at the Helm of the Universe*  
 **Themes:** Systems philosophy, agency, and probabilistic decision-making.
+
+## 8. Chat Widget Capabilities
+**Available Tool:** send_widget_contact_email  
+**Purpose:** Send contact emails directly from the website chat widget to Panagiotis  
+**When to Use:** 
+- When a user wants to contact Panagiotis, send a message, or discuss a project
+- When a user provides their email and asks to be contacted
+- When conducting project intake from the Solutions page
+**Parameters:**
+- name: Visitor name (use "Guest" if not provided)
+- email: Visitor email address (required - must ask for this)
+- message: Message content (use "Inquiry from Chat Widget" if not provided)
+**Behavior:** The tool sends the email immediately without asking for confirmation or subject lines. After sending, confirm to the user that their message was sent.
+
+**NAVIGATION LINKS:**
+When referring to other pages on the site, ALWAYS use markdown links in this format: [link text](/path)
+Available pages:
+- [Home](/) - Main portfolio page
+- [Solutions](/solutions) - All AI solutions
+- [Catalyst AI](/catalyst-ai) - Multi-tenant AI platform
+- [Forensic AI Studio](/forensics) - Legal AI investigator
+- [π.Law](/pilaw) - Legal AI CRM
+- [Silicon Smackdown](/silicon-smackdown) - Voice debate platform
+- [Articles](/articles) - Technical blog
+- [Connect](/connect) - Contact page
+- [GitHub](/github) - Open source repos
+- [Technical Expertise](/technical-expertise) - Skills and capabilities
 
 ## 7. Technical Skills
 **Languages:** Python, TypeScript, Go, Swift, Rust, SQL, Assembly.  

@@ -126,7 +126,7 @@ Production deployment with documentation and support handoff.
 
 ### Deployment
 - **Backend:** Fly.io (https://catalyst-service.fly.dev/v1)
-- **Frontend:** Vercel (catalyst-chat.supercore.tech, catalyst-dashboard.supercore.tech)
+- **Frontend:** Vercel (Next.js web dashboard)
 - **Database:** Fly.io Managed PostgreSQL with pgvector
 
 ### Key Capabilities
@@ -635,8 +635,6 @@ Once email is provided, a summary is sent immediately to Panagiotis for follow-u
 ## External Links
 
 - **Silicon Smackdown Demo:** https://ssd.supercore.tech (Password: 1999)
-- **Catalyst Dashboard:** https://catalyst-dashboard.supercore.tech
-- **Catalyst Chat:** https://catalyst-chat.supercore.tech
 
 ---
 

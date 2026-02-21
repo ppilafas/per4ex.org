@@ -3,15 +3,13 @@
 import Image from "next/image"
 import useSWR from "swr"
 import { Star } from "lucide-react"
-import { getApiUrl } from "@/lib/config"
 import { TypewriterSubtitle } from "@/components/typewriter"
 
 // Fetcher for SWR
 const fetcher = (url: string) => fetch(url).then((res) => res.json())
 
 export default function GitHubProjects() {
-  const API_URL = getApiUrl()
-  const { data, error, isLoading } = useSWR(`${API_URL}/api/github/repos`, fetcher)
+  const { data, error, isLoading } = useSWR("/api/github/repos", fetcher)
 
   return (
     <div className="space-y-12">

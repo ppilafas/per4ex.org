@@ -1,11 +1,4 @@
 {
-  "name": "supercore-monorepo",
-  "private": true,
-  "workspaces": [
-    "apps/*",
-    "packages/*"
-  ],
-  "dependencies": {
-    "react-icons": "^5.5.0"
-  }
+  "name": "supercore-tech",
+  "private": true
 }

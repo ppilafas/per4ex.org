@@ -92,24 +92,6 @@ export function Navbar() {
                 </Link>
               )
             })}
-            <a 
-              href="https://catalyst-dashboard.supercore.tech/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="px-4 py-2 bg-accent/10 hover:bg-accent/20 text-accent rounded-full text-sm font-semibold transition-all border border-accent/20 hover:border-accent/40 flex items-center gap-2"
-            >
-              Catalyst Platform
-              <ExternalLink className="w-3 h-3" />
-            </a>
-            <a 
-              href="https://catalyst-chat.supercore.tech/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="px-4 py-2 bg-white/5 hover:bg-white/10 text-white/80 hover:text-white rounded-full text-sm font-semibold transition-all border border-white/10 hover:border-white/20 flex items-center gap-2"
-            >
-              Catalyst Chat
-              <ExternalLink className="w-3 h-3" />
-            </a>
           </div>
 
           {/* Mobile Menu Button */}
@@ -145,30 +127,6 @@ export function Navbar() {
                   {item.label}
                 </Link>
               ))}
-              
-              {/* External links */}
-              <div className="flex flex-col gap-4 pt-6 mt-2 border-t border-white/10">
-                <a 
-                  href="https://catalyst-dashboard.supercore.tech/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className="flex items-center justify-between py-3 px-4 bg-accent/10 text-accent rounded-xl text-lg font-semibold border border-accent/20"
-                >
-                  <span>Catalyst Platform</span>
-                  <ExternalLink className="w-5 h-5" />
-                </a>
-                <a 
-                  href="https://catalyst-chat.supercore.tech/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className="flex items-center justify-between py-3 px-4 bg-white/5 text-white/80 rounded-xl text-lg font-semibold border border-white/10"
-                >
-                  <span>Catalyst Chat</span>
-                  <ExternalLink className="w-5 h-5" />
-                </a>
-              </div>
             </div>
           </motion.div>
         )}

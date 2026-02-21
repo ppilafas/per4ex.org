@@ -27,7 +27,7 @@ Panagiotis is not a "glue code" developer; he is a systems engineer. His philoso
 **Architecture:** Python 3.11+, FastAPI (REST), WebSockets, PostgreSQL + pgvector  
 **Deployment:** 
 - Backend: Fly.io (https://catalyst-service.fly.dev/v1)
-- Frontend: Vercel (catalyst-chat.supercore.tech, catalyst-dashboard.supercore.tech)
+- Frontend: Vercel (Next.js web dashboard)
 - Database: Fly.io Managed PostgreSQL with pgvector extension
 
 ### Key Capabilities

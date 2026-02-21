@@ -1,27 +1,7 @@
 {
-  "builds": [
-    {
-      "src": "apps/web/package.json",
-      "use": "@vercel/next"
-    },
-    {
-      "src": "apps/api/main.py",
-      "use": "@vercel/python"
-    }
-  ],
-  "routes": [
-    {
-      "src": "/api/github/(.*)",
-      "dest": "/apps/api/main.py"
-    },
-    {
-      "src": "/api/health",
-      "dest": "/apps/api/main.py"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/apps/web/$1"
-    }
-  ]
+  "framework": "nextjs",
+  "rootDirectory": "apps/web",
+  "installCommand": "npm install",
+  "buildCommand": "npm run build",
+  "outputDirectory": ".next"
 }
-

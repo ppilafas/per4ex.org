@@ -1,4 +1,5 @@
 import { AdminAISettings } from "@/components/admin-ai-settings"
+import { AdminChatLog } from "@/components/admin-chat-log"
 import { AdminLoginForm } from "@/components/admin-login-form"
 import { isAdminAuthenticated } from "@/lib/admin-auth"
 import { getAISettings } from "@/lib/ai-config"
@@ -16,5 +17,10 @@ export default async function AdminSystemPage() {
   const settings = await getAISettings()
   const systemInstructions = await getSystemInstructions()
 
-  return <AdminAISettings initialSettings={settings} initialSystemInstructions={systemInstructions} />
+  return (
+    <div className="space-y-6">
+      <AdminAISettings initialSettings={settings} initialSystemInstructions={systemInstructions} />
+      <AdminChatLog />
+    </div>
+  )
 }

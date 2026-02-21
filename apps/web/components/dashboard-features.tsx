@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "framer-motion"
 import { 
   Settings, Users, Activity, Router, 
   Database, Shield, ToggleLeft, Radio, 
-  BarChart3, Brain, Lock, ExternalLink
+  BarChart3, Brain, Lock
 } from "lucide-react"
 
 const FEATURES = [
@@ -73,17 +73,6 @@ export function DashboardFeatures() {
             Catalyst isn't just an API—it includes a comprehensive Admin Dashboard for 
             managing tenancy, routing logic, and system observability.
           </p>
-          <div className="mt-8">
-            <a 
-              href="https://catalyst-dashboard.supercore.tech/" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 bg-accent/10 hover:bg-accent/20 text-accent font-medium px-6 py-3 rounded-full border border-accent/20 transition-all duration-300 hover:scale-105"
-            >
-              <ExternalLink className="w-4 h-4" />
-              Launch Admin Console
-            </a>
-          </div>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_2fr] gap-12">

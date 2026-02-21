@@ -12,20 +12,10 @@ const AssistantWidget = dynamic(
   { ssr: false, loading: () => null }
 )
 
-const LiveShowPiP = dynamic(
-  () => import("@/components/live-show-pip").then((m) => m.LiveShowPiP),
-  { ssr: false, loading: () => null }
-)
-
 export function ClientBootLoader() {
   return <BootLoader />
 }
 
 export function ClientWidgets() {
-  return (
-    <>
-      <AssistantWidget />
-      <LiveShowPiP />
-    </>
-  )
+  return <AssistantWidget />
 }

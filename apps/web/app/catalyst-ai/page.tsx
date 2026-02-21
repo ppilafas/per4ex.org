@@ -23,16 +23,6 @@ export default function CatalystAI() {
              cursorColor="bg-accent"
           />
           <hr className="w-full border-t border-card-border mt-6" />
-          <div className="flex gap-4 mt-6">
-            <Link 
-              href="https://catalyst-dashboard.per4ex.org/"
-              target="_blank"
-              className="px-6 py-3 bg-accent/10 hover:bg-accent/20 text-accent rounded-full text-sm font-semibold transition-all border border-accent/20 hover:border-accent/40 flex items-center gap-2"
-            >
-              <Cpu className="w-4 h-4" />
-              Live Dashboard
-            </Link>
-          </div>
         </div>
         <div />
       </div>
