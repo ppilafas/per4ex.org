@@ -101,6 +101,7 @@ start_tunnel() {
 patch_elevenlabs_agent() {
     local tunnel_url="$1"
     local custom_llm_url="${tunnel_url}/api/voice/llm"
+    local tool_base_url="${tunnel_url}/api/voice/tools/notify"
 
     if [ -z "$ELEVENLABS_API_KEY" ] || [ -z "$ELEVENLABS_AGENT_ID" ]; then
         echo "⚠️  ELEVENLABS_API_KEY or ELEVENLABS_AGENT_ID not set — skipping agent patch"
@@ -109,13 +110,14 @@ patch_elevenlabs_agent() {
 
     echo "🔧 Patching ElevenLabs agent $ELEVENLABS_AGENT_ID → $custom_llm_url"
 
-    # Check the current LLM setting on the agent before patching.
-    # Only update the custom_llm URL if the agent is already set to custom-llm.
-    # If it's set to a managed LLM (e.g. Qwen), skip the patch to preserve that setting.
-    local current_llm
-    current_llm=$(curl -s \
+    # Fetch current agent config
+    local agent_json
+    agent_json=$(curl -s \
         "https://api.elevenlabs.io/v1/convai/agents/$ELEVENLABS_AGENT_ID" \
-        -H "xi-api-key: $ELEVENLABS_API_KEY" | \
+        -H "xi-api-key: $ELEVENLABS_API_KEY")
+
+    local current_llm
+    current_llm=$(echo "$agent_json" | \
         python3 -c "import sys,json; d=json.load(sys.stdin); print(d.get('conversation_config',{}).get('agent',{}).get('prompt',{}).get('llm','unknown'))" 2>/dev/null)
 
     echo "   Current LLM: $current_llm"
@@ -151,6 +153,75 @@ patch_elevenlabs_agent() {
         echo "✅ Agent is using managed LLM ($current_llm) — skipping LLM patch to preserve setting"
         echo "   Custom LLM fallback URL would be: $custom_llm_url"
     fi
+
+    # Patch tool webhook URLs to point to the tunnel
+    echo "🔧 Patching tool webhook URLs → $tool_base_url"
+    local tool_ids
+    tool_ids=$(echo "$agent_json" | \
+        python3 -c "import sys,json; d=json.load(sys.stdin); ids=d.get('conversation_config',{}).get('agent',{}).get('prompt',{}).get('tool_ids',[]); print('\n'.join(ids))" 2>/dev/null)
+
+    if [ -z "$tool_ids" ]; then
+        echo "   No tools registered on agent — skipping tool patch"
+    else
+        while IFS= read -r tool_id; do
+            [ -z "$tool_id" ] && continue
+
+            # Get current tool config to extract the tool name
+            local tool_json tool_name
+            tool_json=$(curl -s \
+                "https://api.elevenlabs.io/v1/convai/tools/$tool_id" \
+                -H "xi-api-key: $ELEVENLABS_API_KEY")
+            tool_name=$(echo "$tool_json" | \
+                python3 -c "import sys,json; d=json.load(sys.stdin); print(d.get('tool_config',{}).get('name','unknown'))" 2>/dev/null)
+
+            local new_url="${tool_base_url}?tool=${tool_name}"
+            echo "   Patching tool $tool_name ($tool_id) → $new_url"
+
+            local patch_status
+            patch_status=$(curl -s -o /tmp/el-tool-patch.json -w "%{http_code}" \
+                -X PATCH \
+                "https://api.elevenlabs.io/v1/convai/tools/$tool_id" \
+                -H "xi-api-key: $ELEVENLABS_API_KEY" \
+                -H "Content-Type: application/json" \
+                -d "{
+                  \"tool_config\": {
+                    \"type\": \"webhook\",
+                    \"name\": \"$tool_name\",
+                    \"api_schema\": {
+                      \"url\": \"$new_url\",
+                      \"method\": \"POST\"
+                    }
+                  }
+                }")
+
+            if [ "$patch_status" = "200" ]; then
+                echo "   ✅ $tool_name → $new_url"
+            else
+                echo "   ❌ Failed to patch $tool_name (HTTP $patch_status):"
+                cat /tmp/el-tool-patch.json
+            fi
+        done <<< "$tool_ids"
+    fi
+
+    # Register post-call webhook for terminal visibility of transcripts + tool calls
+    echo "🔧 Registering post-call webhook → ${tunnel_url}/api/voice/webhook/post-call"
+    local webhook_status
+    webhook_status=$(curl -s -o /tmp/el-webhook.json -w "%{http_code}" \
+        -X PATCH \
+        "https://api.elevenlabs.io/v1/convai/agents/$ELEVENLABS_AGENT_ID" \
+        -H "xi-api-key: $ELEVENLABS_API_KEY" \
+        -H "Content-Type: application/json" \
+        -d "{
+          \"platform_settings\": {
+            \"workspace_overrides\": {
+              \"webhooks\": {
+                \"post_call_webhook_id\": null
+              }
+            }
+          }
+        }")
+    echo "   Post-call webhook note: configure via ElevenLabs dashboard → agent → Advanced → Post-call webhook"
+    echo "   Local endpoint ready at: ${tunnel_url}/api/voice/webhook/post-call"
 }
 
 # 5. Cleanup Trap

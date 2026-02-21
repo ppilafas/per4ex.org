@@ -92,20 +92,30 @@ async function sendSms(message: string, fromName: string): Promise<{ ok: boolean
 }
 
 export async function POST(req: NextRequest) {
+  const reqId = `tool-${Date.now()}`
+
+  // Log everything — headers + raw body — for debugging
+  const rawBody = await req.text()
+  console.log(`\n🔧 [${reqId}] TOOL WEBHOOK HIT`)
+  console.log(`   URL: ${req.url}`)
+  console.log(`   Headers: ${JSON.stringify(Object.fromEntries(req.headers.entries()))}`)
+  console.log(`   Raw body: ${rawBody}`)
+
   // Verify shared secret from ElevenLabs
   if (ELEVENLABS_AGENT_SECRET) {
     const authHeader = req.headers.get("authorization") || ""
     const token = authHeader.replace(/^Bearer\s+/i, "")
     if (token !== ELEVENLABS_AGENT_SECRET) {
-      console.warn("❌ Voice tools notify: unauthorized request")
+      console.warn(`❌ [${reqId}] Unauthorized — bad secret`)
       return unauthorized()
     }
   }
 
   let payload: ToolCallPayload
   try {
-    payload = await req.json()
+    payload = JSON.parse(rawBody)
   } catch {
+    console.error(`❌ [${reqId}] Failed to parse JSON:`, rawBody)
     return NextResponse.json({ error: "Invalid JSON" }, { status: 400 })
   }
 
@@ -118,7 +128,7 @@ export async function POST(req: NextRequest) {
   const visitorName = payload.visitor_name || p.visitor_name || "A visitor"
   const tool_call_id = payload.tool_call_id || "unknown"
 
-  console.log(`🔧 Voice tool call: ${toolName}`, { visitorName, ...payload })
+  console.log(`🔧 [${reqId}] Resolved tool: ${toolName} | visitor: ${visitorName} | tool_call_id: ${tool_call_id}`)
 
   if (toolName === "send_email") {
     const subject = payload.subject || p.subject || "Message from visitor"
