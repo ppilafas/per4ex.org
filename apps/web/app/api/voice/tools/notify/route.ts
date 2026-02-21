@@ -11,9 +11,15 @@ const TWILIO_FROM_NUMBER = process.env.TWILIO_FROM_NUMBER
 const OWNER_PHONE = process.env.OWNER_PHONE
 
 interface ToolCallPayload {
-  tool_name: string
-  tool_call_id: string
-  parameters: Record<string, string>
+  tool_name?: string
+  tool_call_id?: string
+  // flat params (inline tool style — ElevenLabs sends properties directly)
+  visitor_name?: string
+  subject?: string
+  body?: string
+  message?: string
+  // nested params (legacy style)
+  parameters?: Record<string, string>
 }
 
 function unauthorized() {
@@ -103,15 +109,22 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Invalid JSON" }, { status: 400 })
   }
 
-  const { tool_name, tool_call_id, parameters } = payload
-  console.log(`🔧 Voice tool call: ${tool_name}`, parameters)
+  // ElevenLabs sends flat properties directly at the top level for inline tools
+  const p = payload.parameters || {}
+  const toolName = payload.tool_name
+    || (req.nextUrl?.searchParams?.get("tool") ?? "")
+    || (payload.subject || payload.body ? "send_email" : "send_sms")
 
-  if (tool_name === "send_email") {
-    const subject = parameters.subject || "Message from visitor"
-    const body = parameters.body || parameters.message || ""
-    const fromName = parameters.visitor_name || "A visitor"
+  const visitorName = payload.visitor_name || p.visitor_name || "A visitor"
+  const tool_call_id = payload.tool_call_id || "unknown"
 
-    const result = await sendEmail(subject, body, fromName)
+  console.log(`🔧 Voice tool call: ${toolName}`, { visitorName, ...payload })
+
+  if (toolName === "send_email") {
+    const subject = payload.subject || p.subject || "Message from visitor"
+    const body = payload.body || p.body || payload.message || p.message || ""
+
+    const result = await sendEmail(subject, body, visitorName)
 
     return NextResponse.json({
       tool_call_id,
@@ -121,11 +134,10 @@ export async function POST(req: NextRequest) {
     })
   }
 
-  if (tool_name === "send_sms") {
-    const message = parameters.message || parameters.body || ""
-    const fromName = parameters.visitor_name || "A visitor"
+  if (toolName === "send_sms") {
+    const message = payload.message || p.message || payload.body || p.body || ""
 
-    const result = await sendSms(message, fromName)
+    const result = await sendSms(message, visitorName)
 
     return NextResponse.json({
       tool_call_id,
@@ -136,7 +148,7 @@ export async function POST(req: NextRequest) {
   }
 
   return NextResponse.json(
-    { tool_call_id, result: `Unknown tool: ${tool_name}` },
+    { tool_call_id, result: `Unknown tool: ${toolName}` },
     { status: 400 }
   )
 }
