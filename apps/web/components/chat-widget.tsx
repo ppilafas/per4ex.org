@@ -6,9 +6,7 @@ import { motion, AnimatePresence } from "framer-motion"
 import ReactMarkdown from "react-markdown"
 import { cn } from "@/lib/utils"
 import { 
-  getCatalystSessionId, 
-  setCatalystSessionId, 
-  hasActiveSession,
+  getWebSessionId, 
   refreshSessionTimestamp 
 } from "@/lib/chat-session"
 
@@ -75,14 +73,13 @@ export function ChatWidget() {
   // Check current page for positioning
   const currentPath = typeof window !== 'undefined' ? window.location.pathname : ''
   const [messages, setMessages] = useState<Message[]>([
-    { role: "assistant", content: "System online. Catalyst Agent ready. How can I assist you with this portfolio?" }
+    { role: "assistant", content: "Hi there! I'm the Supercore AI assistant. How can I help you today?" }
   ])
   const [input, setInput] = useState("")
   const [isLoading, setIsLoading] = useState(false)
-  const [sessionId, setSessionId] = useState<string | null>(null)
-  const [hasExistingSession, setHasExistingSession] = useState(false)
   const [messageCount, setMessageCount] = useState(0)
   const [isLimitReached, setIsLimitReached] = useState(false)
+  const [conversationId, setConversationId] = useState<string | null>(null)
   const [projectContext, setProjectContext] = useState<ProjectContext | null>(null)
   
   // Message limit configuration - increased to accommodate agentic workflows
@@ -121,13 +118,12 @@ export function ChatWidget() {
     }
   }, [])
 
-  // Restore Catalyst session on mount
+  // Restore conversation on mount (now using ElevenLabs)
   useEffect(() => {
-    const existingSessionId = getCatalystSessionId()
-    if (existingSessionId) {
-      setSessionId(existingSessionId)
-      setHasExistingSession(true)
-      console.log('Restored existing Catalyst session:', existingSessionId)
+    const existingConversationId = sessionStorage.getItem('elevenlabs-conversation-id')
+    if (existingConversationId) {
+      setConversationId(existingConversationId)
+      console.log('Restored existing ElevenLabs conversation:', existingConversationId)
     }
   }, [])
 
@@ -175,68 +171,42 @@ export function ChatWidget() {
       projectContextRef.current = context
       messagesRef.current = initialMessages
       
-      // Auto-send the project inquiry after a short delay
-      const projectMessage = `I'm interested in the "${context.solutionTitle}" solution. I'd like to discuss a project.`
-      setTimeout(() => {
-        console.log('[ChatWidget] 🚀 Auto-sending project message:', projectMessage);
-        // Call the direct send function
-        const userMessage: Message = { role: "user", content: projectMessage }
-        setMessages(prev => [...prev, userMessage])
-        setIsLoading(true)
-        setMessages(prev => [...prev, { role: "assistant", content: "" }])
-        
+      // Auto-send the project inquiry using ElevenLabs endpoint
+        const projectMessage = `I'm interested in the "${context.solutionTitle}" solution. I'd like to discuss a project.`
         const autoPayload = { 
-          messages: [...initialMessages, userMessage].filter(m => m.content.trim() !== "").map(m => ({ role: m.role, content: m.content })),
-          session_id: null,
-          solution_context: context
+          message: projectMessage,
+          conversation_id: null,
         }
         
-        console.log('[ChatWidget] 📤 Auto-send request:', autoPayload)
+        console.log('[ChatWidget] 📤 Auto-send to ElevenLabs:', autoPayload)
         
         // Make the API call
-        fetch("/api/chat", {
+        fetch("/api/chat/elevenlabs", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(autoPayload),
         }).then(async response => {
-          console.log('[ChatWidget] 📥 Auto-send response:', response.status, response.statusText)
-          if (!response.body) throw new Error("No response body")
-          const reader = response.body.getReader()
-          const decoder = new TextDecoder()
-          let assistantMessage = ""
-          let autoChunkCount = 0
+          console.log('[ChatWidget] 📥 Auto-send response:', response.status)
+          const data = await response.json()
           
-          while (true) {
-            const { done, value } = await reader.read()
-            if (done) {
-              console.log('[ChatWidget] ✅ Auto-send complete. Total chunks:', autoChunkCount)
-              break
-            }
-            autoChunkCount++
-            const chunk = decoder.decode(value)
-            const lines = chunk.split("\n")
-            for (const line of lines) {
-              if (line.startsWith("data: ")) {
-                try {
-                  const dataStr = line.slice(6)
-                  if (!dataStr.trim()) continue
-                  const data = JSON.parse(dataStr)
-                  if (data.content || data.text) {
-                    assistantMessage += (data.content || data.text || "")
-                  }
-                  setMessages(prev => {
-                    const newArr = [...prev]
-                    if (assistantMessage) {
-                      newArr[newArr.length - 1] = { role: "assistant", content: assistantMessage }
-                    }
-                    return newArr
-                  })
-                } catch (e) {
-                  console.warn('[ChatWidget] ⚠️ Auto-send parse error:', e)
-                }
-              }
-            }
+          if (!response.ok) {
+            throw new Error(data.error || `HTTP ${response.status}`)
           }
+          
+          // Store conversation ID
+          if (data.conversation_id) {
+            setConversationId(data.conversation_id)
+            sessionStorage.setItem('elevenlabs-conversation-id', data.conversation_id)
+          }
+          
+          // Update UI with response
+          const assistantMessage = data.response || "I'm here to help!"
+          
+          setMessages(prev => {
+            const newArr = [...prev]
+            newArr[newArr.length - 1] = { role: "assistant", content: assistantMessage }
+            return newArr
+          })
         }).catch(error => {
           console.error("[ChatWidget] 💥 Auto-send error:", error)
           setMessages(prev => {
@@ -247,7 +217,6 @@ export function ChatWidget() {
         }).finally(() => {
           setIsLoading(false)
         })
-      }, 200)
     }
 
     window.addEventListener('storage', handleStorageChange)
@@ -293,27 +262,15 @@ export function ChatWidget() {
     // Add placeholder for assistant response
     setMessages(prev => [...prev, { role: "assistant", content: "" }])
 
-    // Build request payload for tracing
-    const messagesToSend = hasExistingSession && sessionId
-      ? [{ role: userMessage.role, content: userMessage.content }]
-      : messages
-          .filter(msg => msg.content.trim() !== "")
-          .concat([userMessage])
-          .map(msg => ({ role: msg.role, content: msg.content }))
-
     const requestPayload = { 
-      messages: messagesToSend,
-      session_id: sessionId,
-      solution_context: projectContext
+      message: text,
+      conversation_id: conversationId,
     }
 
-    console.log('[ChatWidget] 📤 Sending request to /api/chat:', {
-      url: '/api/chat',
-      method: 'POST',
-      sessionId: sessionId || 'none (new session)',
-      messageCount: messagesToSend.length,
+    console.log('[ChatWidget] 📤 Sending request to /api/chat/elevenlabs:', {
+      message: text,
+      conversationId: conversationId || 'new',
       hasProjectContext: !!projectContext,
-      payload: requestPayload
     })
 
     const startTime = performance.now()
@@ -322,7 +279,7 @@ export function ChatWidget() {
       // Refresh session timestamp on user activity
       refreshSessionTimestamp()
 
-      const response = await fetch("/api/chat", {
+      const response = await fetch("/api/chat/elevenlabs", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(requestPayload),
@@ -331,16 +288,8 @@ export function ChatWidget() {
       const responseTime = performance.now() - startTime
       console.log('[ChatWidget] 📥 Response received:', {
         status: response.status,
-        statusText: response.statusText,
         responseTimeMs: Math.round(responseTime),
-        hasBody: !!response.body,
-        headers: Object.fromEntries(response.headers.entries())
       })
-
-      if (!response.body) {
-        console.error('[ChatWidget] ❌ No response body')
-        throw new Error("No response body")
-      }
 
       if (!response.ok) {
         const errorText = await response.text().catch(() => 'Unknown error')
@@ -351,82 +300,28 @@ export function ChatWidget() {
         throw new Error(`HTTP ${response.status}: ${errorText.slice(0, 200)}`)
       }
       
-      const reader = response.body.getReader()
-      const decoder = new TextDecoder()
-      let assistantMessage = ""
-      let chunkCount = 0
-      let dataEvents = 0
+      const data = await response.json()
+      
+      console.log('[ChatWidget] ✅ ElevenLabs response:', {
+        hasResponse: !!data.response,
+        hasConversationId: !!data.conversation_id,
+        toolCalls: data.tool_calls?.length || 0,
+      })
 
-      console.log('[ChatWidget] 🔄 Starting to read stream...')
-
-      while (true) {
-        const { done, value } = await reader.read()
-        if (done) {
-          console.log('[ChatWidget] ✅ Stream complete:', {
-            totalChunks: chunkCount,
-            totalDataEvents: dataEvents,
-            finalMessageLength: assistantMessage.length
-          })
-          break
-        }
-        
-        chunkCount++
-        const chunk = decoder.decode(value)
-        const lines = chunk.split("\n")
-        
-        console.log(`[ChatWidget] 📦 Chunk #${chunkCount}:`, {
-          bytes: value?.byteLength || 0,
-          lines: lines.length,
-          preview: chunk.slice(0, 200).replace(/\n/g, '\\n')
-        })
-        
-        for (const line of lines) {
-            if (line.startsWith("data: ")) {
-                dataEvents++
-                try {
-                    const dataStr = line.slice(6)
-                    if (!dataStr.trim()) continue;
-
-                    const data = JSON.parse(dataStr)
-
-                    // 1. Metadata / Session Init
-                    if (data.session_id && !sessionId) {
-                        console.log('[ChatWidget] 🆕 New session created:', data.session_id)
-                        setSessionId(data.session_id)
-                        setCatalystSessionId(data.session_id)
-                        setHasExistingSession(true)
-                        continue
-                    }
-
-                    // 2. Standard Text Streaming
-                    if (data.content || data.text) {
-                        const delta = data.content || data.text || ""
-                        assistantMessage += delta
-                        
-                        if (dataEvents <= 5 || dataEvents % 20 === 0) {
-                          console.log(`[ChatWidget] ✍️ Content update #${dataEvents}:`, {
-                            deltaLength: delta.length,
-                            totalLength: assistantMessage.length,
-                            delta: delta.slice(0, 100).replace(/\n/g, '\\n')
-                          })
-                        }
-                    }
-                    
-                    // Update UI
-                    setMessages(prev => {
-                        const newArr = [...prev]
-                        if (assistantMessage) {
-                            newArr[newArr.length - 1] = { role: "assistant", content: assistantMessage }
-                        }
-                        return newArr
-                    })
-
-                } catch (e) {
-                    console.warn('[ChatWidget] ⚠️ Parse error for line:', line.slice(0, 100), e)
-                }
-            }
-        }
+      // Store conversation ID in sessionStorage
+      if (data.conversation_id) {
+        setConversationId(data.conversation_id)
+        sessionStorage.setItem('elevenlabs-conversation-id', data.conversation_id)
       }
+
+      // Update UI with full response
+      const assistantResponse = data.response || "I'm sorry, I couldn't process that request."
+      
+      setMessages(prev => {
+        const newArr = [...prev]
+        newArr[newArr.length - 1] = { role: "assistant", content: assistantResponse }
+        return newArr
+      })
 
       // Increment message count on successful send
       setMessageCount(prev => prev + 1)
@@ -436,7 +331,7 @@ export function ChatWidget() {
       console.error("[ChatWidget] 💥 Chat error:", error)
       setMessages(prev => {
          const newArr = [...prev]
-         newArr[newArr.length - 1] = { role: "assistant", content: "Error: Unable to connect to Catalyst Service." }
+         newArr[newArr.length - 1] = { role: "assistant", content: "Sorry, I'm having trouble connecting. Please try again." }
          return newArr
       })
     } finally {
