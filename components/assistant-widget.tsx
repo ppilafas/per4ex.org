@@ -47,24 +47,24 @@ const PAGE_CONTEXTS: Record<string, PageContext> = {
   "/": {
     path: "/",
     title: "Home",
-    description: "Supercore portfolio homepage showcasing AI systems engineering work",
-    starter: "Tell me about your AI systems work",
+    description: "A concise overview of Supercore's practical AI systems work, proof projects, approach, and contact options",
+    starter: "What does Panagiotis build?",
     starters: [
-      "Tell me about your AI systems work",
-      "What is Catalyst AI?",
-      "Show me your recent projects",
+      "What does Panagiotis build?",
+      "Show me proof of the work",
+      "Can he help with legal document AI?",
       "I have a project idea",
     ],
   },
   "/solutions": {
     path: "/solutions",
     title: "Solutions",
-    description: "AI solutions and products page with detailed offerings",
-    starter: "Which solution fits my needs?",
+    description: "Supporting page with AI capabilities; the homepage is the main curated overview",
+    starter: "Which capability fits my project?",
     starters: [
-      "Which solution fits my needs?",
-      "What is π.Law?",
-      "Tell me about Forensic AI Studio",
+      "Which capability fits my project?",
+      "Explain RAG in plain terms",
+      "What proof projects should I see?",
       "I want to discuss a project",
     ],
   },
@@ -83,7 +83,7 @@ const PAGE_CONTEXTS: Record<string, PageContext> = {
   "/catalyst-ai": {
     path: "/catalyst-ai",
     title: "Catalyst AI",
-    description: "Multi-tenant AI assistant platform with voice, RAG, and enterprise features",
+    description: "Flagship assistant runtime with RAG, voice, tool calling, tenant-scoped data, and admin controls",
     starter: "How does Catalyst AI work?",
     starters: [
       "How does Catalyst AI work?",
@@ -95,7 +95,7 @@ const PAGE_CONTEXTS: Record<string, PageContext> = {
   "/forensics": {
     path: "/forensics",
     title: "Forensic AI Studio",
-    description: "Private AI investigator for legal cases - evidence analysis, entity mapping, audio processing",
+    description: "Private evidence-analysis workspace for documents, entity mapping, audio analysis, and agent tools",
     starter: "Tell me about the Forensic AI Studio",
     starters: [
       "Tell me about the Forensic AI Studio",
@@ -119,7 +119,7 @@ const PAGE_CONTEXTS: Record<string, PageContext> = {
   "/connect": {
     path: "/connect",
     title: "Connect",
-    description: "Contact page for project inquiries and collaboration opportunities",
+    description: "Contact page for discussing practical AI systems projects",
     starter: "I want to discuss a project",
     starters: [
       "I want to discuss a project",
@@ -131,13 +131,25 @@ const PAGE_CONTEXTS: Record<string, PageContext> = {
   "/pilaw": {
     path: "/pilaw",
     title: "π.Law",
-    description: "Enterprise legal AI CRM with zero-leakage architecture",
+    description: "Legal AI system for case management and document search over sensitive client data",
     starter: "What is π.Law?",
     starters: [
       "What is π.Law?",
-      "How does the zero-leakage architecture work?",
-      "Features for legal teams",
-      "Integration with existing systems",
+      "How does it handle sensitive data?",
+      "What legal workflows could AI help?",
+      "Can I discuss a legal AI project?",
+    ],
+  },
+  "/ltbr": {
+    path: "/ltbr",
+    title: "Let There Be RAG",
+    description: "In-development RAG SaaS concept for crawling a website and embedding a grounded chat widget",
+    starter: "What is Let There Be RAG?",
+    starters: [
+      "What is Let There Be RAG?",
+      "How would website RAG work?",
+      "Is this available yet?",
+      "Can I discuss a RAG project?",
     ],
   },
   "/github": {

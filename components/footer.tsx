@@ -33,7 +33,7 @@ export function Footer() {
           <>
             {/* Catalyst App Description - Discreet */}
             <p className="mt-2 mb-1 text-xs text-muted/70 max-w-2xl mx-auto leading-relaxed">
-              <strong className="text-muted">Catalyst</strong> is a personal AI operating system and intelligent assistant platform providing real-time voice and text interactions, knowledge base access, and integrated tool capabilities.{" "}
+              <strong className="text-muted">Catalyst</strong> is the assistant runtime behind several Supercore proof projects, combining RAG, voice, tool calling, and tenant-scoped data.{" "}
               <Link href="/catalyst-ai" className="text-muted/60 hover:text-accent transition-colors duration-200">
                 Learn more
               </Link>
@@ -60,4 +60,3 @@ export function Footer() {
     </footer>
   )
 }
-

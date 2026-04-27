@@ -8,10 +8,10 @@ export function CTAButton() {
       onClick={() => {
         window.dispatchEvent(new CustomEvent('open-chat'));
       }}
-      className="bg-accent text-black px-8 py-4 rounded-full font-bold text-lg hover:bg-accent/90 transition-colors inline-flex items-center justify-center gap-2 mb-4"
+      className="inline-flex items-center justify-center gap-2 rounded-full bg-accent px-6 py-3 font-bold text-black transition-colors hover:bg-accent/90"
     >
-      <MessageSquare className="w-5 h-5" />
-      Start a Project
+      <MessageSquare className="w-4 h-4" />
+      Discuss a project
     </button>
   )
 }

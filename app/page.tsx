@@ -1,360 +1,267 @@
 import Image from "next/image"
 import Link from "next/link"
-import { TypewriterSubtitle } from "@/components/typewriter"
-import { Navbar } from "@/components/navbar"
-import { HeroActions } from "@/components/hero-actions"
-import { SolutionsGrid } from "@/components/solutions-grid"
+import { ArrowRight, CheckCircle2, Mail, Shield, Wrench } from "lucide-react"
 import { CTAButton } from "@/components/cta-button"
+
+const helpItems = [
+  {
+    title: "Turn messy knowledge into usable AI",
+    description:
+      "RAG systems for documents, websites, support notes, legal material, and internal knowledge bases.",
+    details: "pgvector, hybrid search, citation grounding, reranking",
+  },
+  {
+    title: "Build assistants that can take action",
+    description:
+      "Chat and voice assistants that call tools, remember context, and work inside real business workflows.",
+    details: "function calling, MCP, workflow gates, audit trails",
+  },
+  {
+    title: "Move prototypes into production",
+    description:
+      "The less glamorous work that makes AI useful: auth, tenant isolation, streaming, logs, costs, and failure handling.",
+    details: "Next.js, FastAPI, Postgres, Vercel, Fly.io, local GPUs",
+  },
+  {
+    title: "Use the right model stack for the job",
+    description:
+      "OpenAI, Gemini, Hugging Face, or self-hosted inference, chosen around latency, privacy, cost, and control.",
+    details: "LLM routing, vLLM, llama.cpp, Whisper, TTS",
+  },
+]
+
+const proofItems = [
+  {
+    title: "Catalyst AI",
+    href: "/catalyst-ai",
+    image: "/catalyst3d.png",
+    label: "Flagship runtime",
+    summary:
+      "A shared assistant platform with RAG, voice, tool calling, tenant-scoped data, and admin controls.",
+    proof: "Used as the base runtime behind multiple products and the site assistant.",
+  },
+  {
+    title: "π.Law",
+    href: "/pilaw",
+    image: "/pilaw3d.png",
+    label: "Legal AI",
+    summary:
+      "A legal case-management and document-search system designed around sensitive client data.",
+    proof: "Uses a proxy boundary, Postgres search, and Catalyst for AI reasoning over legal material.",
+  },
+  {
+    title: "Forensic AI Studio",
+    href: "/forensics",
+    image: "/detective.png",
+    label: "Investigation tools",
+    summary:
+      "A private evidence-analysis workspace for searching documents, mapping entities, and analyzing audio.",
+    proof: "Built under real legal constraints with document ingestion, vector search, and agent tools.",
+  },
+  {
+    title: "Silicon Smackdown",
+    href: "/silicon-smackdown",
+    image: "/silicon_smacdown/big_hero_logo.png",
+    label: "Voice AI",
+    summary:
+      "A real-time AI talk-show experiment with multiple voice personalities and live conversation flow.",
+    proof: "Demonstrates low-latency audio, WebSocket orchestration, and Gemini Live API work.",
+  },
+]
+
+const principles = [
+  "Start with the business workflow, not the model demo.",
+  "Keep private data scoped, logged, and deliberately exposed.",
+  "Prefer boring infrastructure where reliability matters.",
+  "Ship small, measure behavior, and harden what proves useful.",
+]
 
 export default function Home() {
   return (
     <div className="space-y-0">
-      {/* 1. Hero Section */}
-      <div className="flex flex-col items-center relative mb-12">
-        <div className="absolute inset-0 hero-grid -z-10" />
-
-        <div className="w-full max-w-7xl px-4 z-10 pt-10 md:pt-14 pb-10 md:pb-14">
-          <div className="grid grid-cols-1 gap-10 items-center">
-            <div className="flex flex-col items-center text-center">
-              <h1 className="text-5xl md:text-7xl font-bold text-foreground mb-5 md:mb-6 tracking-tight">
-                I Build AI That <br />
-                <span className="whitespace-nowrap">
-                  Actually <span className="text-accent">Ships.</span>
-                </span>
-              </h1>
-
-              <TypewriterSubtitle
-                text="RAG systems, voice agents, self-hosted inference, autonomous workflows — from prototype to production on real infrastructure."
-                className="text-xl md:text-2xl text-muted max-w-2xl mb-8 md:mb-10 leading-relaxed font-sans mx-auto"
-                cursorColor="bg-accent"
-                speed={30}
-              />
-
-              <HeroActions />
-            </div>
+      <section className="relative overflow-hidden border-b border-white/5">
+        <div className="absolute inset-0 hero-grid -z-10 opacity-70" />
+        <div className="mx-auto max-w-5xl px-4 py-16 md:py-24 text-center">
+          <p className="mb-4 text-xs font-bold uppercase tracking-[0.28em] text-accent">
+            Supercore · AI systems engineering
+          </p>
+          <h1 className="mx-auto max-w-4xl text-4xl font-bold tracking-tight text-foreground md:text-6xl">
+            Practical AI systems for teams with real data, real users, and real constraints.
+          </h1>
+          <p className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-muted md:text-xl">
+            I help turn AI ideas into working software: knowledge systems, assistants, voice
+            interfaces, and the infrastructure needed to run them without drama.
+          </p>
+          <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
+            <CTAButton />
+            <Link
+              href="mailto:contact@supercore.tech"
+              className="inline-flex items-center justify-center gap-2 rounded-full border border-white/15 px-6 py-3 font-bold text-foreground transition-colors hover:border-accent/60 hover:text-accent"
+            >
+              <Mail className="h-4 w-4" />
+              contact@supercore.tech
+            </Link>
           </div>
         </div>
-      </div>
+      </section>
 
-      {/* 2. Solutions Grid */}
-      <SolutionsGrid />
+      <section id="help" className="scroll-mt-28 py-16 md:py-20">
+        <div className="mx-auto max-w-6xl px-4">
+          <div className="mb-10 max-w-2xl">
+            <p className="mb-3 text-xs font-bold uppercase tracking-[0.22em] text-accent">
+              What I help with
+            </p>
+            <h2 className="text-3xl font-bold text-foreground md:text-4xl">
+              Useful AI, wired into the systems people already depend on.
+            </h2>
+          </div>
 
-      {/* 4. Currently Building */}
-      <div className="py-20 px-6 border-t border-white/5">
-        <div className="max-w-5xl mx-auto">
-          <h2 className="text-2xl font-bold text-foreground mb-10 text-center">Currently Building</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div className="p-5 rounded-xl bg-white/[0.02] border border-white/10 hover:border-accent/30 transition-colors">
-              <div className="flex items-center gap-2 mb-3">
-                <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-400">Live</span>
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+            {helpItems.map((item) => (
+              <div key={item.title} className="rounded-xl border border-white/10 bg-white/[0.025] p-6">
+                <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-lg bg-accent/10 text-accent">
+                  <Wrench className="h-5 w-5" />
+                </div>
+                <h3 className="mb-2 text-xl font-bold text-foreground">{item.title}</h3>
+                <p className="mb-4 text-sm leading-relaxed text-muted">{item.description}</p>
+                <p className="text-xs text-muted/70">{item.details}</p>
               </div>
-              <h3 className="font-bold text-foreground mb-1">Catalyst AI</h3>
-              <p className="text-xs text-muted leading-relaxed">Multi-tenant runtime with voice, RAG, and tool orchestration. Powers 4 products.</p>
-            </div>
-            <div className="p-5 rounded-xl bg-white/[0.02] border border-white/10 hover:border-blue-500/30 transition-colors">
-              <div className="flex items-center gap-2 mb-3">
-                <div className="w-2 h-2 rounded-full bg-blue-400" />
-                <span className="text-[10px] font-bold uppercase tracking-wider text-blue-400">In Development</span>
-              </div>
-              <h3 className="font-bold text-foreground mb-1">π.Law</h3>
-              <p className="text-xs text-muted leading-relaxed">Legal AI CRM with zero-leakage proxy architecture for sensitive case data.</p>
-            </div>
-            <div className="p-5 rounded-xl bg-white/[0.02] border border-white/10 hover:border-purple-500/30 transition-colors">
-              <div className="flex items-center gap-2 mb-3">
-                <div className="w-2 h-2 rounded-full bg-purple-400" />
-                <span className="text-[10px] font-bold uppercase tracking-wider text-purple-400">Side Project</span>
-              </div>
-              <h3 className="font-bold text-foreground mb-1">GTO Poker Coach</h3>
-              <p className="text-xs text-muted leading-relaxed">Function-calling AI with Monte Carlo equity sim (10k samples), SVG poker table, tool-call inspector.</p>
-            </div>
-            <div className="p-5 rounded-xl bg-white/[0.02] border border-white/10 hover:border-amber-500/30 transition-colors">
-              <div className="flex items-center gap-2 mb-3">
-                <div className="w-2 h-2 rounded-full bg-amber-400" />
-                <span className="text-[10px] font-bold uppercase tracking-wider text-amber-400">In Development</span>
-              </div>
-              <h3 className="font-bold text-foreground mb-1">Let There Be RAG</h3>
-              <p className="text-xs text-muted leading-relaxed">SaaS: point at a URL, auto-crawl, build RAG, get an embeddable chat widget.</p>
-            </div>
+            ))}
           </div>
         </div>
-      </div>
+      </section>
 
-      {/* 6. Philosophy / About */}
-      <div className="py-20 px-6">
-        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-8">
-          <div className="glass-panel">
-            <h3 className="text-xl font-bold text-foreground mb-4 flex items-center gap-2">
-              <div className="w-1.5 h-6 bg-accent rounded-full"/>
-              Engineering Philosophy
-            </h3>
-            <p className="text-lg leading-relaxed text-muted mb-6">
-              I build production AI systems — the kind you can trust, operate, and evolve. I ship platforms that combine RAG knowledge bases, agentic workflows, real-time voice, and deep integrations with business data — without sacrificing security boundaries, observability, or performance.
-            </p>
-            <p className="text-lg leading-relaxed text-muted">
-              <strong className="text-foreground">Catalyst</strong> is my flagship platform: a multi-tenant AI runtime with multi-provider routing, persistent memory, and tooling built for real operations. If you need AI that survives the real world—not just a demo—I can help you design it, ship it, and harden it.
-            </p>
+      <section id="work" className="scroll-mt-28 border-y border-white/5 bg-[#0a0a0a] py-16 md:py-20">
+        <div className="mx-auto max-w-6xl px-4">
+          <div className="mb-10 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+            <div className="max-w-2xl">
+              <p className="mb-3 text-xs font-bold uppercase tracking-[0.22em] text-accent">
+                Proof of work
+              </p>
+              <h2 className="text-3xl font-bold text-foreground md:text-4xl">
+                A few systems that show the range.
+              </h2>
+            </div>
+            <Link
+              href="/articles"
+              className="inline-flex items-center gap-2 text-sm font-bold text-accent hover:text-accent/80"
+            >
+              Read field notes
+              <ArrowRight className="h-4 w-4" />
+            </Link>
           </div>
 
-          <div className="glass-panel h-full flex flex-col justify-center">
-            <h3 className="text-xl font-bold text-foreground mb-6 mt-0">Applied Experience</h3>
-            <p className="text-sm text-muted leading-relaxed mb-5">
-              Domains I&apos;ve shipped production systems in:
-            </p>
-            <div className="space-y-3">
-              {[
-                { domain: "Legal Tech", detail: "AI-powered case management, document analysis" },
-                { domain: "Fleet Management", detail: "Real-time vehicle tracking, route optimization" },
-                { domain: "Healthcare / Pharma", detail: "Clinical data pipelines, compliance automation" },
-                { domain: "Meeting Intelligence", detail: "Real-time transcription, action item extraction" },
-                { domain: "Hosting Infrastructure", detail: "Multi-tenant platforms, GPU resource management" },
-              ].map((item) => (
-                <div key={item.domain} className="group">
-                  <div className="flex items-start gap-3">
-                    <div className="w-1.5 h-1.5 rounded-full bg-accent mt-2 shrink-0" />
-                    <div>
-                      <span className="text-sm font-medium text-foreground">{item.domain}</span>
-                      <p className="text-xs text-muted/70">{item.detail}</p>
-                    </div>
+          <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
+            {proofItems.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className="group grid grid-cols-[96px_1fr] gap-5 rounded-xl border border-white/10 bg-white/[0.025] p-4 transition-colors hover:border-accent/40 md:grid-cols-[132px_1fr]"
+              >
+                <div className="relative h-24 overflow-hidden rounded-lg bg-black/30 md:h-32">
+                  <Image
+                    src={item.image}
+                    alt={item.title}
+                    fill
+                    sizes="132px"
+                    className="object-contain p-3 transition-transform duration-300 group-hover:scale-105"
+                  />
+                </div>
+                <div>
+                  <div className="mb-2 flex flex-wrap items-center gap-2">
+                    <h3 className="text-xl font-bold text-foreground group-hover:text-accent">
+                      {item.title}
+                    </h3>
+                    <span className="rounded border border-white/10 bg-white/5 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-muted">
+                      {item.label}
+                    </span>
                   </div>
+                  <p className="mb-3 text-sm leading-relaxed text-muted">{item.summary}</p>
+                  <p className="text-xs leading-relaxed text-muted/70">{item.proof}</p>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section id="approach" className="scroll-mt-28 py-16 md:py-20">
+        <div className="mx-auto grid max-w-6xl grid-cols-1 gap-6 px-4 lg:grid-cols-[1.2fr_0.8fr]">
+          <div className="rounded-xl border border-white/10 bg-white/[0.025] p-7">
+            <p className="mb-3 text-xs font-bold uppercase tracking-[0.22em] text-accent">
+              How I work
+            </p>
+            <h2 className="mb-5 text-3xl font-bold text-foreground">
+              Less theatre. More working software.
+            </h2>
+            <p className="mb-5 text-base leading-relaxed text-muted">
+              I am useful when the problem has messy inputs, sensitive data, awkward integrations,
+              or unclear production constraints. The goal is not to add AI everywhere. The goal is
+              to make one important workflow faster, safer, or easier to operate.
+            </p>
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+              {principles.map((principle) => (
+                <div key={principle} className="flex gap-3 rounded-lg bg-black/20 p-3">
+                  <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-accent" />
+                  <span className="text-sm leading-relaxed text-muted">{principle}</span>
                 </div>
               ))}
             </div>
           </div>
-        </div>
-      </div>
 
-      {/* 7. Catalyst AI (Flagship) */}
-      <div className="w-full bg-[#0a0a0a] border-y border-white/5 py-24 relative overflow-hidden">
-        <div className="absolute inset-0 bg-[url('/file.svg')] opacity-[0.03]" />
-        
-        <div className="max-w-7xl mx-auto px-6 relative z-10">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-             {/* Left: Content */}
-             <div className="space-y-8">
-                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-accent/10 text-accent text-sm font-bold tracking-wide border border-accent/20">
-                   <div className="w-2 h-2 rounded-full bg-accent animate-pulse" />
-                   FLAGSHIP PLATFORM
-                </div>
-                
-                <h2 className="text-4xl md:text-5xl font-bold text-white leading-tight">
-                   Catalyst AI <br/>
-                   <span className="text-muted text-3xl md:text-4xl">Multi-Tenant Runtime.</span>
-                </h2>
-                
-                <p className="text-lg text-muted/80 leading-relaxed max-w-xl">
-                   A production-grade AI platform built for operations, not just demos. 
-                   Featuring hard tenant isolation, custom LLM routing, and a real-time voice layer 
-                   clocking under 300ms latency.
-                </p>
-
-                <div className="grid grid-cols-2 gap-4">
-                   <div className="p-5 rounded-xl bg-white/5 border border-white/10 hover:border-accent/30 transition-colors">
-                      <div className="text-2xl font-bold text-white mb-1 font-mono">&lt;300ms</div>
-                      <div className="text-xs text-muted uppercase tracking-wider">Voice Latency</div>
-                   </div>
-                   <div className="p-5 rounded-xl bg-white/5 border border-white/10 hover:border-accent/30 transition-colors">
-                      <div className="text-2xl font-bold text-white mb-1">100%</div>
-                      <div className="text-xs text-muted uppercase tracking-wider">Data Isolation</div>
-                   </div>
-                   <div className="p-5 rounded-xl bg-white/5 border border-white/10 hover:border-accent/30 transition-colors">
-                      <div className="text-2xl font-bold text-white mb-1 font-mono">RLS</div>
-                      <div className="text-xs text-muted uppercase tracking-wider">Row Level Security</div>
-                   </div>
-                   <div className="p-5 rounded-xl bg-white/5 border border-white/10 hover:border-accent/30 transition-colors">
-                      <div className="text-2xl font-bold text-white mb-1 font-mono">OSS</div>
-                      <div className="text-xs text-muted uppercase tracking-wider">Zero-Dependency</div>
-                   </div>
-                </div>
-             </div>
-
-             {/* Right: Visual */}
-             <div className="relative">
-                <div className="relative z-10 rounded-xl overflow-hidden border border-white/10 shadow-2xl">
-                   <Image 
-                      src="/catalyst3d.png" 
-                      alt="Catalyst Interface" 
-                      width={800} 
-                      height={600} 
-                      className="w-full h-auto object-cover"
-                   />
-                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
-                </div>
-             </div>
+          <div className="rounded-xl border border-white/10 bg-white/[0.025] p-7">
+            <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-lg bg-accent/10 text-accent">
+              <Shield className="h-5 w-5" />
+            </div>
+            <h3 className="mb-3 text-xl font-bold text-foreground">Good fits</h3>
+            <p className="mb-4 text-sm leading-relaxed text-muted">
+              Bring a workflow, dataset, or product idea where generic chatbot wrappers are not enough.
+            </p>
+            <ul className="space-y-2 text-sm text-muted">
+              <li>Legal, evidence, support, or internal knowledge workflows</li>
+              <li>Assistants that need tools, memory, or integrations</li>
+              <li>Voice or real-time interfaces with latency constraints</li>
+              <li>AI systems that need privacy, observability, or cost control</li>
+            </ul>
           </div>
         </div>
-      </div>
+      </section>
 
-      {/* 8. Featured Work */}
-      <div className="py-20 px-6 bg-[#0c0c0c] border-t border-white/5">
-        <h2 className="text-3xl font-bold text-foreground mb-12 text-center">Featured Work</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto">
-          
-          {/* π.Law Card */}
-          <Link href="/pilaw" className="group block rounded-xl overflow-hidden border border-white/10 hover:border-accent/40 transition-all bg-[#0a0a0a]">
-            <div className="h-56 relative bg-gradient-to-br from-[#1a1a2e] to-[#0a0a0a] flex items-center justify-center">
-               <div className="relative w-44 h-44">
-                 <Image 
-                   src="/pilaw3d.png" 
-                   alt="π.Law" 
-                   fill 
-                   className="object-contain transition-transform duration-500 group-hover:scale-110" 
-                 />
-               </div>
-            </div>
-            <div className="p-5 border-t border-white/5">
-              <div className="flex items-center gap-2 mb-2">
-                <h3 className="text-xl font-bold text-white group-hover:text-accent transition-colors">π.Law</h3>
-                <span className="bg-blue-500/20 text-blue-400 border border-blue-500/30 px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider">Legal AI</span>
-              </div>
-              <p className="text-gray-400 text-sm mb-3 leading-relaxed">Legal case management with automated document analysis and vector retrieval.</p>
-              <div className="flex flex-wrap gap-2">
-                <span className="bg-white/5 text-white/60 px-2 py-0.5 rounded text-xs">RAG</span>
-                <span className="bg-white/5 text-white/60 px-2 py-0.5 rounded text-xs">PostgreSQL</span>
-              </div>
-            </div>
-          </Link>
-
-          {/* Silicon Smackdown Card */}
-          <Link href="/silicon-smackdown" className="group block rounded-xl overflow-hidden border border-white/10 hover:border-accent/40 transition-all bg-[#0a0a0a]">
-            <div className="h-56 relative bg-gradient-to-br from-purple-900/20 to-[#0a0a0a] flex items-center justify-center">
-               <div className="relative w-44 h-44">
-                 <Image 
-                   src="/silicon_smacdown/big_hero_logo.png" 
-                   alt="Silicon Smackdown" 
-                   fill 
-                   className="object-contain transition-transform duration-500 group-hover:scale-110" 
-                 />
-               </div>
-            </div>
-            <div className="p-5 border-t border-white/5">
-              <div className="flex items-center gap-2 mb-2">
-                <h3 className="text-xl font-bold text-white group-hover:text-accent transition-colors">Silicon Smackdown</h3>
-                <span className="bg-purple-500/20 text-purple-400 border border-purple-500/30 px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider">Voice AI</span>
-              </div>
-              <p className="text-gray-400 text-sm mb-3 leading-relaxed">Real-time AI talk show with full-duplex voice debates. 20+ personalities powered by Gemini Live API.</p>
-              <div className="flex flex-wrap gap-2">
-                <span className="bg-white/5 text-white/60 px-2 py-0.5 rounded text-xs">Gemini Live</span>
-                <span className="bg-white/5 text-white/60 px-2 py-0.5 rounded text-xs">&lt;100ms</span>
-              </div>
-            </div>
-          </Link>
-
-          {/* Forensic AI Studio Card */}
-          <Link href="/forensics" className="group block rounded-xl overflow-hidden border border-white/10 hover:border-accent/40 transition-all bg-[#0a0a0a]">
-            <div className="h-56 relative bg-gradient-to-br from-emerald-950/40 to-[#0a0a0a] flex items-center justify-center">
-               <div className="relative w-44 h-44 drop-shadow-[0_0_30px_rgba(16,185,129,0.3)] group-hover:drop-shadow-[0_0_40px_rgba(16,185,129,0.5)] transition-all duration-500">
-                 <Image 
-                   src="/detective.png" 
-                   alt="Forensic AI Studio" 
-                   fill 
-                   className="object-contain transition-transform duration-500 group-hover:scale-110" 
-                 />
-               </div>
-            </div>
-            <div className="p-5 border-t border-white/5">
-              <div className="flex items-center gap-2 mb-2">
-                <h3 className="text-xl font-bold text-white group-hover:text-accent transition-colors">Forensic AI Studio</h3>
-                <span className="bg-accent/20 text-accent border border-accent/30 px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider">Personal</span>
-              </div>
-              <p className="text-gray-400 text-sm mb-3 leading-relaxed">Private AI investigator built for a real legal case. Ingests evidence, maps entities, analyzes audio, reasons across 100K+ documents.</p>
-              <div className="flex flex-wrap gap-2">
-                <span className="bg-white/5 text-white/60 px-2 py-0.5 rounded text-xs">28+ Agent Tools</span>
-                <span className="bg-white/5 text-white/60 px-2 py-0.5 rounded text-xs">pgvector</span>
-              </div>
-            </div>
-          </Link>
-
-          {/* GTO Poker Coach Card */}
-          <div className="group block rounded-xl overflow-hidden border border-white/10 hover:border-amber-500/40 transition-all bg-[#0a0a0a]">
-            <div className="h-56 relative bg-gradient-to-br from-amber-950/30 to-[#0a0a0a] flex items-center justify-center">
-               <div className="text-6xl">♠️</div>
-            </div>
-            <div className="p-5 border-t border-white/5">
-              <div className="flex items-center gap-2 mb-2">
-                <h3 className="text-xl font-bold text-white">GTO Poker Coach</h3>
-                <span className="bg-amber-500/20 text-amber-400 border border-amber-500/30 px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider">Side Project</span>
-              </div>
-              <p className="text-gray-400 text-sm mb-3 leading-relaxed">Function-calling AI coach with Monte Carlo equity simulation (10k samples), interactive SVG poker table, and tool-call inspector UI.</p>
-              <div className="flex flex-wrap gap-2">
-                <span className="bg-white/5 text-white/60 px-2 py-0.5 rounded text-xs">Tool Calling</span>
-                <span className="bg-white/5 text-white/60 px-2 py-0.5 rounded text-xs">Monte Carlo</span>
-              </div>
-            </div>
-          </div>
-          
-        </div>
-      </div>
-
-      {/* 9. Beyond Code */}
-      <div className="py-20 px-6 bg-[#080808] border-t border-white/5">
-        <h2 className="text-3xl font-bold text-foreground mb-12 text-center">Beyond Code</h2>
-        <div className="max-w-md mx-auto">
-          <Link href="/authored-works" className="group block rounded-xl overflow-hidden border border-white/10 hover:border-accent/40 transition-all bg-[#0a0a0a]">
-            <div className="h-56 relative bg-gradient-to-br from-[#1a1a2e] to-[#0a0a0a] flex items-center justify-center overflow-hidden">
-               <div className="relative w-44 h-44">
-                 <Image 
-                   src="/parisian_author.png" 
-                   alt="Cosmic Dice" 
-                   fill 
-                   className="object-contain transition-transform duration-500 group-hover:scale-110" 
-                 />
-               </div>
-            </div>
-            <div className="p-5 border-t border-white/5">
-              <div className="flex items-center gap-2 mb-2">
-                <h3 className="text-xl font-bold text-white group-hover:text-accent transition-colors">Cosmic Dice</h3>
-                <span className="bg-purple-500/20 text-purple-400 border border-purple-500/30 px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider">Book</span>
-              </div>
-              <p className="text-gray-400 text-sm leading-relaxed">If everything is predetermined, what meaning does responsibility have? If everything is random, what meaning does love have? A philosophical exploration of consciousness, agency, and synthetic minds.</p>
-            </div>
-          </Link>
-        </div>
-      </div>
-
-      {/* 10. Social Proof + Call to Action */}
-      <div className="py-10 border-t border-white/5">
-        <div className="max-w-4xl mx-auto px-6 flex flex-wrap items-center justify-center gap-8 text-sm text-muted">
-          <div className="flex items-center gap-2">
-            <span className="text-accent font-bold">10+</span>
-            <span>Production Systems</span>
-          </div>
-          <div className="w-px h-4 bg-white/10 hidden sm:block" />
-          <div className="flex items-center gap-2">
-            <span className="text-accent font-bold">Self-Hosted</span>
-            <span>&</span>
-            <span className="text-accent font-bold">Cloud</span>
-          </div>
-          <div className="w-px h-4 bg-white/10 hidden sm:block" />
-          <div className="flex items-center gap-2">
-            <span className="text-accent font-bold">5+</span>
-            <span>Years AI/ML</span>
-          </div>
-        </div>
-      </div>
-      
-      <div className="px-6 py-16">
-        <div className="max-w-2xl mx-auto text-center">
-          <h2 className="text-3xl font-bold text-foreground mb-4">Ready to Ship?</h2>
-          <p className="text-muted mb-8">
-            Tell me about your project and let's figure out the best path forward.
+      <section id="contact" className="scroll-mt-28 border-t border-white/5 py-16 md:py-20">
+        <div className="mx-auto max-w-3xl px-4 text-center">
+          <p className="mb-3 text-xs font-bold uppercase tracking-[0.22em] text-accent">
+            Contact
           </p>
-          
-          <CTAButton />
-          
-          <p className="text-muted/60 text-sm mb-8">Typically respond within 24 hours</p>
-          
-          <div className="flex items-center justify-center gap-4 text-sm">
-            <Link href="/technical-expertise" className="text-muted hover:text-accent transition-colors">
-              View Full Portfolio
-            </Link>
-            <span className="text-white/10">•</span>
-            <Link href="/privacy" className="text-muted/60 hover:text-accent transition-colors">
-              Privacy Policy
+          <h2 className="mb-4 text-3xl font-bold text-foreground md:text-4xl">
+            Tell me what you are trying to build.
+          </h2>
+          <p className="mx-auto mb-8 max-w-2xl text-muted">
+            A useful first message includes the workflow, the data involved, who will use it,
+            and what would make the project worth doing.
+          </p>
+          <div className="mb-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
+            <CTAButton />
+            <Link
+              href="mailto:contact@supercore.tech"
+              className="inline-flex items-center justify-center gap-2 rounded-full border border-white/15 px-6 py-3 font-bold text-foreground transition-colors hover:border-accent/60 hover:text-accent"
+            >
+              <Mail className="h-4 w-4" />
+              Email directly
             </Link>
           </div>
+          <div className="grid grid-cols-1 gap-3 text-left text-sm text-muted sm:grid-cols-3">
+            <div className="rounded-lg border border-white/10 bg-white/[0.02] p-4">
+              What exists today?
+            </div>
+            <div className="rounded-lg border border-white/10 bg-white/[0.02] p-4">
+              What data or systems are involved?
+            </div>
+            <div className="rounded-lg border border-white/10 bg-white/[0.02] p-4">
+              What would success look like?
+            </div>
+          </div>
         </div>
-      </div>
+      </section>
     </div>
   )
 }

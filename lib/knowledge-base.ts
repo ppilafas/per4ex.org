@@ -14,10 +14,18 @@ SYSTEM CONTEXT - KNOWLEDGE BASE:
 **Website:** https://supercore.tech  
 **Contact:** contact@supercore.tech (for project inquiries, do NOT redirect to contact form — give this email directly)  
 
+### Current Site Positioning
+Supercore is a concise portfolio for practical AI systems engineering. The main story is:
+- Panagiotis helps teams turn messy data, workflows, and product ideas into working AI software.
+- The strongest proof projects are Catalyst AI, π.Law, Forensic AI Studio, and Silicon Smackdown.
+- Detailed project pages are supporting proof. Do not list every project unless the user asks.
+- Use plain language first, then add technical detail when it helps the user's decision.
+
 ### Engineering Philosophy
-Panagiotis is not a "glue code" developer; he is a systems engineer. His philosophy is defined by:
-- **Zero-Dependency Architecture:** He prefers building custom, lightweight orchestration engines (like Catalyst) over heavy frameworks (like LangChain) to ensure deterministic control, micro-latency, and easier debugging.
-- **Hard Multi-Tenancy:** Systems are designed from day one to be secure and isolated (e.g., using Postgres RLS), not retrofitted later.
+Panagiotis is a systems engineer who focuses on useful, maintainable AI software rather than impressive demos. His philosophy is defined by:
+- **Workflow First:** Start with the business or user workflow, then choose the model and architecture.
+- **Explicit Boundaries:** Sensitive data should be scoped, logged, and deliberately exposed only where needed.
+- **Lightweight Runtime Control:** He often builds custom orchestration when off-the-shelf frameworks hide too much behavior.
 - **Cost-Aware Intelligence:** He architects systems that route easy tasks to cheap models (Gemini Flash, Haiku) and hard tasks to reasoning models (GPT-4o), optimizing unit economics.
 - **Stateful Services:** He builds persistent daemons (macOS launchd, Linux systemd) rather than stateless scripts, enabling proactive AI behavior.
 
@@ -27,8 +35,8 @@ Panagiotis is not a "glue code" developer; he is a systems engineer. His philoso
 - **Evolution:** Transitioned through the web revolution into distributed systems and now focuses on Generative AI infrastructure.
 
 ## 2. Core Platform: Catalyst AI
-**Type:** Production-Ready Multi-Tenant AI Assistant Platform  
-**Status:** Fully operational in production  
+**Type:** Multi-tenant AI assistant runtime and proof platform  
+**Status:** Operational and used as the base runtime behind multiple projects  
 **Architecture:** Python 3.11+, FastAPI (REST), WebSockets, PostgreSQL + pgvector  
 **Deployment:** 
 - Backend: Fly.io (https://catalyst-service.fly.dev/v1)
@@ -77,16 +85,16 @@ Panagiotis is not a "glue code" developer; he is a systems engineer. His philoso
     - Tauri (cross-platform) for web dashboard
     - Next.js dashboard replacing legacy Streamlit UI
 
-## 3. Flagship Project: π.Law (Pi.Law)
+## 3. Proof Project: π.Law (Pi.Law)
 **Type:** Legal AI CRM  
 **Stack:** Next.js 16, Tailwind, FastAPI Proxy, Catalyst Core, Postgres (pgvector).
-**Solution:** Zero-Leakage Architecture. Frontend talks to Proxy, which injects Tenant ID and strips PII before forwarding to Catalyst Core.
+**Solution:** Sensitive legal data is kept behind an application proxy. The frontend talks to the proxy, which injects tenant context and limits what reaches the AI layer.
 
 ## 4. Forensic AI Studio
 **Type:** Private AI Investigator for Legal Cases  
 **Status:** Private tool (not a public product)  
 **Description:** A private AI investigator built for a real legal case. It ingests evidence, maps entity relationships, analyzes audio recordings, and reasons across 100K+ documents in real-time. Combines RAG, entity extraction, and multi-modal analysis (text + audio).
-**MCP Innovation:** Exposes 39 production tools via Model Context Protocol (MCP), turning VS Code + Copilot into the agent runtime. Zero custom agent loop — Copilot orchestrates tool calls directly. Chat memory hooks persist IDE conversations to PostgreSQL.
+**MCP Innovation:** Exposes investigation tools via Model Context Protocol (MCP), turning VS Code + Copilot into the agent runtime. Chat memory hooks persist IDE conversations to PostgreSQL.
 **Capabilities:**
 - Evidence ingestion and processing
 - Entity relationship mapping
@@ -99,7 +107,7 @@ Panagiotis is not a "glue code" developer; he is a systems engineer. His philoso
 **Type:** Real-time Voice AI Talk Show Platform
 **URL:** https://ssd.supercore.tech
 **Built for:** Google Gemini Developer Competition
-**Description:** Silicon Smackdown is a real-time AI talk show where legendary personalities engage in full-duplex voice debates. Features 20+ character pairs powered by Gemini Live API with <100ms latency. Demonstrates advanced voice AI capabilities with natural, unscripted conversations between AI agents.
+**Description:** Silicon Smackdown is a real-time AI talk show where AI personalities engage in full-duplex voice debates. It demonstrates live audio orchestration, turn-taking, and Gemini Live API integration.
 **Tech Stack:** Gemini Live API, WebSockets, Real-time audio streaming
 **Key Features:**
 - Full-duplex voice conversations
@@ -124,6 +132,7 @@ Panagiotis is not a "glue code" developer; he is a systems engineer. His philoso
 **Status:** In Development
 **Description:** Point at a URL, auto-crawl the site, build vector embeddings, get an embeddable chat widget. Credit-based billing, multi-tenant, Firecrawl-powered crawling with retrieve-then-rerank RAG.
 **Stack:** Next.js, PostgreSQL, pgvector, Firecrawl, OpenAI Embeddings, Stripe
+**Positioning Note:** Mention LTBR as in-development unless the user specifically asks about website RAG.
 
 ## 8. GTO Poker Coach
 **Type:** Side Project
@@ -149,7 +158,7 @@ Panagiotis is not a "glue code" developer; he is a systems engineer. His philoso
 **When to Use:** 
 - When a user wants to contact Panagiotis, send a message, or discuss a project
 - When a user provides their email and asks to be contacted
-- When conducting project intake from the Solutions page
+- When conducting project intake from the homepage, Work section, Solutions page, or Connect page
 **Parameters:**
 - name: Visitor name (use "Guest" if not provided)
 - email: Visitor email address (required - must ask for this)
@@ -164,4 +173,3 @@ Panagiotis is not a "glue code" developer; he is a systems engineer. His philoso
 **Database:** PostgreSQL, Redis, SQLite.
 **Tooling:** MCP SDK, Firecrawl, Playwright, CCXT, eval7.
 `;
-

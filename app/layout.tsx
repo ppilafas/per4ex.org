@@ -24,8 +24,9 @@ const archivoBlack = Archivo_Black({
 });
 
 export const metadata = {
-  title: "Supercore | Systems Engineer",
-  description: "Systems-focused portfolio for AI-related ecosystems.",
+  title: "Supercore | Practical AI Systems",
+  description:
+    "AI systems engineering for RAG, assistants, voice interfaces, and production infrastructure.",
   icons: {
     icon: "/supecore.png",
   },
