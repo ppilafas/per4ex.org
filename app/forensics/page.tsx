@@ -4,7 +4,7 @@ import { Search, Database, Brain, Mic, Shield, FileText, Network, Clock, Zap, Te
 
 export const metadata = {
   title: "Forensic AI Studio | supercore.tech",
-  description: "A private AI investigator built from scratch: ingests evidence, maps entity relationships, analyzes audio recordings, and reasons across 100K+ documents in real-time.",
+  description: "A cutting-edge forensic AI suite for personal investigations: ingests evidence, maps entity relationships, analyzes audio recordings, and reasons across 100K+ documents in real-time.",
 }
 
 export default function ForensicsPage() {
@@ -12,18 +12,18 @@ export default function ForensicsPage() {
     <div className="space-y-0">
 
       {/* ── Hero ── */}
-      <div className="relative py-24 px-6 overflow-hidden border-b border-white/5">
+      <div className="relative pt-8 pb-24 px-6 overflow-hidden border-b border-white/5">
         <div className="absolute inset-0 hero-grid -z-10 opacity-40" />
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-background -z-10" />
 
         <div className="max-w-5xl mx-auto text-center">
           <div className="flex justify-center mb-8">
-            <div className="relative w-36 h-36 drop-shadow-[0_0_40px_rgba(16,185,129,0.4)] hover:scale-105 transition-transform duration-500">
+            <div className="relative w-[180px] h-[180px] rounded-full overflow-hidden bg-gradient-to-br from-card/80 to-card/40 border border-card-border/60 drop-shadow-[0_0_40px_rgba(16,185,129,0.35)] hover:scale-105 transition-transform duration-500">
               <Image
                 src="/detective.png"
                 alt="Forensic AI Studio"
                 fill
-                className="object-contain"
+                className="object-contain p-2 scale-[1.24]"
                 priority
               />
             </div>
@@ -31,7 +31,7 @@ export default function ForensicsPage() {
 
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-accent/10 text-accent text-xs font-bold tracking-widest border border-accent/20 mb-8 uppercase">
             <Lock className="w-3 h-3" />
-            Private Tool · Not a Product
+            Personal Investigation Suite
           </div>
 
           <h1 className="text-5xl md:text-7xl font-bold text-foreground mb-6 tracking-tight leading-none">
@@ -40,7 +40,7 @@ export default function ForensicsPage() {
           </h1>
 
           <p className="text-xl md:text-2xl text-muted max-w-3xl mx-auto mb-10 leading-relaxed">
-            I built a private AI investigator for a real legal case. It ingests evidence, maps entity relationships, analyzes audio recordings, and reasons across <strong className="text-foreground">100K+ documents</strong> in real-time.
+            A cutting-edge forensic AI suite I built for personal investigations. It ingests evidence, maps entity relationships, analyzes audio recordings, and reasons across <strong className="text-foreground">100K+ documents</strong> in real-time.
           </p>
 
           {/* Key stats */}
@@ -63,10 +63,10 @@ export default function ForensicsPage() {
       {/* ── What it is ── */}
       <div className="py-20 px-6 border-b border-white/5">
         <div className="max-w-5xl mx-auto">
-          <h2 className="text-3xl font-bold text-foreground mb-4">What Is This?</h2>
+          <h2 className="text-3xl font-bold text-foreground mb-4">What It Is</h2>
           <div className="glass-panel border-l-4 border-l-accent mb-10">
             <p className="text-lg text-muted leading-relaxed">
-              This is a <strong className="text-foreground">full-stack AI investigation platform</strong> I built for personal use during a complex legal case. It's not a product, not a demo — it's a working tool I use daily. The codebase is a Next.js 16 app with a PostgreSQL + pgvector backend, a 28-tool AI agent layer, a voice interface, and a deep research orchestrator. Everything is purpose-built for one job: <strong className="text-foreground">finding the truth in a mountain of evidence.</strong>
+              This is a <strong className="text-foreground">full-stack forensic AI platform</strong> I built for personal investigations. It is not marketingware or a throwaway demo. It is a working system with a Next.js 16 frontend, PostgreSQL + pgvector backend, a 28-tool agent layer, voice workflows, and a deep research orchestrator. Everything is purpose-built for one job: <strong className="text-foreground">finding signal inside a mountain of evidence.</strong>
             </p>
           </div>
 
@@ -422,6 +422,51 @@ memory_vectors (PG)  ──── HNSW indexed, semantic dedup
         </div>
       </div>
 
+      {/* ── IDE as Agent Runtime (MCP) ── */}
+      <div className="py-20 px-6 border-b border-white/5 bg-[#080808]">
+        <div className="max-w-5xl mx-auto">
+          <div className="text-center mb-12">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-purple-500/10 text-purple-400 text-sm font-bold tracking-wide border border-purple-500/20 mb-4">
+              <div className="w-2 h-2 rounded-full bg-purple-400" />
+              ARCHITECTURE INNOVATION
+            </div>
+            <h2 className="text-3xl font-bold text-foreground mb-4">IDE as Agent Runtime</h2>
+            <p className="text-lg text-muted max-w-2xl mx-auto">
+              What if your IDE was your AI agent runtime? Instead of building a custom chat UI per domain, 
+              I exposed the entire tool suite via MCP and let Copilot handle orchestration.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <div className="glass-panel border-l-4 border-l-purple-500">
+              <h3 className="font-bold text-foreground mb-3">39 MCP Tools</h3>
+              <p className="text-sm text-muted leading-relaxed">
+                Evidence search, document analysis, Google Workspace integration, vector memory, entity graph queries — all exposed as MCP protocol tools.
+              </p>
+            </div>
+            <div className="glass-panel border-l-4 border-l-purple-500">
+              <h3 className="font-bold text-foreground mb-3">Zero Custom Agent Loop</h3>
+              <p className="text-sm text-muted leading-relaxed">
+                Copilot acts as the orchestration layer. The MCP server imports directly from the app modules — same DB, same embeddings, zero proxy overhead.
+              </p>
+            </div>
+            <div className="glass-panel border-l-4 border-l-purple-500">
+              <h3 className="font-bold text-foreground mb-3">Persistent Memory</h3>
+              <p className="text-sm text-muted leading-relaxed">
+                Chat memory hooks persist IDE conversations to PostgreSQL, creating an audit trail. Multi-agent delegation within Copilot (agent A → agent B).
+              </p>
+            </div>
+          </div>
+
+          <div className="glass-panel text-center">
+            <p className="text-sm text-muted/80 italic">
+              This eliminates the need for a custom chat UI per domain — the IDE becomes a general-purpose agent interface 
+              for any backend that speaks MCP.
+            </p>
+          </div>
+        </div>
+      </div>
+
       {/* ── Why it matters ── */}
       <div className="py-20 px-6 border-b border-white/5">
         <div className="max-w-5xl mx-auto">
@@ -454,7 +499,7 @@ memory_vectors (PG)  ──── HNSW indexed, semantic dedup
               </div>
               <h3 className="text-2xl font-bold text-foreground mb-4">The Hardest AI Problems Are Personal</h3>
               <p className="text-lg text-muted leading-relaxed">
-                Reasoning across 100K+ documents, detecting tampered audio, mapping entity relationships across years of evidence — these are the same problems enterprises pay millions to solve. I built the solution for myself first.
+                Reasoning across 100K+ documents, detecting tampered audio, mapping entity relationships across years of evidence — these are hard problems regardless of who&apos;s solving them. I built the solution for myself first.
               </p>
             </div>
           </div>

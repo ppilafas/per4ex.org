@@ -30,14 +30,14 @@ export default function Connect() {
               <strong className="text-foreground text-lg mb-4">Email</strong>
               <div className="flex items-center gap-2 bg-card border border-card-border px-4 py-2 rounded text-foreground">
                  <Mail className="w-5 h-5" /> 
-                 <span className="select-all">pi@supercore.tech</span>
+                 <span className="select-all">contact@supercore.tech</span>
               </div>
            </div>
 
            <div className="glass-panel flex flex-col items-center text-center p-6 hover:bg-card/80 transition-colors">
               <strong className="text-foreground text-lg mb-4">GitHub</strong>
-              <a href="https://github.com" target="_blank" className="flex items-center gap-2 bg-card border border-card-border px-4 py-2 rounded text-foreground hover:bg-card-border transition-colors">
-                 <Code className="w-5 h-5" /> github.com
+              <a href="https://github.com/ppilafas" target="_blank" className="flex items-center gap-2 bg-card border border-card-border px-4 py-2 rounded text-foreground hover:bg-card-border transition-colors">
+                 <Code className="w-5 h-5" /> github.com/ppilafas
               </a>
            </div>
         </div>

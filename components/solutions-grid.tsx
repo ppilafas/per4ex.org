@@ -61,7 +61,7 @@ export function SolutionsGrid() {
               <span>Stack Agnostic</span>
             </div>
             <p className="text-muted max-w-2xl mx-auto">
-              I ship on <span className="text-foreground">LangChain</span>, <span className="text-foreground">LlamaIndex</span>, and <span className="text-foreground">Vercel AI SDK</span> — or build custom runtimes when your use case demands it.
+              I build on <span className="text-foreground">OpenAI</span>, <span className="text-foreground">Gemini</span>, <span className="text-foreground">HuggingFace</span>, and <span className="text-foreground">self-hosted models</span> — or custom runtimes when the use case demands it.
             </p>
           </div>
         </div>

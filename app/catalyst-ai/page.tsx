@@ -13,8 +13,8 @@ export default function CatalystAI() {
       <div className="grid grid-cols-1 md:grid-cols-[1fr_2fr_1fr] gap-4 mb-4">
         <div />
         <div className="flex flex-col items-center">
-          <div className="relative w-[180px] h-[180px] mb-6 rounded-full overflow-hidden hover:scale-105 transition-transform duration-500 drop-shadow-[0_0_20px_rgba(16,185,129,0.3)]">
-             <Image src="/catalyst3d.png" alt="Catalyst AI" fill className="object-cover p-2" priority />
+          <div className="relative w-[180px] h-[180px] mb-6 rounded-full overflow-hidden bg-gradient-to-br from-card/80 to-card/40 border border-card-border/60 hover:scale-105 transition-transform duration-500 drop-shadow-[0_0_20px_rgba(16,185,129,0.3)]">
+             <Image src="/catalyst3d.png" alt="Catalyst AI" fill className="object-contain p-2 scale-[1.12]" priority />
           </div>
           <h1 className="text-4xl md:text-5xl font-bold text-center text-foreground mb-2">Catalyst AI</h1>
           <TypewriterSubtitle 
@@ -85,7 +85,7 @@ export default function CatalystAI() {
         </h2>
         <div className="space-y-6 text-muted leading-relaxed relative z-10">
           <p className="text-lg">
-            Catalyst is <strong className="text-foreground">fully operational</strong>, deployed on modern cloud infrastructure with enterprise-grade security and scalability.
+            Catalyst is <strong className="text-foreground">fully operational</strong>, deployed on modern cloud infrastructure with production-grade security and scalability.
           </p>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="bg-background/50 p-6 rounded-xl border border-card-border hover:border-accent/40 transition-colors">
@@ -331,7 +331,7 @@ export default function CatalystAI() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div className="glass-panel col-span-1 md:col-span-2">
               <h3 className="text-xl font-bold text-foreground mb-4 flex items-center gap-2">
-                 <Database className="w-5 h-5 text-accent" /> Enterprise RAG
+                 <Database className="w-5 h-5 text-accent" /> Production RAG
               </h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <ul className="space-y-2 text-sm text-muted">
@@ -385,12 +385,38 @@ export default function CatalystAI() {
                  <div className="w-16 h-16 bg-accent/10 rounded-full flex items-center justify-center mx-auto text-accent">
                      <Users className="w-8 h-8" />
                  </div>
-                 <h3 className="text-xl font-bold text-foreground">For Enterprise</h3>
+                 <h3 className="text-xl font-bold text-foreground">For Teams</h3>
                  <p className="text-muted text-sm max-w-sm mx-auto">
-                     A secure, multi-tenant platform for deploying specialized agents to employees. Isolate data by department (Tenant) and project (Namespace).
+                     A secure, multi-tenant platform for deploying specialized agents. Isolate data by department (Tenant) and project (Namespace).
                  </p>
              </div>
          </div>
+      </div>
+
+      {/* Powered By Catalyst */}
+      <div className="glass-panel">
+        <h2 className="text-2xl font-bold text-foreground mb-6 text-center">Powered by Catalyst</h2>
+        <p className="text-muted text-sm text-center mb-8 max-w-xl mx-auto">
+          Catalyst isn&apos;t a demo — it&apos;s the shared runtime behind multiple production products.
+        </p>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+          <Link href="/pilaw" className="p-4 rounded-xl bg-white/[0.02] border border-white/10 hover:border-blue-500/40 transition-colors text-center group">
+            <h4 className="font-bold text-foreground group-hover:text-blue-400 transition-colors">π.Law</h4>
+            <p className="text-xs text-muted mt-1">Legal AI CRM</p>
+          </Link>
+          <Link href="/forensics" className="p-4 rounded-xl bg-white/[0.02] border border-white/10 hover:border-accent/40 transition-colors text-center group">
+            <h4 className="font-bold text-foreground group-hover:text-accent transition-colors">Forensic AI Studio</h4>
+            <p className="text-xs text-muted mt-1">Evidence Analysis</p>
+          </Link>
+          <Link href="/silicon-smackdown" className="p-4 rounded-xl bg-white/[0.02] border border-white/10 hover:border-purple-500/40 transition-colors text-center group">
+            <h4 className="font-bold text-foreground group-hover:text-purple-400 transition-colors">Supercore Show</h4>
+            <p className="text-xs text-muted mt-1">Voice AI Debates</p>
+          </Link>
+          <div className="p-4 rounded-xl bg-white/[0.02] border border-white/10 hover:border-accent/40 transition-colors text-center">
+            <h4 className="font-bold text-foreground">This Chat Widget</h4>
+            <p className="text-xs text-muted mt-1">per4ex.org assistant</p>
+          </div>
+        </div>
       </div>
 
       {/* Live Voice Widget Demo */}

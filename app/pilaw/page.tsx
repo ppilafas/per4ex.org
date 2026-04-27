@@ -9,15 +9,19 @@ export default function PiLaw() {
       <div className="grid grid-cols-1 md:grid-cols-[1fr_2fr_1fr] gap-4 mb-8">
         <div />
         <div className="flex flex-col items-center">
-          <div className="relative w-[180px] h-[180px] mb-6 rounded-full overflow-hidden hover:scale-105 transition-transform duration-500 drop-shadow-[0_0_20px_rgba(16,185,129,0.3)]">
-             <Image src="/pilaw3d.png" alt="π.Law" fill className="object-cover p-2" sizes="180px" priority />
+          <div className="relative w-[180px] h-[180px] mb-6 rounded-full overflow-hidden bg-gradient-to-br from-card/80 to-card/40 border border-card-border/60 hover:scale-105 transition-transform duration-500 drop-shadow-[0_0_20px_rgba(16,185,129,0.3)]">
+             <Image src="/pilaw3d.png" alt="π.Law" fill className="object-contain p-2 scale-[1.12]" sizes="180px" priority />
           </div>
           <h1 className="text-4xl md:text-5xl font-bold text-center text-foreground mb-2">π.Law</h1>
           <TypewriterSubtitle 
-             text="Enterprise Legal AI CRM with zero-leakage architecture" 
+             text="Legal AI CRM with zero-leakage proxy architecture" 
              className="mb-6 text-lg md:text-xl"
              cursorColor="bg-blue-500"
           />
+          <div className="flex items-center gap-2 mb-4">
+            <div className="w-2 h-2 rounded-full bg-blue-400" />
+            <span className="text-xs font-bold uppercase tracking-wider text-blue-400">In Development</span>
+          </div>
           <hr className="w-full border-t border-card-border mt-6" />
         </div>
         <div />
@@ -30,8 +34,8 @@ export default function PiLaw() {
             Engineering Case Study
          </h2>
          <p className="text-lg text-muted leading-relaxed">
-            π.Law is a production-ready enterprise legal AI system.
-            It solves the challenge of <strong>"Safe Enterprise AI"</strong> by decoupling the sensitive legal data layer from the AI reasoning layer using a zero-leakage proxy architecture.
+            π.Law is a production-ready legal AI system.
+            It solves the challenge of <strong>"Safe AI over sensitive data"</strong> by decoupling the legal data layer from the AI reasoning layer using a zero-leakage proxy architecture.
          </p>
       </div>
 

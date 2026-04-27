@@ -78,8 +78,8 @@ export default function ArticlesPage() {
             Articles & Insights
           </h1>
           <p className="text-lg text-white/60 max-w-2xl mx-auto">
-            Thoughts on building production AI systems, lessons from the field, 
-            and answers to questions clients frequently ask.
+            Field notes from building production AI systems — architecture decisions,
+            failure modes, and lessons from shipping.
           </p>
         </div>
 

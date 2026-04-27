@@ -39,7 +39,7 @@ export default function SiliconSmackdown() {
 
           <div className="flex flex-col sm:flex-row gap-4 items-center mb-4">
             <Link
-              href="https://ssd.per4ex.org"
+              href="https://ssd.supercore.tech"
               target="_blank"
               className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-accent text-white font-semibold hover:bg-accent/90 transition-all hover:scale-105 shadow-lg shadow-accent/20"
             >
@@ -58,6 +58,10 @@ export default function SiliconSmackdown() {
             </Link>
           </div>
           <div className="flex flex-col items-center gap-2 mb-8">
+            <div className="flex items-center gap-2 mb-2">
+              <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+              <span className="text-xs font-bold uppercase tracking-wider text-emerald-400">Live</span>
+            </div>
             <span className="text-muted/60 text-sm">Password: <code className="bg-white/5 px-2 py-0.5 rounded text-accent">1999</code></span>
             <span className="text-muted text-sm">Built for Google Gemini Developer Competition</span>
           </div>

@@ -46,15 +46,15 @@ export default async function RootLayout({
         suppressHydrationWarning
       >
         <NextIntlClientProvider messages={messages}>
-          <div className="min-h-screen bg-background text-foreground relative">
+          <div className="min-h-screen bg-background text-foreground relative flex flex-col">
             <ClientBootLoader />
             <Navbar />
-            <main className="w-full min-h-screen flex flex-col pt-24">
-               <div className="max-w-7xl w-full px-6 flex-1 mx-auto">
-        {children}
-                 <Footer />
-               </div>
+            <main className="w-full flex-1 pt-24 pb-40">
+              <div className="max-w-7xl w-full px-6 flex-1 mx-auto">
+                {children}
+              </div>
             </main>
+            <Footer />
             <ClientWidgets />
             <Analytics />
           </div>

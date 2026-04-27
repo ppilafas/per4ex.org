@@ -1,4 +1,3 @@
-import { cn } from "@/lib/utils"
 import Image from "next/image"
 import Link from "next/link"
 import { TypewriterSubtitle } from "@/components/typewriter"
@@ -15,65 +14,23 @@ export default function Home() {
         <div className="absolute inset-0 hero-grid -z-10" />
 
         <div className="w-full max-w-7xl px-4 z-10 pt-10 md:pt-14 pb-10 md:pb-14">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-14 lg:items-start items-center">
-            <div className="flex flex-col items-center lg:items-start text-center lg:text-left lg:pr-6">
+          <div className="grid grid-cols-1 gap-10 items-center">
+            <div className="flex flex-col items-center text-center">
               <h1 className="text-5xl md:text-7xl font-bold text-foreground mb-5 md:mb-6 tracking-tight">
-                Ship Production <br />
+                I Build AI That <br />
                 <span className="whitespace-nowrap">
-                  AI <span className="text-accent">Faster.</span>
+                  Actually <span className="text-accent">Ships.</span>
                 </span>
               </h1>
 
               <TypewriterSubtitle
-                text="I help teams escape demo hell. RAG systems, voice agents, autonomous workflows — built to actually ship."
-                className="text-xl md:text-2xl text-muted max-w-2xl mb-8 md:mb-10 leading-relaxed font-sans text-left mx-auto lg:mx-0"
+                text="RAG systems, voice agents, self-hosted inference, autonomous workflows — from prototype to production on real infrastructure."
+                className="text-xl md:text-2xl text-muted max-w-2xl mb-8 md:mb-10 leading-relaxed font-sans mx-auto"
                 cursorColor="bg-accent"
                 speed={30}
               />
 
               <HeroActions />
-            </div>
-
-            <div className="relative mx-auto w-full max-w-[520px] lg:max-w-[560px] lg:justify-self-end">
-              <div className="relative aspect-[4/3] sm:aspect-square overflow-hidden rounded-2xl border border-white/10 shadow-2xl">
-                <div className="absolute bottom-4 right-4 z-30">
-                  <Image
-                    src="/supecore.png"
-                    alt="Supercore"
-                    width={170}
-                    height={68}
-                    className="h-7 md:h-8 w-auto drop-shadow-[0_0_18px_rgba(0,0,0,0.65)] [filter:brightness(0)_invert(1)]"
-                    priority
-                  />
-                </div>
-                <Image
-                  src="/speedbot.gif"
-                  alt="Assistant ship illustration"
-                  fill
-                  sizes="(max-width: 640px) 92vw, (max-width: 1024px) 520px, 560px"
-                  className="object-cover"
-                  priority
-                />
-                <div className="pointer-events-none absolute inset-0 bg-emerald-500/25 mix-blend-color" />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
-                <div className="absolute inset-0 bg-gradient-to-r from-black/35 via-transparent to-transparent" />
-                <div className="pointer-events-none absolute -inset-8 bg-[radial-gradient(circle_at_center,rgba(16,185,129,0.10),transparent_55%)]" />
-
-                <div className="hero-ticker hidden sm:block">
-                  <div className="hero-ticker-row hero-ticker-1">
-                    <div className="hero-ticker-track v-fast">
-                      <span><strong>Enterprise RAG</strong> [//] <span className="hollow">vector search</span> [+] citations [//] <span className="hollow">private data</span> ⚡</span>
-                      <span><strong>Enterprise RAG</strong> [//] <span className="hollow">vector search</span> [+] citations [//] <span className="hollow">private data</span> ⚡</span>
-                    </div>
-                  </div>
-                  <div className="hero-ticker-row hero-ticker-2">
-                    <div className="hero-ticker-track rev medium">
-                      <span><strong>Realtime Voice AI</strong> ⚡ <span className="hollow">low latency</span> [//] turn-taking [+] <span className="hollow">interruptions</span> [//]</span>
-                      <span><strong>Realtime Voice AI</strong> ⚡ <span className="hollow">low latency</span> [//] turn-taking [+] <span className="hollow">interruptions</span> [//]</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
             </div>
           </div>
         </div>
@@ -82,31 +39,42 @@ export default function Home() {
       {/* 2. Solutions Grid */}
       <SolutionsGrid />
 
-      {/* 4. How I Work */}
+      {/* 4. Currently Building */}
       <div className="py-20 px-6 border-t border-white/5">
-        <div className="max-w-4xl mx-auto">
-          <h2 className="text-2xl font-bold text-foreground mb-10 text-center">How I Work</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="text-center p-6">
-              <div className="w-10 h-10 rounded-full bg-accent/10 border border-accent/20 flex items-center justify-center mx-auto mb-4">
-                <span className="text-accent font-bold font-mono text-sm">01</span>
+        <div className="max-w-5xl mx-auto">
+          <h2 className="text-2xl font-bold text-foreground mb-10 text-center">Currently Building</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="p-5 rounded-xl bg-white/[0.02] border border-white/10 hover:border-accent/30 transition-colors">
+              <div className="flex items-center gap-2 mb-3">
+                <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-400">Live</span>
               </div>
-              <h3 className="font-bold text-foreground mb-2">Discovery</h3>
-              <p className="text-sm text-muted leading-relaxed">We define scope, constraints, and success metrics together.</p>
+              <h3 className="font-bold text-foreground mb-1">Catalyst AI</h3>
+              <p className="text-xs text-muted leading-relaxed">Multi-tenant runtime with voice, RAG, and tool orchestration. Powers 4 products.</p>
             </div>
-            <div className="text-center p-6">
-              <div className="w-10 h-10 rounded-full bg-accent/10 border border-accent/20 flex items-center justify-center mx-auto mb-4">
-                <span className="text-accent font-bold font-mono text-sm">02</span>
+            <div className="p-5 rounded-xl bg-white/[0.02] border border-white/10 hover:border-blue-500/30 transition-colors">
+              <div className="flex items-center gap-2 mb-3">
+                <div className="w-2 h-2 rounded-full bg-blue-400" />
+                <span className="text-[10px] font-bold uppercase tracking-wider text-blue-400">In Development</span>
               </div>
-              <h3 className="font-bold text-foreground mb-2">Build</h3>
-              <p className="text-sm text-muted leading-relaxed">Iterative development with weekly demos and feedback loops.</p>
+              <h3 className="font-bold text-foreground mb-1">π.Law</h3>
+              <p className="text-xs text-muted leading-relaxed">Legal AI CRM with zero-leakage proxy architecture for sensitive case data.</p>
             </div>
-            <div className="text-center p-6">
-              <div className="w-10 h-10 rounded-full bg-accent/10 border border-accent/20 flex items-center justify-center mx-auto mb-4">
-                <span className="text-accent font-bold font-mono text-sm">03</span>
+            <div className="p-5 rounded-xl bg-white/[0.02] border border-white/10 hover:border-purple-500/30 transition-colors">
+              <div className="flex items-center gap-2 mb-3">
+                <div className="w-2 h-2 rounded-full bg-purple-400" />
+                <span className="text-[10px] font-bold uppercase tracking-wider text-purple-400">Side Project</span>
               </div>
-              <h3 className="font-bold text-foreground mb-2">Ship</h3>
-              <p className="text-sm text-muted leading-relaxed">Production deployment with documentation and support handoff.</p>
+              <h3 className="font-bold text-foreground mb-1">GTO Poker Coach</h3>
+              <p className="text-xs text-muted leading-relaxed">Function-calling AI with Monte Carlo equity sim (10k samples), SVG poker table, tool-call inspector.</p>
+            </div>
+            <div className="p-5 rounded-xl bg-white/[0.02] border border-white/10 hover:border-amber-500/30 transition-colors">
+              <div className="flex items-center gap-2 mb-3">
+                <div className="w-2 h-2 rounded-full bg-amber-400" />
+                <span className="text-[10px] font-bold uppercase tracking-wider text-amber-400">In Development</span>
+              </div>
+              <h3 className="font-bold text-foreground mb-1">Let There Be RAG</h3>
+              <p className="text-xs text-muted leading-relaxed">SaaS: point at a URL, auto-crawl, build RAG, get an embeddable chat widget.</p>
             </div>
           </div>
         </div>
@@ -121,7 +89,7 @@ export default function Home() {
               Engineering Philosophy
             </h3>
             <p className="text-lg leading-relaxed text-muted mb-6">
-              I build production AI systems—the kind enterprises can trust, operate, and evolve. I help teams move from AI excitement to AI reliability: shipping platforms that combine RAG knowledge bases, agentic workflows, real-time voice, and deep integrations with Google Workspace and enterprise data—without sacrificing security boundaries, observability, or performance.
+              I build production AI systems — the kind you can trust, operate, and evolve. I ship platforms that combine RAG knowledge bases, agentic workflows, real-time voice, and deep integrations with business data — without sacrificing security boundaries, observability, or performance.
             </p>
             <p className="text-lg leading-relaxed text-muted">
               <strong className="text-foreground">Catalyst</strong> is my flagship platform: a multi-tenant AI runtime with multi-provider routing, persistent memory, and tooling built for real operations. If you need AI that survives the real world—not just a demo—I can help you design it, ship it, and harden it.
@@ -129,33 +97,25 @@ export default function Home() {
           </div>
 
           <div className="glass-panel h-full flex flex-col justify-center">
-            <h3 className="text-xl font-bold text-foreground mb-6 mt-0">Technical Expertise</h3>
-            <div className="space-y-5">
+            <h3 className="text-xl font-bold text-foreground mb-6 mt-0">Applied Experience</h3>
+            <p className="text-sm text-muted leading-relaxed mb-5">
+              Domains I&apos;ve shipped production systems in:
+            </p>
+            <div className="space-y-3">
               {[
-                { label: "AI/ML Infrastructure", level: 5, status: "Expert" },
-                { label: "Distributed Systems", level: 4, status: "Advanced" },
-                { label: "RAG & Knowledge Systems", level: 5, status: "Expert" },
-                { label: "MLOps & Cloud", level: 4, status: "Advanced" },
-                { label: "Data Engineering", level: 4, status: "Advanced" },
-                { label: "Systems Architecture", level: 5, status: "Expert" },
-              ].map((skill) => (
-                <div key={skill.label} className="group">
-                  <div className="flex justify-between mb-2">
-                    <span className="text-sm font-medium text-muted group-hover:text-foreground transition-colors">{skill.label}</span>
-                    <span className="text-xs text-accent/80 font-mono tracking-wider uppercase">{skill.status}</span>
-                  </div>
-                  <div className="flex gap-0.5">
-                    {[1, 2, 3, 4, 5].map((block) => (
-                      <div 
-                        key={block}
-                        className={cn(
-                          "h-1 flex-1 rounded-sm transition-all duration-500",
-                          block <= skill.level 
-                            ? "bg-accent" 
-                            : "bg-white/5"
-                        )}
-                      />
-                    ))}
+                { domain: "Legal Tech", detail: "AI-powered case management, document analysis" },
+                { domain: "Fleet Management", detail: "Real-time vehicle tracking, route optimization" },
+                { domain: "Healthcare / Pharma", detail: "Clinical data pipelines, compliance automation" },
+                { domain: "Meeting Intelligence", detail: "Real-time transcription, action item extraction" },
+                { domain: "Hosting Infrastructure", detail: "Multi-tenant platforms, GPU resource management" },
+              ].map((item) => (
+                <div key={item.domain} className="group">
+                  <div className="flex items-start gap-3">
+                    <div className="w-1.5 h-1.5 rounded-full bg-accent mt-2 shrink-0" />
+                    <div>
+                      <span className="text-sm font-medium text-foreground">{item.domain}</span>
+                      <p className="text-xs text-muted/70">{item.detail}</p>
+                    </div>
                   </div>
                 </div>
               ))}
@@ -228,7 +188,7 @@ export default function Home() {
       {/* 8. Featured Work */}
       <div className="py-20 px-6 bg-[#0c0c0c] border-t border-white/5">
         <h2 className="text-3xl font-bold text-foreground mb-12 text-center">Featured Work</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto">
           
           {/* π.Law Card */}
           <Link href="/pilaw" className="group block rounded-xl overflow-hidden border border-white/10 hover:border-accent/40 transition-all bg-[#0a0a0a]">
@@ -245,37 +205,12 @@ export default function Home() {
             <div className="p-5 border-t border-white/5">
               <div className="flex items-center gap-2 mb-2">
                 <h3 className="text-xl font-bold text-white group-hover:text-accent transition-colors">π.Law</h3>
-                <span className="bg-blue-500/20 text-blue-400 border border-blue-500/30 px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider">Enterprise</span>
+                <span className="bg-blue-500/20 text-blue-400 border border-blue-500/30 px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider">Legal AI</span>
               </div>
               <p className="text-gray-400 text-sm mb-3 leading-relaxed">Legal case management with automated document analysis and vector retrieval.</p>
               <div className="flex flex-wrap gap-2">
                 <span className="bg-white/5 text-white/60 px-2 py-0.5 rounded text-xs">RAG</span>
                 <span className="bg-white/5 text-white/60 px-2 py-0.5 rounded text-xs">PostgreSQL</span>
-              </div>
-            </div>
-          </Link>
-
-          {/* The Per4ex.org Show Card */}
-          <Link href="/show" className="group block rounded-xl overflow-hidden border border-white/10 hover:border-accent/40 transition-all bg-black">
-            <div className="h-56 relative flex items-center justify-center">
-               <div className="relative w-52 h-52">
-                 <Image 
-                   src="/per4ex_new.png" 
-                   alt="The Supercore Show" 
-                   fill 
-                   className="object-contain transition-transform duration-500 group-hover:scale-110" 
-                 />
-               </div>
-            </div>
-            <div className="p-5 border-t border-white/5 bg-[#0a0a0a]">
-              <div className="flex items-center gap-2 mb-2">
-                <h3 className="text-xl font-bold text-white group-hover:text-accent transition-colors">The Supercore Show</h3>
-                <span className="bg-red-500/20 text-red-400 border border-red-500/30 px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider">Live</span>
-              </div>
-              <p className="text-gray-400 text-sm mb-3 leading-relaxed">A live talk show where I moderate conversations between AI guests. Real-time via Ably.</p>
-              <div className="flex flex-wrap gap-2">
-                <span className="bg-white/5 text-white/60 px-2 py-0.5 rounded text-xs">Multi-Agent</span>
-                <span className="bg-white/5 text-white/60 px-2 py-0.5 rounded text-xs">WebSockets</span>
               </div>
             </div>
           </Link>
@@ -329,6 +264,24 @@ export default function Home() {
               </div>
             </div>
           </Link>
+
+          {/* GTO Poker Coach Card */}
+          <div className="group block rounded-xl overflow-hidden border border-white/10 hover:border-amber-500/40 transition-all bg-[#0a0a0a]">
+            <div className="h-56 relative bg-gradient-to-br from-amber-950/30 to-[#0a0a0a] flex items-center justify-center">
+               <div className="text-6xl">♠️</div>
+            </div>
+            <div className="p-5 border-t border-white/5">
+              <div className="flex items-center gap-2 mb-2">
+                <h3 className="text-xl font-bold text-white">GTO Poker Coach</h3>
+                <span className="bg-amber-500/20 text-amber-400 border border-amber-500/30 px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider">Side Project</span>
+              </div>
+              <p className="text-gray-400 text-sm mb-3 leading-relaxed">Function-calling AI coach with Monte Carlo equity simulation (10k samples), interactive SVG poker table, and tool-call inspector UI.</p>
+              <div className="flex flex-wrap gap-2">
+                <span className="bg-white/5 text-white/60 px-2 py-0.5 rounded text-xs">Tool Calling</span>
+                <span className="bg-white/5 text-white/60 px-2 py-0.5 rounded text-xs">Monte Carlo</span>
+              </div>
+            </div>
+          </div>
           
         </div>
       </div>
@@ -368,9 +321,9 @@ export default function Home() {
           </div>
           <div className="w-px h-4 bg-white/10 hidden sm:block" />
           <div className="flex items-center gap-2">
-            <span className="text-accent font-bold">Enterprise</span>
+            <span className="text-accent font-bold">Self-Hosted</span>
             <span>&</span>
-            <span className="text-accent font-bold">Startup</span>
+            <span className="text-accent font-bold">Cloud</span>
           </div>
           <div className="w-px h-4 bg-white/10 hidden sm:block" />
           <div className="flex items-center gap-2">

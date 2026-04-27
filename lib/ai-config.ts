@@ -16,14 +16,14 @@ const ABS_SETTINGS_FILE_PATH = path.resolve(process.cwd(), SETTINGS_FILE_PATH)
 
 function defaultsFromEnv(): AISettings {
   return {
-    model: process.env.AI_MODEL || "gemini-2.0-flash",
+    model: process.env.AI_MODEL || "openai/gpt-oss-120b:cerebras",
   }
 }
 
 function sanitizePatch(input: Partial<AISettings>): Partial<AISettings> {
   const patch: Partial<AISettings> = {}
   if (typeof input.model === "string") {
-    patch.model = input.model.trim() || "gemini-2.0-flash"
+    patch.model = input.model.trim() || "openai/gpt-oss-120b:cerebras"
   }
   return patch
 }

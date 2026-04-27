@@ -1,10 +1,13 @@
 import { NextRequest, NextResponse } from "next/server"
-import { streamText, tool, generateText } from "ai"
-import { google } from "@ai-sdk/google"
-import { z } from "zod"
+import OpenAI from "openai"
 import { KNOWLEDGE_BASE_CONTEXT } from "@/lib/knowledge-base"
 import { getSystemInstructions } from "@/lib/system-instructions"
+import { getAISettings } from "@/lib/ai-config"
 import { appendChatLog } from "@/lib/chat-log"
+
+// ---------------------------------------------------------------------------
+// Types
+// ---------------------------------------------------------------------------
 
 interface ChatMessage {
   role: "user" | "assistant" | "system"
@@ -24,14 +27,108 @@ interface PageContext {
   description: string
 }
 
+// ---------------------------------------------------------------------------
+// OpenAI-compatible client pointed at HuggingFace Router
+// ---------------------------------------------------------------------------
+
+function getClient(): OpenAI {
+  const token = process.env.HF_TOKEN
+  if (!token) throw new Error("HF_TOKEN is not set")
+  return new OpenAI({
+    baseURL: "https://router.huggingface.co/v1",
+    apiKey: token,
+  })
+}
+
+// ---------------------------------------------------------------------------
+// Tool definitions (OpenAI function-calling format)
+// ---------------------------------------------------------------------------
+
+const TOOLS: OpenAI.ChatCompletionTool[] = [
+  {
+    type: "function",
+    function: {
+      name: "send_widget_contact_email",
+      description:
+        "Send a contact email to Panagiotis. Call this immediately when the user provides their email and wants to contact Panagiotis. Do not ask for confirmation.",
+      parameters: {
+        type: "object",
+        properties: {
+          name: {
+            type: "string",
+            description: "Visitor name (use 'Guest' if not provided)",
+          },
+          email: {
+            type: "string",
+            description: "Visitor email address - REQUIRED",
+          },
+          message: {
+            type: "string",
+            description: "Message content (use 'Inquiry from Chat Widget' if not provided)",
+          },
+        },
+        required: ["email"],
+      },
+    },
+  },
+]
+
+// ---------------------------------------------------------------------------
+// Tool executor
+// ---------------------------------------------------------------------------
+
+async function executeToolCall(
+  name: string,
+  args: Record<string, string>,
+  requestId: string
+): Promise<string> {
+  if (name !== "send_widget_contact_email") {
+    return `Unknown tool: ${name}`
+  }
+
+  const { name: visitorName = "Guest", email, message = "Inquiry from Chat Widget" } = args
+  console.log(`[${requestId}] TOOL: send_widget_contact_email called with email=${email}, name=${visitorName}`)
+
+  const resendKey = process.env.RESEND_API_KEY
+  const ownerEmail = process.env.OWNER_EMAIL || "ppilafas@gmail.com"
+  if (!resendKey) {
+    console.log(`[${requestId}] TOOL: Email service not configured`)
+    return "Email service not configured."
+  }
+
+  const res = await fetch("https://api.resend.com/emails", {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${resendKey}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      from: "Supercore Chat <onboarding@resend.dev>",
+      to: [ownerEmail],
+      subject: `[Chat] Message from ${visitorName}`,
+      text: `From: ${visitorName} <${email}>\n\n${message}\n\n---\nSent via Supercore chat widget`,
+    }),
+  })
+
+  if (!res.ok) {
+    console.error(`[${requestId}] Email error:`, res.status, await res.text())
+    return "Failed to send email. Please try again."
+  }
+  console.log(`[${requestId}] Email sent to ${ownerEmail} from ${email}`)
+  return "Email sent successfully."
+}
+
+// ---------------------------------------------------------------------------
+// System prompt builder (unchanged logic)
+// ---------------------------------------------------------------------------
+
 function buildSystemPrompt(
   systemInstructions: string,
   solution_context: SolutionContext | undefined,
   page_context: PageContext | undefined
 ): string {
   let contextPrompt = ""
-  
-  // Add page context if available
+
   if (page_context) {
     contextPrompt += `
 === CURRENT PAGE CONTEXT ===
@@ -45,7 +142,6 @@ If the user asks questions, assume they're about ${page_context.title} unless ot
 `
   }
 
-  // Add solution/project context if available
   if (solution_context) {
     contextPrompt += `
 === PROJECT INTAKE PROTOCOL ===
@@ -92,7 +188,6 @@ AFTER SENDING EMAIL:
 ===============================
 `
   } else {
-    // Standard contact protocol when not in solution context
     contextPrompt += `
 === CONTACT FORM PROTOCOL ===
 If the user wants to contact support, send a message, or hire me:
@@ -107,21 +202,9 @@ If the user wants to contact support, send a message, or hire me:
   return `${systemInstructions}\n\n${contextPrompt}\n\n${KNOWLEDGE_BASE_CONTEXT}`
 }
 
-function createSSEStream(textStream: AsyncIterable<string>): ReadableStream {
-  const encoder = new TextEncoder()
-  return new ReadableStream({
-    async start(controller) {
-      try {
-        for await (const textPart of textStream) {
-          controller.enqueue(encoder.encode(`data: ${JSON.stringify({ content: textPart })}\n\n`))
-        }
-        controller.close()
-      } catch (error) {
-        controller.error(error)
-      }
-    },
-  })
-}
+// ---------------------------------------------------------------------------
+// POST handler
+// ---------------------------------------------------------------------------
 
 export async function POST(req: NextRequest) {
   const requestId = `chat-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`
@@ -145,6 +228,9 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Missing messages" }, { status: 400 })
     }
 
+    const client = getClient()
+    const settings = await getAISettings()
+    const model = settings.model
     const systemInstructions = await getSystemInstructions()
     const systemPrompt = buildSystemPrompt(
       systemInstructions,
@@ -152,124 +238,180 @@ export async function POST(req: NextRequest) {
       page_context as PageContext | undefined
     )
 
-    console.log(`[${requestId}] Using Gemini 2.0 Flash via Vercel AI SDK`)
+    console.log(`[${requestId}] Using model=${model} via HuggingFace Router`)
 
     const lastUserMsg = (messages as ChatMessage[]).filter((m) => m.role === "user").pop()?.content || ""
 
-    let messagesForLlm = (messages as ChatMessage[]).map((msg) => ({
-      role: msg.role === "system" ? ("user" as const) : msg.role,
-      content: msg.content,
-    }))
+    const messagesForLlm: OpenAI.ChatCompletionMessageParam[] = [
+      { role: "system", content: systemPrompt },
+      ...(messages as ChatMessage[]).map((msg) => ({
+        role: msg.role as "user" | "assistant",
+        content: msg.content,
+      })),
+    ]
 
-    const result = await generateText({
-      model: google("gemini-2.0-flash"),
-      system: systemPrompt,
+    // ------------------------------------------------------------------
+    // Single streaming call with tools.
+    // We accumulate tool_call deltas. If the model wants a tool, we
+    // execute it and make one follow-up streaming call for synthesis.
+    // For normal messages this is a single API request.
+    // ------------------------------------------------------------------
+
+    const firstStream = await client.chat.completions.create({
+      model,
       messages: messagesForLlm,
-      tools: {
-        send_widget_contact_email: tool({
-          description: `Send a contact email to Panagiotis. TRIGGER: Call this immediately when user provides their email and wants to contact Panagiotis. Do not ask for confirmation, just send it.`,
-          inputSchema: z.object({
-            name: z.string().describe("Visitor name (use 'Guest' if not provided)"),
-            email: z.string().describe("Visitor email address - REQUIRED"),
-            message: z.string().describe("Message content (use 'Inquiry from Chat Widget' if not provided)"),
-          }),
-          execute: async ({ name, email, message }: { name: string; email: string; message: string }) => {
-            console.log(`[${requestId}] TOOL: send_widget_contact_email called with email=${email}, name=${name}`)
-            const resendKey = process.env.RESEND_API_KEY
-            const ownerEmail = process.env.OWNER_EMAIL || "ppilafas@gmail.com"
-            if (!resendKey) {
-              console.log(`[${requestId}] TOOL: Email service not configured`)
-              return "Email service not configured."
-            }
-            console.log(`[${requestId}] TOOL: Sending email via Resend...`)
-            const res = await fetch("https://api.resend.com/emails", {
-              method: "POST",
-              headers: {
-                Authorization: `Bearer ${resendKey}`,
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({
-                from: "Supercore Chat <onboarding@resend.dev>",
-                to: [ownerEmail],
-                subject: `[Chat] Message from ${name}`,
-                text: `From: ${name} <${email}>\n\n${message}\n\n---\nSent via Supercore chat widget`,
-              }),
-            })
-            if (!res.ok) {
-              console.error(`[${requestId}] Email error:`, res.status, await res.text())
-              return "Failed to send email. Please try again."
-            }
-            console.log(`[${requestId}] Email sent to ${ownerEmail} from ${email}`)
-            return "Email sent successfully."
-          },
-        }),
-      },
+      tools: TOOLS,
+      tool_choice: "auto",
+      max_tokens: 512,
+      temperature: 0.7,
+      stream: true,
     })
 
-    let finalText = result.text
-    let toolWasCalled = result.finishReason === "tool-calls" || (result.toolCalls && result.toolCalls.length > 0)
+    const encoder = new TextEncoder()
+    let fullContent = ""
 
-    if (toolWasCalled && result.toolResults) {
-      console.log(`[${requestId}] TOOL: Follow-up call needed after tool execution`)
+    // Accumulate content and tool calls from the stream
+    let streamedContent = ""
+    const toolCallAccum: Record<number, { id: string; name: string; arguments: string }> = {}
+    let hasToolCalls = false
 
-      // Build message history with tool call and results properly formatted
-      const toolCallMsg = result.toolCalls?.map(tc => `${tc.toolName} called with: ${JSON.stringify(tc.input)}`).join("\n") || "Tool was called"
-      const toolResultMsg = result.toolResults.map(tr => `${tr.toolName} result: ${tr.output}`).join("\n")
+    for await (const chunk of firstStream) {
+      const delta = chunk.choices[0]?.delta
 
-      const followUpMessages = [
-        ...messagesForLlm,
-        {
-          role: "assistant" as const,
-          content: `I called the following tool:\n${toolCallMsg}\n\nResults:\n${toolResultMsg}`,
-        },
-      ]
+      // Accumulate content deltas
+      if (delta?.content) {
+        streamedContent += delta.content
+      }
 
-      console.log(`[${requestId}] TOOL: Making follow-up call with ${followUpMessages.length} messages`)
-
-      const followUpResult = await generateText({
-        model: google("gemini-2.0-flash"),
-        system: systemPrompt,
-        messages: followUpMessages,
-      })
-
-      finalText = followUpResult.text
-      console.log(`[${requestId}] TOOL: Follow-up response received (${finalText.length} chars)`)
+      // Accumulate tool_call deltas
+      if (delta?.tool_calls) {
+        hasToolCalls = true
+        for (const tc of delta.tool_calls) {
+          const idx = tc.index
+          if (!toolCallAccum[idx]) {
+            toolCallAccum[idx] = { id: tc.id || "", name: tc.function?.name || "", arguments: "" }
+          }
+          if (tc.id) toolCallAccum[idx].id = tc.id
+          if (tc.function?.name) toolCallAccum[idx].name = tc.function.name
+          if (tc.function?.arguments) toolCallAccum[idx].arguments += tc.function.arguments
+        }
+      }
     }
 
-    const durationMs = Math.round(performance.now() - startTime)
-    console.log(`[${requestId}] Response ready in ${durationMs}ms, finishReason: ${result.finishReason}${toolWasCalled ? " (tool executed)" : ""}`)
+    // ------------------------------------------------------------------
+    // If tool calls were requested, execute them and stream follow-up
+    // ------------------------------------------------------------------
+    if (hasToolCalls && Object.keys(toolCallAccum).length > 0) {
+      const toolCalls = Object.values(toolCallAccum)
+      console.log(`[${requestId}] TOOL: ${toolCalls.length} tool call(s) requested`)
 
-    appendChatLog({
-      userMessage: lastUserMsg,
-      assistantMessage: finalText.slice(0, 500),
-      durationMs,
-      hasSolutionContext: !!solution_context,
-      solutionTitle: solution_context?.solutionTitle,
-    }).catch((err) => console.error(`[${requestId}] Log write error:`, err))
+      // Build proper assistant message with tool_calls
+      messagesForLlm.push({
+        role: "assistant",
+        tool_calls: toolCalls.map((tc, i) => ({
+          id: tc.id || `call_${i}`,
+          type: "function" as const,
+          function: { name: tc.name, arguments: tc.arguments },
+        })),
+      })
 
-    const stream = new ReadableStream({
+      // Execute each tool and append results
+      for (const tc of toolCalls) {
+        const args = JSON.parse(tc.arguments) as Record<string, string>
+        const result = await executeToolCall(tc.name, args, requestId)
+        messagesForLlm.push({
+          role: "tool",
+          tool_call_id: tc.id || "call_0",
+          content: result,
+        })
+      }
+
+      // Stream the follow-up synthesis (no tools — force text)
+      const followUpStream = await client.chat.completions.create({
+        model,
+        messages: messagesForLlm,
+        max_tokens: 512,
+        temperature: 0.7,
+        stream: true,
+      })
+
+      const sseStream = new ReadableStream({
+        async start(controller) {
+          try {
+            for await (const chunk of followUpStream) {
+              const delta = chunk.choices[0]?.delta?.content
+              if (delta) {
+                fullContent += delta
+                controller.enqueue(encoder.encode(`data: ${JSON.stringify({ content: delta })}\n\n`))
+              }
+            }
+            controller.close()
+
+            const durationMs = Math.round(performance.now() - startTime)
+            console.log(`[${requestId}] Stream complete in ${durationMs}ms (tool executed)`)
+
+            appendChatLog({
+              userMessage: lastUserMsg,
+              assistantMessage: fullContent.slice(0, 500),
+              durationMs,
+              hasSolutionContext: !!solution_context,
+              solutionTitle: solution_context?.solutionTitle,
+            }).catch((err) => console.error(`[${requestId}] Log write error:`, err))
+          } catch (err) {
+            console.error(`[${requestId}] Stream error:`, err)
+            controller.error(err)
+          }
+        },
+      })
+
+      return new NextResponse(sseStream, {
+        headers: {
+          "Content-Type": "text/event-stream",
+          "Cache-Control": "no-cache",
+          Connection: "keep-alive",
+          "X-Request-Id": requestId,
+        },
+      })
+    }
+
+    // ------------------------------------------------------------------
+    // No tool calls — stream the already-received content to the client
+    // ------------------------------------------------------------------
+    fullContent = streamedContent
+
+    const sseStream = new ReadableStream({
       start(controller) {
-        const encoder = new TextEncoder()
-        const chunkSize = 10
+        // Content was already fully received — send it in small chunks for
+        // a smooth typing effect on the frontend
+        const chunkSize = 20
         let i = 0
         function sendChunk() {
-          if (i >= finalText.length) {
+          if (i >= fullContent.length) {
             controller.close()
             return
           }
-          const chunk = finalText.slice(i, i + chunkSize)
+          const chunk = fullContent.slice(i, i + chunkSize)
           controller.enqueue(encoder.encode(`data: ${JSON.stringify({ content: chunk })}\n\n`))
           i += chunkSize
-          setTimeout(sendChunk, 8)
+          // Use queueMicrotask for fast but non-blocking delivery
+          setTimeout(sendChunk, 5)
         }
         sendChunk()
+
+        const durationMs = Math.round(performance.now() - startTime)
+        console.log(`[${requestId}] Stream complete in ${durationMs}ms`)
+
+        appendChatLog({
+          userMessage: lastUserMsg,
+          assistantMessage: fullContent.slice(0, 500),
+          durationMs,
+          hasSolutionContext: !!solution_context,
+          solutionTitle: solution_context?.solutionTitle,
+        }).catch((err) => console.error(`[${requestId}] Log write error:`, err))
       },
     })
 
-    const setupTime = performance.now() - startTime
-    console.log(`[${requestId}] Stream ready in ${Math.round(setupTime)}ms`)
-
-    return new NextResponse(stream, {
+    return new NextResponse(sseStream, {
       headers: {
         "Content-Type": "text/event-stream",
         "Cache-Control": "no-cache",

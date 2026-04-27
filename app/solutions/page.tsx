@@ -3,100 +3,70 @@
 import { 
   MessageSquare, 
   Database, 
-  Sparkles, 
   Mic, 
   FileText, 
   Bot, 
-  PenTool, 
-  Brain,
+  Server,
   ArrowRight
 } from "lucide-react"
+import Link from "next/link"
 
 const SOLUTIONS = [
   {
-    id: "ai-chat",
-    icon: MessageSquare,
-    title: "AI Website Chat",
-    problem: "Customers expect 24/7 support, but you can't scale human agents. Generic chatbots frustrate users with scripted responses.",
-    solution: "A custom AI assistant trained on your documentation, FAQs, and product knowledge. Integrates with your CRM and escalates to humans when needed.",
-    stack: ["OpenAI", "LangChain", "Vercel AI SDK", "Your Backend"],
-    color: "text-blue-400",
-    bgColor: "bg-blue-500/10",
-    borderColor: "border-blue-500/20"
-  },
-  {
     id: "rag",
     icon: Database,
-    title: "Internal Knowledge Base (RAG)",
-    problem: "Tribal knowledge scattered across Notion, Slack, Google Drive, and people's heads. New hires take months to get up to speed.",
-    solution: "Unified semantic search across all your company data. Ask questions in natural language, get answers with source citations.",
-    stack: ["pgvector", "LlamaIndex", "Embeddings", "SSO Integration"],
+    title: "RAG & Knowledge Systems",
+    what: "Semantic search over your own data with citation grounding. Hybrid retrieval (keyword + vector), namespace scoping, multi-tenant isolation.",
+    proof: "Built into Catalyst (powers 4 products), π.Law (legal case data), Forensic AI Studio (100K+ documents), and Let There Be RAG (SaaS).",
+    stack: ["PostgreSQL + pgvector", "Hybrid Search", "Firecrawl", "Retrieve-then-Rerank"],
+    proofLink: "/catalyst-ai",
     color: "text-emerald-400",
     bgColor: "bg-emerald-500/10",
     borderColor: "border-emerald-500/20"
   },
   {
-    id: "copilot",
-    icon: Sparkles,
-    title: "AI Copilot for Your Product",
-    problem: "Competitors are shipping AI features. Your users are asking for it. You're falling behind.",
-    solution: "Embed AI capabilities directly into your existing SaaS product. From smart suggestions to natural language interfaces.",
-    stack: ["OpenAI API", "Custom Fine-tuning", "Your Product API"],
-    color: "text-purple-400",
-    bgColor: "bg-purple-500/10",
-    borderColor: "border-purple-500/20"
-  },
-  {
     id: "voice",
     icon: Mic,
-    title: "Voice AI / Call Automation",
-    problem: "Call center costs are exploding. Hold times frustrate customers. After-hours coverage is expensive.",
-    solution: "Voice agents that handle inbound and outbound calls with sub-300ms latency. Human-like conversation with seamless escalation.",
-    stack: ["Twilio", "Deepgram", "ElevenLabs", "Custom Orchestration"],
+    title: "Voice AI & Real-Time Audio",
+    what: "Full-duplex voice agents with sub-300ms latency, turn-taking, and interruption handling. Self-hosted STT/TTS or cloud APIs.",
+    proof: "Silicon Smackdown runs live multi-personality voice debates. Catalyst's voice layer handles real-time conversations with tool calling.",
+    stack: ["Gemini Live API", "Whisper STT", "Kokoro TTS", "WebSocket Streaming"],
+    proofLink: "/silicon-smackdown",
     color: "text-orange-400",
     bgColor: "bg-orange-500/10",
     borderColor: "border-orange-500/20"
   },
   {
-    id: "documents",
-    icon: FileText,
-    title: "Document Processing",
-    problem: "Manual extraction from PDFs, invoices, and contracts. Hours of human time on repetitive data entry.",
-    solution: "Automated parsing, validation, and structured data export. Handle edge cases with confidence scoring.",
-    stack: ["OCR", "GPT-4 Vision", "Structured Output", "Database Sync"],
-    color: "text-cyan-400",
-    bgColor: "bg-cyan-500/10",
-    borderColor: "border-cyan-500/20"
-  },
-  {
     id: "agents",
     icon: Bot,
-    title: "AI Workflow Agents",
-    problem: "Repetitive multi-step tasks consuming human hours. Error-prone manual processes.",
-    solution: "Autonomous agents that execute, verify, and report. Human-in-the-loop gates for critical decisions.",
-    stack: ["LangGraph", "Tool Orchestration", "Safety Gates"],
+    title: "AI Agent Systems",
+    what: "Function-calling agents with tool orchestration, multi-step planning, and human-in-the-loop gates. MCP protocol for IDE-native agent tooling.",
+    proof: "Forensic AI Studio exposes 39 MCP tools to Copilot. GTO Poker Coach uses function-calling with Monte Carlo simulation. Catalyst orchestrates tools across tenants.",
+    stack: ["Function Calling", "MCP SDK", "Tool Orchestration", "Multi-Agent Delegation"],
+    proofLink: "/forensics",
     color: "text-red-400",
     bgColor: "bg-red-500/10",
     borderColor: "border-red-500/20"
   },
   {
-    id: "content",
-    icon: PenTool,
-    title: "Content Generation Pipeline",
-    problem: "Content bottleneck. Marketing can't keep up with demand. Scaling means scaling headcount.",
-    solution: "Brand-trained generation with editorial workflow. Consistent voice, human review loop, bulk production.",
-    stack: ["Fine-tuned Models", "Style Guides", "Review Workflow"],
-    color: "text-pink-400",
-    bgColor: "bg-pink-500/10",
-    borderColor: "border-pink-500/20"
+    id: "documents",
+    icon: FileText,
+    title: "Document Intelligence",
+    what: "Automated parsing, semantic chunking, and structured extraction from PDFs, DOCX, and web content. Entity mapping across large document sets.",
+    proof: "Forensic AI Studio processes legal evidence at scale. π.Law handles case documents with zero-leakage proxy architecture.",
+    stack: ["PDF/DOCX Extraction", "Entity Graphs", "Vector Embeddings", "Structured Output"],
+    proofLink: "/pilaw",
+    color: "text-cyan-400",
+    bgColor: "bg-cyan-500/10",
+    borderColor: "border-cyan-500/20"
   },
   {
-    id: "training",
-    icon: Brain,
-    title: "Custom LLM Training",
-    problem: "Generic models don't understand your domain, jargon, or proprietary processes.",
-    solution: "Fine-tuned or RAG-augmented models trained on your data. Private hosting options for sensitive industries.",
-    stack: ["OpenAI Fine-tuning", "LoRA", "Private Hosting"],
+    id: "infra",
+    icon: Server,
+    title: "Self-Hosted AI Infrastructure",
+    what: "Deploy LLM inference, STT, and TTS on your own hardware. No cloud vendor lock-in. VRAM optimization, quantization, multi-service orchestration.",
+    proof: "Running vLLM, llama.cpp, Whisper, and Kokoro on bare-metal RTX GPUs with Supervisor and Nginx orchestration.",
+    stack: ["vLLM", "llama.cpp", "GPTQ/AWQ", "Supervisor + systemd"],
     color: "text-yellow-400",
     bgColor: "bg-yellow-500/10",
     borderColor: "border-yellow-500/20"
@@ -117,18 +87,18 @@ function SolutionCard({ solution }: { solution: typeof SOLUTIONS[0] }) {
       
       <div className="space-y-4 mb-6 flex-1">
         <div>
-          <div className="text-xs font-bold text-muted uppercase tracking-wider mb-2">The Problem</div>
-          <p className="text-sm text-muted/80 leading-relaxed">{solution.problem}</p>
+          <div className="text-xs font-bold text-muted uppercase tracking-wider mb-2">What I Build</div>
+          <p className="text-sm text-foreground/80 leading-relaxed">{solution.what}</p>
         </div>
         
         <div>
-          <div className="text-xs font-bold text-accent uppercase tracking-wider mb-2">The Solution</div>
-          <p className="text-sm text-foreground/80 leading-relaxed">{solution.solution}</p>
+          <div className="text-xs font-bold text-accent uppercase tracking-wider mb-2">Where It Runs</div>
+          <p className="text-sm text-muted/80 leading-relaxed">{solution.proof}</p>
         </div>
       </div>
       
       <div className="mb-6">
-        <div className="text-xs font-bold text-muted uppercase tracking-wider mb-2">Tech Stack</div>
+        <div className="text-xs font-bold text-muted uppercase tracking-wider mb-2">Stack</div>
         <div className="flex flex-wrap gap-2">
           {solution.stack.map((tech) => (
             <span 
@@ -140,21 +110,16 @@ function SolutionCard({ solution }: { solution: typeof SOLUTIONS[0] }) {
           ))}
         </div>
       </div>
-      
-      <button
-        onClick={() => window.dispatchEvent(new CustomEvent('start-project', { 
-          detail: { 
-            solutionId: solution.id,
-            solutionTitle: solution.title,
-            problem: solution.problem,
-            stack: solution.stack 
-          }
-        }))}
-        className={`w-full py-3 rounded-lg font-bold text-sm ${solution.bgColor} ${solution.color} border ${solution.borderColor} hover:bg-opacity-20 transition-colors flex items-center justify-center gap-2 mt-auto`}
-      >
-        Start This Project
-        <ArrowRight className="w-4 h-4" />
-      </button>
+
+      {solution.proofLink && (
+        <Link
+          href={solution.proofLink}
+          className={`w-full py-3 rounded-lg font-bold text-sm ${solution.bgColor} ${solution.color} border ${solution.borderColor} hover:bg-opacity-20 transition-colors flex items-center justify-center gap-2 mt-auto`}
+        >
+          See It In Action
+          <ArrowRight className="w-4 h-4" />
+        </Link>
+      )}
     </div>
   )
 }
@@ -165,11 +130,10 @@ export default function SolutionsPage() {
       {/* Hero */}
       <div className="text-center pt-8">
         <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-4 tracking-tight">
-          AI Solutions for <span className="text-accent">Real Business Problems</span>
+          What I <span className="text-accent">Build</span>
         </h1>
         <p className="text-lg text-muted max-w-2xl mx-auto leading-relaxed">
-          Not sure where to start? These are the solutions companies are shipping right now. 
-          Each one is production-ready and customized to your stack.
+          Every solution below runs in production, backed by a real project you can explore on this site.
         </p>
       </div>
       
@@ -182,16 +146,16 @@ export default function SolutionsPage() {
       
       {/* Bottom CTA */}
       <div className="text-center py-12 border-t border-white/5">
-        <h2 className="text-2xl font-bold text-foreground mb-4">Not sure which solution fits?</h2>
+        <h2 className="text-2xl font-bold text-foreground mb-4">Have a different problem?</h2>
         <p className="text-muted mb-6 max-w-lg mx-auto">
-          Describe your problem and I'll help you figure out the right approach — no commitment, just clarity.
+          If it involves LLMs, real-time data, or production infrastructure, I can probably help.
         </p>
         <button
           onClick={() => window.dispatchEvent(new CustomEvent('open-chat'))}
           className="px-8 py-4 bg-accent text-black rounded-full font-bold text-lg hover:bg-accent/90 transition-colors inline-flex items-center gap-2"
         >
           <MessageSquare className="w-5 h-5" />
-          Let's Figure It Out
+          Let&apos;s Talk
         </button>
       </div>
     </div>

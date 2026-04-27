@@ -4,6 +4,8 @@ import { useState, useRef, useEffect, useCallback } from "react"
 import { MessageSquare, X, Send, Loader2, Sparkles, Minimize2, Terminal } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
 import ReactMarkdown from "react-markdown"
+import remarkGfm from "remark-gfm"
+import { useRouter } from "next/navigation"
 import { cn } from "@/lib/utils"
 
 // ---------------------------------------------------------------------------
@@ -174,15 +176,31 @@ function timestamp() {
 // Clickable Link Component for In-App Navigation
 // ---------------------------------------------------------------------------
 function ClickableLink({ href, children }: { href: string; children: React.ReactNode }) {
+  const router = useRouter()
+
   const handleClick = (e: React.MouseEvent) => {
-    e.preventDefault()
-    if (href.startsWith("/")) {
-      window.history.pushState({}, "", href)
-      window.dispatchEvent(new PopStateEvent("popstate"))
-      window.scrollTo({ top: 0, behavior: "smooth" })
-    } else {
-      window.open(href, "_blank", "noopener,noreferrer")
+    // Keep default browser behavior for modified clicks (new tab, etc.)
+    if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return
+
+    const rawHref = href.trim()
+
+    try {
+      const parsedUrl = new URL(rawHref, window.location.origin)
+      const isSameOrigin = parsedUrl.origin === window.location.origin
+
+      if (isSameOrigin) {
+        e.preventDefault()
+        const targetPath = `${parsedUrl.pathname}${parsedUrl.search}${parsedUrl.hash}`
+        router.push(targetPath)
+        window.scrollTo({ top: 0, behavior: "smooth" })
+        return
+      }
+    } catch {
+      // If URL parsing fails, fall through and open as external.
     }
+
+    e.preventDefault()
+    window.open(rawHref, "_blank", "noopener,noreferrer")
   }
 
   return (
@@ -196,12 +214,29 @@ function ClickableLink({ href, children }: { href: string; children: React.React
   )
 }
 
-// Custom ReactMarkdown components for in-app links
+// Custom ReactMarkdown components for in-app links + tables
 const markdownComponents = {
   a: ({ href, children }: { href?: string; children?: React.ReactNode }) => {
     if (!href) return <span>{children}</span>
     return <ClickableLink href={href}>{children}</ClickableLink>
   },
+  table: ({ children }: { children?: React.ReactNode }) => (
+    <div className="overflow-x-auto my-2 rounded-lg border border-card-border/40">
+      <table className="w-full text-xs border-collapse">{children}</table>
+    </div>
+  ),
+  thead: ({ children }: { children?: React.ReactNode }) => (
+    <thead className="bg-black/30 text-accent font-semibold">{children}</thead>
+  ),
+  th: ({ children }: { children?: React.ReactNode }) => (
+    <th className="px-2.5 py-1.5 text-left border-b border-card-border/40 whitespace-nowrap">{children}</th>
+  ),
+  td: ({ children }: { children?: React.ReactNode }) => (
+    <td className="px-2.5 py-1.5 border-b border-card-border/20">{children}</td>
+  ),
+  tr: ({ children }: { children?: React.ReactNode }) => (
+    <tr className="hover:bg-white/5 transition-colors">{children}</tr>
+  ),
 }
 
 // ---------------------------------------------------------------------------
@@ -518,7 +553,6 @@ export function AssistantWidget() {
                   </div>
                   <div>
                     <h3 className="font-bold text-foreground text-sm tracking-tight">AI Assistant</h3>
-                    <p className="text-xs text-muted/70">Gemini Flash</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-1">
@@ -566,7 +600,7 @@ export function AssistantWidget() {
                           <span className="whitespace-pre-wrap">{msg.content}</span>
                         ) : (
                           <div className="prose prose-sm prose-invert max-w-none prose-p:my-1 prose-p:leading-relaxed prose-strong:text-white prose-ul:my-1.5 prose-ul:pl-4 prose-li:my-0.5 prose-code:text-accent prose-code:bg-black/30 prose-code:px-1 prose-code:rounded prose-code:text-xs prose-code:before:content-none prose-code:after:content-none prose-a:text-accent prose-headings:text-white prose-headings:font-bold prose-headings:my-2 prose-h3:text-sm">
-                            <ReactMarkdown components={markdownComponents}>{msg.content}</ReactMarkdown>
+                            <ReactMarkdown remarkPlugins={[remarkGfm]} components={markdownComponents}>{msg.content}</ReactMarkdown>
                           </div>
                         )}
                       </div>
