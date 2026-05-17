@@ -16,7 +16,7 @@ Single Next.js 16 application deployed to Vercel.
 ## Directory Structure
 
 ```
-per4ex.org/
+supercore.tech/
 ├── apps/web/              # Next.js application
 │   ├── app/               # App Router pages & API routes
 │   │   ├── api/chat/      # Gemini chat endpoint (SSE streaming)

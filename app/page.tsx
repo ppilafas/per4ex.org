@@ -4,7 +4,12 @@ import { ArrowRight, CheckCircle2, Mail, Shield, Wrench } from "lucide-react"
 import { CTAButton } from "@/components/cta-button"
 import { VoiceAssistantMount } from "@/components/voice-assistant-mount"
 
-const helpItems = [
+const helpItems: {
+  title: string
+  description: string
+  details: string
+  link?: { href: string; label: string }
+}[] = [
   {
     title: "Turn messy knowledge into usable AI",
     description:
@@ -24,10 +29,11 @@ const helpItems = [
     details: "Next.js, FastAPI, Postgres, Vercel, Fly.io, local GPUs",
   },
   {
-    title: "Use the right model stack for the job",
+    title: "Run AI on your own infrastructure",
     description:
-      "OpenAI, Gemini, Hugging Face, or self-hosted inference, chosen around latency, privacy, cost, and control.",
-    details: "LLM routing, vLLM, llama.cpp, Whisper, TTS",
+      "Self-hosted LLM inference for teams that can't send data to a third-party API — on-prem or private cloud, sized around compliance, cost at scale, and latency.",
+    details: "vLLM, quantization, GPU sizing, private RAG",
+    link: { href: "/private-ai", label: "Private AI deployments" },
   },
 ]
 
@@ -128,6 +134,15 @@ export default function Home() {
                 <h3 className="mb-2 text-xl font-bold text-foreground">{item.title}</h3>
                 <p className="mb-4 text-sm leading-relaxed text-muted">{item.description}</p>
                 <p className="text-xs text-muted/70">{item.details}</p>
+                {item.link && (
+                  <Link
+                    href={item.link.href}
+                    className="mt-4 inline-flex items-center gap-1.5 text-xs font-bold text-accent hover:text-accent/80"
+                  >
+                    {item.link.label}
+                    <ArrowRight className="h-3.5 w-3.5" />
+                  </Link>
+                )}
               </div>
             ))}
           </div>

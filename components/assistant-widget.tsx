@@ -173,6 +173,18 @@ const PAGE_CONTEXTS: Record<string, PageContext> = {
       "Systems architecture approach",
     ],
   },
+  "/private-ai": {
+    path: "/private-ai",
+    title: "Private AI Inference",
+    description: "Self-hosted LLM inference on the client's own infrastructure — for compliance/data residency, cost control at scale, and predictable latency. Covers model & hardware sizing, vLLM production serving, private RAG, and an honest build-vs-buy call.",
+    starter: "Is self-hosting AI right for my case?",
+    starters: [
+      "Is self-hosting AI right for my case?",
+      "We can't send data to a third-party API",
+      "Would self-hosting cut our inference costs?",
+      "What does a private AI deployment involve?",
+    ],
+  },
 }
 
 const MESSAGE_LIMIT = 15

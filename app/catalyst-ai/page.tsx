@@ -414,7 +414,7 @@ export default function CatalystAI() {
           </Link>
           <div className="p-4 rounded-xl bg-white/[0.02] border border-white/10 hover:border-accent/40 transition-colors text-center">
             <h4 className="font-bold text-foreground">This Chat Widget</h4>
-            <p className="text-xs text-muted mt-1">per4ex.org assistant</p>
+            <p className="text-xs text-muted mt-1">supercore.tech assistant</p>
           </div>
         </div>
       </div>

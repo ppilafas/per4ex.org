@@ -145,7 +145,7 @@
 ### Header
 - **Title:** Catalyst AI
 - **Tagline:** Production-Ready Multi-Tenant AI Assistant Platform
-- **Live Dashboard Link:** https://catalyst-dashboard.per4ex.org/
+- **Live Dashboard Link:** https://catalyst-dashboard.supercore.tech/
 
 ### Executive Summary
 > "Catalyst is a production AI platform for teams that want the power of modern models without the fragility of demo-grade apps. It pairs a modern web experience with a persistent background service to deliver real-time chat and voice, retrieval across your knowledge base, proactive workflows, and deep integrations—while enforcing hard multi-tenant isolation and operational control from day one."
@@ -335,7 +335,7 @@
 ## 🤝 Connect
 
 ### Contact Channels
-- **Email:** hello@per4ex.org
+- **Email:** contact@supercore.tech
 - **LinkedIn:** [profile link]
 - **GitHub:** [profile link]
 - **Twitter/X:** [profile link]
@@ -347,4 +347,4 @@
 
 ---
 
-*This document reflects the complete current state of per4ex.org as of January 2026. For the latest experience, visit [per4ex.org](https://per4ex.org).*
+*This document reflects the complete current state of supercore.tech as of January 2026. For the latest experience, visit [supercore.tech](https://supercore.tech).*

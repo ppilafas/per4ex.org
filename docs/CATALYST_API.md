@@ -312,7 +312,7 @@ For direct model testing (bypassing service label routing), superusers can speci
 **Alternative Request Format** (simplified):
 ```json
 {
-  "content": "What is per4ex?",
+  "content": "What is supercore?",
   "session_id": "widget_session_123"
 }
 ```
@@ -2188,12 +2188,12 @@ const client = new CatalystClient('YOUR_API_KEY', 'http://localhost:8001', 'cata
 const sessionId = 'widget_session_123';
 
 // Non-streaming
-const response = await client.chat('What is per4ex?', sessionId);
+const response = await client.chat('What is supercore?', sessionId);
 console.log(response);
 
 // Streaming
 let fullText = '';
-for await (const chunk of client.streamChat('What is per4ex?', sessionId)) {
+for await (const chunk of client.streamChat('What is supercore?', sessionId)) {
   fullText += chunk;
   process.stdout.write(chunk);
 }
@@ -2337,7 +2337,7 @@ curl -X POST "http://localhost:8001/v1/rag/query" \
 **For `catalyst-widget` tenant**:
 - Ensure only RAG tools are enabled (no SQL, Gmail, Calendar, etc.)
 - Verify namespace scoping works correctly
-- Test with `namespace: "per4ex-kb"` for knowledge base queries
+- Test with `namespace: "supercore-kb"` for knowledge base queries
 
 **For `pilaw` tenant**:
 - Test with `namespace: "case_123"` for case-scoped documents

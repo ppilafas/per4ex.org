@@ -1,4 +1,4 @@
-# Per4ex.org UI Design System Specification
+# supercore.org UI Design System Specification
 
 ## Overview
 Dark-themed portfolio with glassmorphism effects, designed for a systems engineer aesthetic. Uses Geist fonts (Sans for headers, Mono for body), emerald accent color, and translucent card panels.
@@ -366,7 +366,7 @@ export function TypewriterSubtitle({
       <Image src="/avatar.png" alt="Avatar" fill className="object-cover" />
     </div>
     <h1 className="text-5xl md:text-6xl font-bold text-center text-foreground mb-2">
-      Per4ex.org
+      supercore.org
     </h1>
     <TypewriterSubtitle text="Specialized in AI-Related Ecosystems" />
   </div>
