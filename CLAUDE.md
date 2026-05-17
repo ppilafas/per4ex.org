@@ -12,15 +12,24 @@ Some conversations in this repo are **proposal / client-acquisition work**, not 
 
 ## Commit protocol — autonomous, no asking
 
-Commit your completed work **without asking for confirmation**.
+**Bias hard toward action. Do not be trigger-shy.** This is a fast-iteration solo project worked in short spare-time bursts; the failure mode here is hesitating, not over-committing. Never ask "should I commit?", never hedge, never wait for permission or pile on confirmations. When a unit of work is complete and working, commit it immediately and move on. The scoping check below is a mechanical ~5-second safeguard, **not** a reason to slow down or ask.
 
-- Commit **directly to `main`**. Do **not** create feature branches. (This intentionally overrides the usual "branch off the default branch first" default — fast iteration is the priority here.)
-- **Scope every commit to only the files this session actually created or modified.** Multiple conversations run in parallel against this same working tree. Before committing, run `git status` to *see* what else is in flight, then **leave those files alone** — they belong to other sessions.
-  - `git add <explicit/paths/you/changed>` — list them out.
+- Commit your completed work **without asking for confirmation**.
+- Commit **directly to `main`**. Do **not** create feature branches. (Intentionally overrides the usual "branch off the default branch first" default — speed is the priority here.)
+- **Scope every commit to only the files this session actually created or modified.** Multiple conversations run in parallel against this same working tree. Run `git status` to *see* what else is in flight, then **leave those files alone** — they belong to other sessions.
+  - `git add <explicit/paths/you/changed>` — list them out explicitly.
   - **Never** `git add -A`, `git add .`, or `git commit -am`. These sweep other sessions' uncommitted work into the wrong commit.
-  - The same applies to untracked files/dirs: don't commit ones you didn't create.
+  - Same for untracked files/dirs: don't commit ones you didn't create.
+- **Staging-verification (the critical gotcha — quick, do it and keep moving):** `git add <path>` does **not** unstage what another session already staged. A path-scoped *add* is not a path-scoped *commit* — pre-staged foreign changes ride along silently. So immediately before committing:
+  1. `git diff --cached --name-status` — confirm **only your paths** are staged.
+  2. If a foreign path is staged: `git reset HEAD -- <foreign path>` to unstage it, do your commit, then `git add <foreign path>` to restore the other session's staged state.
+  3. Sanity-check the commit output ("N files changed") matches what you expect.
 - End commit messages with the standard trailer:
   `Co-Authored-By: Claude Opus 4.7 (1M context) <noreply@anthropic.com>`
+
+### This file (CLAUDE.md) is shared coordination state
+
+CLAUDE.md is authored and revised across sessions. **Whoever edits it last commits it** — if you modify CLAUDE.md, include it in your scoped commit yourself. This deliberately overrides the "don't commit files you didn't create" rule *for this one file*, so the latest protocol is never left sitting uncommitted waiting on its original author.
 
 ## Deploy protocol — on the user's command, but remind proactively
 
