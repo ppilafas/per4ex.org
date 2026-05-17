@@ -46,6 +46,9 @@ yarn-error.log*
 # Data files (runtime settings)
 .data/
 
+# Local-only strategic docs (proposals, client interaction logs, rates)
+local/
+
 # Local legal/client documents
 public/0_SCRIBES_Specs_260222.xlsx
 public/IP Assignment Agreement_SCRIBES.docx

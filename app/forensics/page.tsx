@@ -4,7 +4,7 @@ import { Search, Database, Brain, Mic, Shield, FileText, Network, Clock, Zap, Te
 
 export const metadata = {
   title: "Forensic AI Studio | supercore.tech",
-  description: "A cutting-edge forensic AI suite for personal investigations: ingests evidence, maps entity relationships, analyzes audio recordings, and reasons across 100K+ documents in real-time.",
+  description: "A full-stack forensic AI suite for personal investigations: ingests evidence, maps entity relationships, analyzes audio recordings, and reasons in real-time across a vast, multi-source evidence corpus.",
 }
 
 export default function ForensicsPage() {
@@ -40,16 +40,16 @@ export default function ForensicsPage() {
           </h1>
 
           <p className="text-xl md:text-2xl text-muted max-w-3xl mx-auto mb-10 leading-relaxed">
-            A cutting-edge forensic AI suite I built for personal investigations. It ingests evidence, maps entity relationships, analyzes audio recordings, and reasons across <strong className="text-foreground">100K+ documents</strong> in real-time.
+            A full-stack forensic AI suite I built for personal investigations. It ingests evidence, maps entity relationships, analyzes audio recordings, and reasons in real-time across a <strong className="text-foreground">vast, multi-source evidence corpus</strong>.
           </p>
 
           {/* Key stats */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-3xl mx-auto">
             {[
-              { value: "155", label: "TypeScript files" },
-              { value: "45", label: "API routes" },
-              { value: "28+", label: "Agent tools" },
-              { value: "25", label: "DB tables" },
+              { value: "96%", label: "Context reduction" },
+              { value: "75%", label: "Lower token cost" },
+              { value: "<1ms", label: "Memory recall" },
+              { value: "100ms", label: "Cached audio analysis" },
             ].map((s) => (
               <div key={s.label} className="glass-panel py-4 px-3 text-center">
                 <div className="text-3xl font-bold text-accent mb-1">{s.value}</div>
@@ -66,7 +66,7 @@ export default function ForensicsPage() {
           <h2 className="text-3xl font-bold text-foreground mb-4">What It Is</h2>
           <div className="glass-panel border-l-4 border-l-accent mb-10">
             <p className="text-lg text-muted leading-relaxed">
-              This is a <strong className="text-foreground">full-stack forensic AI platform</strong> I built for personal investigations. It is not marketingware or a throwaway demo. It is a working system with a Next.js 16 frontend, PostgreSQL + pgvector backend, a 28-tool agent layer, voice workflows, and a deep research orchestrator. Everything is purpose-built for one job: <strong className="text-foreground">finding signal inside a mountain of evidence.</strong>
+              This is a <strong className="text-foreground">full-stack forensic AI platform</strong> I built for personal investigations — a working system, not a demo. A Next.js 16 frontend, PostgreSQL + pgvector backend, a model-agnostic agent layer, voice workflows, and a deep research orchestrator. Everything is purpose-built for one job: <strong className="text-foreground">finding signal inside a mountain of evidence.</strong>
             </p>
           </div>
 
@@ -79,7 +79,7 @@ export default function ForensicsPage() {
               },
               {
                 icon: Brain,
-                title: "AI Agent with 28+ Tools",
+                title: "AI Agent with a Deep Toolbox",
                 desc: "A persistent agent that can search evidence, recall memories, run deep research, analyze audio, query Gmail/Drive, browse the web, and execute multi-step investigations.",
               },
               {
@@ -113,7 +113,7 @@ export default function ForensicsPage() {
               title="Evidence Browser"
               badge="DONE"
               items={[
-                "Search + filter 169 ingested documents",
+                "Search + filter the full evidence corpus",
                 "Chunk viewer with source attribution",
                 "Inline ingestion panel",
                 "pgvector semantic search + GIN full-text",
@@ -224,7 +224,7 @@ export default function ForensicsPage() {
       <div className="py-20 px-6 border-b border-white/5">
         <div className="max-w-5xl mx-auto">
           <h2 className="text-3xl font-bold text-foreground mb-3">The Agent's Toolbox</h2>
-          <p className="text-muted mb-10 max-w-2xl">28+ tools across 7 categories. The agent decides which to call, in what order, and how to chain results.</p>
+          <p className="text-muted mb-10 max-w-2xl">A broad tool suite the agent composes on its own — deciding which to call, in what order, and how to chain the results.</p>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 
@@ -284,32 +284,31 @@ export default function ForensicsPage() {
 User Message
     │
     ▼
-context-manager.ts  ──── Budget-aware layered context
-    │                    ┌─ Compass (90K, Gemini cache)
-    │                    ├─ Persona (~820 tokens)
-    │                    ├─ Memory Hint (~50 tokens)
-    │                    ├─ Session Summary (~300 tokens)
-    │                    └─ Recent Turns (4–20, dynamic)
+Context Manager  ─────── Budget-aware, layered context
+    │                    ┌─ Mission brief (cached)
+    │                    ├─ Persona
+    │                    ├─ Memory hint
+    │                    ├─ Session summary
+    │                    └─ Recent turns (dynamic window)
     │
     ▼
-AI SDK streamText()  ──── Multi-model: Gemini / Claude / GPT
+Model Router  ────────── Model-agnostic streaming
     │
-    ├── Tool Calls ──────► 28+ tools execute in parallel
-    │       │
-    │       ├── fast_context    → pgvector + FTS search
-    │       ├── analyze_audio   → Gemini audio modality
-    │       ├── deep_research   → 5-phase orchestrator
-    │       ├── search_gmail    → Google OAuth
-    │       └── recall_memory   → in-memory cosine search
+    ├── Tool Layer ─────► Tools run in parallel
+    │                    ┌─ Evidence search
+    │                    ├─ Audio analysis
+    │                    ├─ Deep research
+    │                    ├─ Workspace integration
+    │                    └─ Vector memory recall
     │
     ▼
 Assistant Response
     │
     ▼
-memory-extractor.ts  ──── Async: extract + store memories
+Memory Extraction  ───── Async: distill + persist
     │
     ▼
-memory_vectors (PG)  ──── HNSW indexed, semantic dedup
+Vector Memory Store  ─── Indexed, semantically deduped
 `}</pre>
               </div>
             </div>
@@ -318,7 +317,7 @@ memory_vectors (PG)  ──── HNSW indexed, semantic dedup
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {[
               { icon: Database, title: "Database", lines: ["PostgreSQL + pgvector", "25 tables", "HNSW vector indexes", "GIN full-text indexes"] },
-              { icon: Brain, title: "AI Models", lines: ["Gemini 2.0 Flash (primary)", "Claude 3.5 Sonnet", "GPT-4o", "OpenAI embeddings (1536d)"] },
+              { icon: Brain, title: "AI Models", lines: ["Model-agnostic routing", "Gemini / Claude / GPT interchangeable", "Hot-swap without code change", "Pluggable embedding models"] },
               { icon: Server, title: "Stack", lines: ["Next.js 16 App Router", "Vercel AI SDK 6", "Drizzle ORM", "Google Cloud Storage"] },
             ].map((c) => (
               <div key={c.title} className="glass-panel hover:border-accent/40 transition-all">
@@ -439,7 +438,7 @@ memory_vectors (PG)  ──── HNSW indexed, semantic dedup
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
             <div className="glass-panel border-l-4 border-l-purple-500">
-              <h3 className="font-bold text-foreground mb-3">39 MCP Tools</h3>
+              <h3 className="font-bold text-foreground mb-3">Full Tool Suite over MCP</h3>
               <p className="text-sm text-muted leading-relaxed">
                 Evidence search, document analysis, Google Workspace integration, vector memory, entity graph queries — all exposed as MCP protocol tools.
               </p>
@@ -484,7 +483,7 @@ memory_vectors (PG)  ──── HNSW indexed, semantic dedup
               <Terminal className="w-8 h-8 text-accent mb-4" />
               <h3 className="text-xl font-bold text-foreground mb-3">Proof of Depth</h3>
               <p className="text-muted leading-relaxed">
-                When I say I build production AI systems, this is what I mean. Not a chatbot wrapper. A full-stack AI platform with a custom context manager, vector memory, audio intelligence, deep research orchestrator, and 28 agent tools — all wired together and actually used.
+                When I say I build production AI systems, this is what I mean. Not a chatbot wrapper. A full-stack AI platform with a custom context manager, vector memory, audio intelligence, deep research orchestrator, and a deep agent toolbox — all wired together and actually used.
               </p>
             </div>
           </div>
@@ -499,7 +498,7 @@ memory_vectors (PG)  ──── HNSW indexed, semantic dedup
               </div>
               <h3 className="text-2xl font-bold text-foreground mb-4">The Hardest AI Problems Are Personal</h3>
               <p className="text-lg text-muted leading-relaxed">
-                Reasoning across 100K+ documents, detecting tampered audio, mapping entity relationships across years of evidence — these are hard problems regardless of who&apos;s solving them. I built the solution for myself first.
+                Reasoning across a vast, multi-source evidence corpus, detecting tampered audio, mapping entity relationships across years of evidence — these are hard problems regardless of who&apos;s solving them. I built the solution for myself first.
               </p>
             </div>
           </div>
@@ -514,7 +513,7 @@ memory_vectors (PG)  ──── HNSW indexed, semantic dedup
             {[
               "Next.js 16", "TypeScript", "Vercel AI SDK 6",
               "PostgreSQL", "pgvector", "Drizzle ORM",
-              "Google Gemini 2.0", "Anthropic Claude", "OpenAI GPT-4o",
+              "Google Gemini", "Anthropic Claude", "OpenAI GPT",
               "Whisper STT", "ElevenLabs TTS", "Gemini TTS",
               "Google Cloud Storage", "NextAuth.js", "Google OAuth",
               "Tavily Search", "d3-force", "shadcn/ui",
