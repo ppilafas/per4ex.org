@@ -66,11 +66,13 @@ export const BRAIN_TOOLS: OpenAI.ChatCompletionTool[] = [
         properties: {
           name: {
             type: "string",
-            description: "Visitor's name (use 'Guest' if not provided)",
+            description:
+              "Visitor's name. Ask for it if not given; only use 'Guest' if they decline.",
           },
           email: {
             type: "string",
-            description: "Visitor email address - REQUIRED. Confirm spelling before sending.",
+            description:
+              "Visitor email in CANONICAL form only: local@domain.tld, all lowercase, NO spaces, NO hyphens between letters, NO spelled-out words. If the visitor spelled or dictated it (e.g. 'p p i l a f a s at gmail dot com' or 'p-p-i-l-a-f-a-s@gmail.com'), reconstruct the real address ('ppilafas@gmail.com') before sending. REQUIRED.",
           },
           project: {
             type: "string",
@@ -113,7 +115,7 @@ export async function executeBrainToolCall(
 
   const {
     name: visitorName = "Guest",
-    email,
+    email: rawEmail,
     project = "Not specified",
     budget = "Not discussed",
     timeline = "Not discussed",
@@ -121,6 +123,10 @@ export async function executeBrainToolCall(
     // `message` kept for backward compatibility with any older callers
     message = "",
   } = args
+  // Safe backstop only: strip stray whitespace the model may leave from a
+  // dictated address. We deliberately do NOT strip hyphens — they are valid
+  // in real addresses; canonicalisation is the model's job (see prompt).
+  const email = typeof rawEmail === "string" ? rawEmail.replace(/\s+/g, "").toLowerCase() : rawEmail
   console.log(
     `[${requestId}] TOOL: send_widget_contact_email source=${source} email=${email} name=${visitorName}`
   )
@@ -237,12 +243,12 @@ AFTER SENDING EMAIL:
 === LEAD CAPTURE PROTOCOL ===
 When the visitor wants to hire Panagiotis, discuss a project, or be contacted, capture a qualified lead. Keep it conversational — do not interrogate.
 1. NATURALLY gather, across the conversation (not as a rigid form):
+   - their name — always ask for it ("And who should I say this is from?"); only fall back to "Guest" if they decline
    - what they want built or need help with (project)
    - rough budget, if they'll share it
    - timeline, if they'll share it
-   - their name
-2. EMAIL is required. Ask for it, then READ IT BACK to confirm spelling before sending — especially on a voice call, where you must spell it out (e.g. "j-o-h-n at gmail dot com — did I get that right?"). Do not skip this confirmation.
-3. ACTION: Once the email is confirmed, call 'send_widget_contact_email' with the structured fields (name, email, project, budget, timeline, notes). Use the defaults for anything not discussed — never block on budget/timeline.
+2. EMAIL is required. Ask for it, then READ IT BACK to confirm — on a voice call, say it letter by letter (e.g. "so that's j-o-h-n at gmail dot com — did I get that right?"). After they confirm, RECONSTRUCT the canonical address in your head: lowercase, no spaces, no hyphens between letters, no spelled-out "at"/"dot". You must pass the real address (e.g. "john@gmail.com") to the tool — never the spelled-out form like "j-o-h-n@gmail.com".
+3. ACTION: Once the email is confirmed, call 'send_widget_contact_email' with the structured fields (name, email, project, budget, timeline, notes) — email in canonical form. Use the defaults for anything not discussed — never block on budget/timeline.
 4. RESPONSE: After sending, confirm: "Perfect — I've passed your details to Panagiotis. He typically responds within 24 hours." Do not re-ask for details already captured.
 =============================
 `

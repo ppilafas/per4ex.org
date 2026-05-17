@@ -1,12 +1,14 @@
 "use client"
 
 import { useState, useRef, useEffect, useCallback } from "react"
-import { MessageSquare, X, Send, Loader2, Sparkles, Minimize2, Terminal } from "lucide-react"
+import { MessageSquare, X, Send, Loader2, Sparkles, Minimize2, Mic } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
 import ReactMarkdown from "react-markdown"
 import remarkGfm from "remark-gfm"
 import { useRouter } from "next/navigation"
+import { ConversationProvider } from "@elevenlabs/react"
 import { cn } from "@/lib/utils"
+import { VoicePanel } from "@/components/voice-assistant"
 
 // ---------------------------------------------------------------------------
 // Types
@@ -21,11 +23,6 @@ interface ProjectContext {
   solutionTitle: string
   problem: string
   stack: string[]
-}
-
-interface LogEntry {
-  ts: string
-  text: string
 }
 
 interface PageContext {
@@ -180,10 +177,6 @@ const PAGE_CONTEXTS: Record<string, PageContext> = {
 
 const MESSAGE_LIMIT = 15
 
-function timestamp() {
-  return new Date().toISOString().slice(11, 23)
-}
-
 // ---------------------------------------------------------------------------
 // Clickable Link Component for In-App Navigation
 // ---------------------------------------------------------------------------
@@ -257,6 +250,7 @@ const markdownComponents = {
 export function AssistantWidget() {
   const [isOpen, setIsOpen] = useState(false)
   const [isExpanded, setIsExpanded] = useState(false)
+  const [mode, setMode] = useState<"text" | "voice">("text")
   const [currentPath, setCurrentPath] = useState("/")
 
   const [messages, setMessages] = useState<Message[]>([
@@ -271,10 +265,6 @@ export function AssistantWidget() {
   const messagesRef = useRef<Message[]>(messages)
   const messagesEndRef = useRef<HTMLDivElement>(null)
 
-  // Terminal log state
-  const [logs, setLogs] = useState<LogEntry[]>([])
-  const [showTerminal, setShowTerminal] = useState(false)
-  const logsEndRef = useRef<HTMLDivElement>(null)
 
   // Get current page context
   const pageContext = PAGE_CONTEXTS[currentPath] || PAGE_CONTEXTS["/"]
@@ -339,15 +329,15 @@ export function AssistantWidget() {
     return pageContext.starters || PAGE_CONTEXTS["/"].starters || ["How can I help you?"]
   }, [pageContext])
 
-  const addLog = useCallback((text: string) => {
-    setLogs((prev) => [...prev.slice(-99), { ts: timestamp(), text }])
+  // Logs panel was removed; keep a no-op so existing call sites stay valid.
+  const addLog = useCallback((text: string): void => {
+    void text
   }, [])
 
   // Keep refs in sync
   useEffect(() => { messagesRef.current = messages }, [messages])
   useEffect(() => { projectContextRef.current = projectContext }, [projectContext])
   useEffect(() => { messagesEndRef.current?.scrollIntoView({ behavior: "smooth" }) }, [messages])
-  useEffect(() => { logsEndRef.current?.scrollIntoView({ behavior: "smooth" }) }, [logs])
 
   // Message count persistence
   useEffect(() => {
@@ -499,11 +489,22 @@ export function AssistantWidget() {
       setTimeout(() => handleSendMessage(projectMessage), 800)
     }
 
+    // Launcher from the homepage section: open the widget, optionally in voice
+    const handleAssistantOpen = (e: CustomEvent<{ mode?: "text" | "voice" }>) => {
+      setIsOpen(true)
+      if (e.detail?.mode === "voice") {
+        setMode("voice")
+        setIsExpanded(true)
+      }
+    }
+
     window.addEventListener("open-chat", handleOpenChat)
     window.addEventListener("start-project", handleStartProject as EventListener)
+    window.addEventListener("supercore:assistant", handleAssistantOpen as EventListener)
     return () => {
       window.removeEventListener("open-chat", handleOpenChat)
       window.removeEventListener("start-project", handleStartProject as EventListener)
+      window.removeEventListener("supercore:assistant", handleAssistantOpen as EventListener)
     }
   }, [handleSendMessage])
 
@@ -569,14 +570,25 @@ export function AssistantWidget() {
                 </div>
                 <div className="flex items-center gap-1">
                   <button
-                    onClick={() => setShowTerminal((v) => !v)}
+                    onClick={() => {
+                      if (mode === "voice") {
+                        setMode("text")
+                      } else {
+                        setMode("voice")
+                        setIsExpanded(true)
+                      }
+                    }}
                     className={cn(
                       "p-1.5 rounded-lg transition-colors group",
-                      showTerminal ? "bg-accent/20 text-accent" : "hover:bg-card/50 text-muted"
+                      mode === "voice" ? "bg-accent/20 text-accent" : "hover:bg-card/50 text-muted"
                     )}
-                    title="Toggle terminal logs"
+                    title={mode === "voice" ? "Switch to text chat" : "Talk to Catalyst (voice)"}
                   >
-                    <Terminal className="w-4 h-4 group-hover:text-foreground transition-colors" />
+                    {mode === "voice" ? (
+                      <MessageSquare className="w-4 h-4 group-hover:text-foreground transition-colors" />
+                    ) : (
+                      <Mic className="w-4 h-4 group-hover:text-foreground transition-colors" />
+                    )}
                   </button>
                   <button
                     onClick={() => setIsExpanded((v) => !v)}
@@ -592,10 +604,18 @@ export function AssistantWidget() {
               </div>
             </div>
 
+            {mode === "voice" ? (
+              <div className="flex min-h-0 flex-1 flex-col p-4">
+                <ConversationProvider>
+                  <VoicePanel />
+                </ConversationProvider>
+              </div>
+            ) : (
+              <>
             {/* Body: chat + optional terminal */}
             <div className="flex-1 flex overflow-hidden">
               {/* Chat messages */}
-              <div className={cn("flex-1 overflow-y-auto p-4 space-y-3", showTerminal && "border-r border-card-border/30")}>
+              <div className="flex-1 overflow-y-auto p-4 space-y-3">
                 {messages.map((msg, idx) => {
                   if (!msg.content) return null
                   return (
@@ -668,27 +688,6 @@ export function AssistantWidget() {
 
                 <div ref={messagesEndRef} />
               </div>
-
-              {/* Terminal log panel */}
-              {showTerminal && (
-                <div className="w-[280px] flex flex-col bg-black/60 overflow-hidden">
-                  <div className="px-3 py-2 border-b border-card-border/20 flex items-center gap-2">
-                    <Terminal className="w-3.5 h-3.5 text-green-400" />
-                    <span className="text-[10px] font-mono text-green-400 uppercase tracking-wider">Agent Logs</span>
-                  </div>
-                  <div className="flex-1 overflow-y-auto p-2 font-mono text-[10px] leading-relaxed">
-                    {logs.length === 0 && (
-                      <p className="text-muted/40 italic">No logs yet. Send a message to see activity.</p>
-                    )}
-                    {logs.map((log, i) => (
-                      <div key={i} className="text-green-400/80 mb-0.5">
-                        <span className="text-green-400/40">[{log.ts}]</span> {log.text}
-                      </div>
-                    ))}
-                    <div ref={logsEndRef} />
-                  </div>
-                </div>
-              )}
             </div>
 
             {/* Footer: input */}
@@ -724,6 +723,8 @@ export function AssistantWidget() {
                 </p>
               )}
             </div>
+              </>
+            )}
           </motion.div>
         )}
       </AnimatePresence>

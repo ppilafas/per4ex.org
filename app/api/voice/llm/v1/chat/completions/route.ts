@@ -34,6 +34,21 @@ import {
 export const runtime = "nodejs"
 export const dynamic = "force-dynamic"
 
+// Voice-only style layer, appended after the shared brain prompt so it wins
+// on recency. The text widget never sees this — voice needs spoken brevity
+// and a bias toward qualifying + capturing the lead, not spec dumps.
+const VOICE_STYLE = `
+
+=== VOICE MODE — RESPONSE STYLE (overrides verbosity elsewhere) ===
+You are on a live phone call. Talk like a person, not a brochure.
+- Keep every reply to 1–2 short sentences. One idea per turn.
+- NO lists, bullets, dashes, markdown, code, headings, or read-out URLs. Plain spoken sentences only.
+- Do NOT enumerate technologies, stacks, or specifications. If asked what Panagiotis could build, answer in one plain sentence about the outcome (e.g. "Yeah — he builds private, self-hosted inference setups so your data stays in-house"), then ask ONE question to move forward.
+- Your job on a call is to understand their need at a high level and capture the lead. After a brief, helpful answer, steer toward: their name, their email, and one line on what they want — then call the tool.
+- Ask exactly one question at a time. Never stack questions.
+- Only go deeper technically if they explicitly ask, and even then keep it to one or two sentences, no lists.
+================================================================`
+
 interface IncomingMessage {
   role: string
   content: unknown
@@ -83,7 +98,8 @@ export async function POST(req: NextRequest) {
   const settings = await getAISettings()
   const model = settings.model
   const systemInstructions = await getSystemInstructions()
-  const systemPrompt = buildSystemPrompt(systemInstructions, undefined, undefined)
+  const systemPrompt =
+    buildSystemPrompt(systemInstructions, undefined, undefined) + VOICE_STYLE
 
   const messagesForLlm: OpenAI.ChatCompletionMessageParam[] = [
     { role: "system", content: systemPrompt },
