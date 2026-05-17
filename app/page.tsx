@@ -2,6 +2,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { ArrowRight, CheckCircle2, Mail, Shield, Wrench } from "lucide-react"
 import { CTAButton } from "@/components/cta-button"
+import { VoiceAssistantMount } from "@/components/voice-assistant-mount"
 
 const helpItems = [
   {
@@ -104,6 +105,8 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      <VoiceAssistantMount />
 
       <section id="help" className="scroll-mt-28 py-16 md:py-20">
         <div className="mx-auto max-w-6xl px-4">
