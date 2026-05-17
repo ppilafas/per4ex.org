@@ -35,6 +35,7 @@ CLAUDE.md is authored and revised across sessions. **Whoever edits it last commi
 
 "Deploy" = `git push origin main`. Vercel auto-builds from the push; there is no separate deploy step.
 
+- **Production deploy is *always* `git push origin main` — one standardized path.** The Vercel CLI is installed and this repo is linked (`.vercel/`), so `vercel --prod` / `vercel deploy --prod` *works* — **do not use it.** The CLI snapshots the current working tree, which on this shared multi-session tree means deploying other sessions' uncommitted in-flight work and producing a prod build that matches no git SHA (un-auditable, not `git revert`-able). Git-push deploys keep prod 1:1 with a commit on `main`. The CLI is acceptable **only** for throwaway *preview* builds (`vercel` with no `--prod`), never for production.
 - **Never push autonomously.** Pushing is the user's call so he can pace iteration across conversations.
 - After committing, surface a brief one-line nudge, e.g.:
   `Committed <summary>. Ready to deploy — say the word and I'll push to main.`
