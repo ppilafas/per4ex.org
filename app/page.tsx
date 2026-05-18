@@ -42,6 +42,7 @@ const proofItems = [
     title: "Catalyst AI",
     href: "/catalyst-ai",
     image: "/catalyst3d.png",
+    imgClass: "scale-100",
     label: "Flagship runtime",
     summary:
       "A shared assistant platform with RAG, voice, tool calling, tenant-scoped data, and admin controls.",
@@ -51,6 +52,7 @@ const proofItems = [
     title: "π.Law",
     href: "/pilaw",
     image: "/pilaw3d.png",
+    imgClass: "scale-[1.35]",
     label: "Legal AI",
     summary:
       "A legal case-management and document-search system designed around sensitive client data.",
@@ -60,6 +62,7 @@ const proofItems = [
     title: "Forensic AI Studio",
     href: "/forensics",
     image: "/detective.png",
+    imgClass: "scale-[1.35]",
     label: "Investigation tools",
     summary:
       "A private evidence-analysis workspace for searching documents, mapping entities, and analyzing audio.",
@@ -69,6 +72,7 @@ const proofItems = [
     title: "Silicon Smackdown",
     href: "/silicon-smackdown",
     image: "/silicon_smacdown/big_hero_logo.png",
+    imgClass: "scale-[1.15]",
     label: "Voice AI",
     summary:
       "A real-time AI talk-show experiment with multiple voice personalities and live conversation flow.",
@@ -185,13 +189,15 @@ export default function Home() {
                 className="group grid grid-cols-[96px_1fr] gap-5 rounded-xl border border-white/10 bg-white/[0.025] p-4 transition-colors hover:border-accent/40 md:grid-cols-[132px_1fr]"
               >
                 <div className="relative h-24 overflow-hidden rounded-lg bg-black/30 md:h-32">
-                  <Image
-                    src={item.image}
-                    alt={item.title}
-                    fill
-                    sizes="132px"
-                    className="object-contain p-3 transition-transform duration-300 group-hover:scale-105"
-                  />
+                  <div className={`absolute inset-0 ${item.imgClass ?? ""}`}>
+                    <Image
+                      src={item.image}
+                      alt={item.title}
+                      fill
+                      sizes="132px"
+                      className="object-contain p-3 transition-transform duration-300 group-hover:scale-105"
+                    />
+                  </div>
                 </div>
                 <div>
                   <div className="mb-2 flex flex-wrap items-center gap-2">
