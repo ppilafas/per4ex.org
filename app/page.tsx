@@ -95,7 +95,7 @@ export default function Home() {
             width={320}
             height={128}
             priority
-            className="mx-auto mb-6 h-20 w-auto md:h-28"
+            className="mx-auto mb-6 h-28 w-auto md:h-40"
           />
           <p className="mb-4 text-xs font-bold uppercase tracking-[0.28em] text-accent">
             Supercore · AI systems engineering
