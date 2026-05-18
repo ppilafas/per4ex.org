@@ -54,3 +54,6 @@ public/0_SCRIBES_Specs_260222.xlsx
 public/IP Assignment Agreement_SCRIBES.docx
 public/IP Assignment Agreement_SCRIBES.docx.pdf
 public/IP Assignment Agreement_SCRIBES.docx_signed.pdf
+
+# OAuth client secrets (defense-in-depth; real copy lives in gitignored local/)
+client_secret*.json
