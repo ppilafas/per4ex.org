@@ -89,6 +89,14 @@ export default function Home() {
       <section className="relative overflow-hidden border-b border-white/5">
         <div className="absolute inset-0 hero-grid -z-10 opacity-70" />
         <div className="mx-auto max-w-5xl px-4 py-16 md:py-24 text-center">
+          <Image
+            src="/supecore.png"
+            alt="Supercore"
+            width={320}
+            height={128}
+            priority
+            className="mx-auto mb-6 h-20 w-auto md:h-28"
+          />
           <p className="mb-4 text-xs font-bold uppercase tracking-[0.28em] text-accent">
             Supercore · AI systems engineering
           </p>
