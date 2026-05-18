@@ -535,9 +535,11 @@ export function AssistantWidget() {
 
   const starters = getStarters()
 
-  // Panel dimensions
-  const panelWidth = isExpanded ? "w-[680px]" : "w-[380px]"
-  const panelHeight = isExpanded ? "h-[720px]" : "h-[560px]"
+  // Panel dimensions — desktop only (sm:+). On mobile the panel is sized by
+  // the responsive inset classes on the container so it always fits the
+  // viewport regardless of expanded/voice state.
+  const panelWidth = isExpanded ? "sm:w-[680px]" : "sm:w-[380px]"
+  const panelHeight = isExpanded ? "sm:h-[720px]" : "sm:h-[560px]"
 
   // ---------------------------------------------------------------------------
   // Render
@@ -561,7 +563,11 @@ export function AssistantWidget() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.95 }}
             className={cn(
-              "fixed bottom-24 right-6 bg-gradient-to-br from-background/98 via-background/96 to-background/90 backdrop-blur-2xl border border-card-border/60 rounded-2xl shadow-2xl flex flex-col z-[100] overflow-hidden transition-all duration-300",
+              "fixed z-[100] flex flex-col overflow-hidden rounded-2xl border border-card-border/60 bg-gradient-to-br from-background/98 via-background/96 to-background/90 backdrop-blur-2xl shadow-2xl transition-all duration-300",
+              // Mobile: near-fullscreen with safe margins so it always fits the viewport
+              "inset-x-3 bottom-3 top-3",
+              // Desktop (sm:+): anchored bottom-right, fixed size, clamped to viewport height
+              "sm:inset-x-auto sm:top-auto sm:bottom-24 sm:right-6 sm:max-h-[calc(100dvh_-_7.5rem)]",
               panelWidth,
               panelHeight
             )}
