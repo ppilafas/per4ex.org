@@ -142,6 +142,16 @@ export async function executeBrainToolCall(
     return "Email service not configured."
   }
 
+  // Backstop: refuse a clearly malformed address rather than silently
+  // emailing junk. We only reject structurally-broken input (no @, no
+  // dotted domain, sub-2-char TLD). We do NOT second-guess plausible
+  // addresses like "x@gmail.cm" — ".cm" is a real TLD; catching likely
+  // typos is the model's job at read-back time (see LEAD CAPTURE PROTOCOL).
+  if (typeof email !== "string" || !/^[^\s@]+@[^\s@]+\.[a-z]{2,}$/i.test(email)) {
+    console.log(`[${requestId}] TOOL: rejected malformed email="${email}"`)
+    return `The email address "${email}" doesn't look valid — it was not sent. Ask the visitor to repeat it slowly, read it back to confirm, then try again.`
+  }
+
   const body = [
     `Name: ${visitorName}`,
     `Email: ${email}`,
@@ -251,12 +261,13 @@ AFTER SENDING EMAIL:
     contextPrompt += `
 === LEAD CAPTURE PROTOCOL ===
 When the visitor wants to hire Panagiotis, discuss a project, or be contacted, capture a qualified lead. Keep it conversational — do not interrogate.
+0. FIRST take stock of what the visitor has ALREADY told you earlier in this conversation. NEVER ask again for a name, email, or detail they have already given — acknowledge it ("Thanks, <name>") and ask only for what is genuinely still missing. If they ask how to reach Panagiotis, answer that directly first (email: contact@supercore.tech) before offering to take their details.
 1. NATURALLY gather, across the conversation (not as a rigid form):
    - their name — always ask for it ("And who should I say this is from?"); only fall back to "Guest" if they decline
    - what they want built or need help with (project)
    - rough budget, if they'll share it
    - timeline, if they'll share it
-2. EMAIL is required. Ask for it, then READ IT BACK to confirm — on a voice call, say it letter by letter (e.g. "so that's j-o-h-n at gmail dot com — did I get that right?"). After they confirm, RECONSTRUCT the canonical address in your head: lowercase, no spaces, no hyphens between letters, no spelled-out "at"/"dot". You must pass the real address (e.g. "john@gmail.com") to the tool — never the spelled-out form like "j-o-h-n@gmail.com".
+2. EMAIL is required. Ask for it, then READ IT BACK to confirm — on a voice call, say it letter by letter (e.g. "so that's j-o-h-n at gmail dot com — did I get that right?"). SANITY-CHECK it before accepting: if the domain or TLD looks like a likely mistake — e.g. ".cm"/".con"/".co" where ".com" is meant, or "gmial"/"gmai"/"hotmial"/"yaho" — do NOT just accept it; ask "I think you meant <corrected> — is that right?" and only use the corrected address once they confirm. After they confirm, RECONSTRUCT the canonical address in your head: lowercase, no spaces, no hyphens between letters, no spelled-out "at"/"dot". You must pass the real address (e.g. "john@gmail.com") to the tool — never the spelled-out form like "j-o-h-n@gmail.com".
 3. ACTION: Once the email is confirmed, call 'send_widget_contact_email' with the structured fields (name, email, project, budget, timeline, notes) — email in canonical form. Use the defaults for anything not discussed — never block on budget/timeline.
 4. RESPONSE: After sending, confirm: "Perfect — I've passed your details to Panagiotis. He typically responds within 24 hours." Do not re-ask for details already captured.
 =============================
