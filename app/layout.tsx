@@ -6,6 +6,7 @@ import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 import { ClientBootLoader, ClientWidgets } from "@/components/client-widgets";
 import { AnalyticsTags } from "@/components/analytics-tags";
+import { ConsentBanner } from "@/components/consent-banner";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -60,6 +61,7 @@ export default async function RootLayout({
             <ClientWidgets />
             <Analytics />
             <AnalyticsTags />
+            <ConsentBanner />
           </div>
         </NextIntlClientProvider>
       </body>

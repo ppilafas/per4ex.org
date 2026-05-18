@@ -66,9 +66,9 @@ export function AnalyticsTags() {
           function gtag(){dataLayer.push(arguments);}
           window.gtag = gtag;
 
-          // Consent Mode v2 — privacy-safe defaults. No CMP/banner yet, so
-          // tracking storage is denied: GA4/Ads run in cookieless modeling
-          // mode (EEA-compliant) until a consent banner grants an update.
+          // Consent Mode v2 — privacy-safe defaults set BEFORE any hit.
+          // Denied until the visitor chooses; components/consent-banner.tsx
+          // issues gtag('consent','update', …) to grant/keep-denied.
           gtag('consent', 'default', {
             ad_storage: 'denied',
             ad_user_data: 'denied',
