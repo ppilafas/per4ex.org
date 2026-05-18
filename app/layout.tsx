@@ -5,6 +5,7 @@ import { Geist, Geist_Mono, Archivo_Black } from "next/font/google";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 import { ClientBootLoader, ClientWidgets } from "@/components/client-widgets";
+import { AnalyticsTags } from "@/components/analytics-tags";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -58,6 +59,7 @@ export default async function RootLayout({
             <Footer />
             <ClientWidgets />
             <Analytics />
+            <AnalyticsTags />
           </div>
         </NextIntlClientProvider>
       </body>
