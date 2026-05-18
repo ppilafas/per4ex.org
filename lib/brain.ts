@@ -14,6 +14,7 @@
 
 import OpenAI from "openai"
 import { KNOWLEDGE_BASE_CONTEXT } from "@/lib/knowledge-base"
+import { sendQualifiedEnquiry } from "@/lib/ga-mp"
 
 // ---------------------------------------------------------------------------
 // Shared types
@@ -107,7 +108,10 @@ export async function executeBrainToolCall(
   name: string,
   args: Record<string, string>,
   requestId: string,
-  source = "Website"
+  source = "Website",
+  /** GA4 client_id from the browser `_ga` cookie, for session stitching.
+   *  Undefined for server-to-server callers (e.g. the voice shim). */
+  gaClientId?: string
 ): Promise<string> {
   if (name !== "send_widget_contact_email") {
     return `Unknown tool: ${name}`
@@ -168,6 +172,11 @@ export async function executeBrainToolCall(
     return "Failed to send email. Please try again."
   }
   console.log(`[${requestId}] Email sent to ${ownerEmail} from ${email}`)
+
+  // Confirmed qualified lead → fire the server-side GA4 conversion.
+  // Bounded + never throws; no PII leaves here (only source).
+  await sendQualifiedEnquiry({ source, clientId: gaClientId, requestId })
+
   return "Email sent successfully."
 }
 

@@ -12,6 +12,7 @@ import {
   executeBrainToolCall,
   buildSystemPrompt,
 } from "@/lib/brain"
+import { gaClientIdFromCookie } from "@/lib/ga-mp"
 
 // ---------------------------------------------------------------------------
 // POST handler
@@ -126,10 +127,14 @@ export async function POST(req: NextRequest) {
         })),
       })
 
+      // GA4 client_id from the browser `_ga` cookie, to stitch the
+      // server-side conversion back to the originating ad click / session.
+      const gaClientId = gaClientIdFromCookie(req.cookies.get("_ga")?.value)
+
       // Execute each tool and append results
       for (const tc of toolCalls) {
         const args = JSON.parse(tc.arguments) as Record<string, string>
-        const result = await executeBrainToolCall(tc.name, args, requestId, "Chat widget")
+        const result = await executeBrainToolCall(tc.name, args, requestId, "Chat widget", gaClientId)
         messagesForLlm.push({
           role: "tool",
           tool_call_id: tc.id || "call_0",
