@@ -1,7 +1,6 @@
 "use client"
 
-import { Database, Bot, Mic, Activity, Layers } from "lucide-react"
-
+import { Database, Robot as Bot, Microphone as Mic, Pulse as Activity, StackSimple as Layers } from "@phosphor-icons/react"
 const SOLUTIONS = [
   {
     icon: Database,

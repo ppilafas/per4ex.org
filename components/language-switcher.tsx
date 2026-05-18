@@ -2,7 +2,7 @@
 
 import { useLocale } from 'next-intl';
 import { usePathname, useRouter } from 'next/navigation';
-import { Globe } from 'lucide-react';
+import { Globe } from "@phosphor-icons/react"
 import { locales, type Locale } from '@/i18n';
 import { cn } from '@/lib/utils';
 

@@ -2,8 +2,7 @@
 
 import Link from "next/link"
 import { useState } from "react"
-import { ChevronUp, ChevronDown } from "lucide-react"
-
+import { CaretUp as ChevronUp, CaretDown as ChevronDown } from "@phosphor-icons/react"
 export function Footer() {
   const [isExpanded, setIsExpanded] = useState(false)
 

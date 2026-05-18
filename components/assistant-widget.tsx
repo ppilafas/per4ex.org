@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useRef, useEffect, useCallback } from "react"
-import { MessageSquare, X, Send, Loader2, Sparkles, Minimize2, Mic } from "lucide-react"
+import { ChatCircle as MessageSquare, X, PaperPlaneTilt as Send, CircleNotch as Loader2, Sparkle as Sparkles, ArrowsIn as Minimize2, Microphone as Mic } from "@phosphor-icons/react"
 import { motion, AnimatePresence } from "framer-motion"
 import ReactMarkdown from "react-markdown"
 import remarkGfm from "remark-gfm"

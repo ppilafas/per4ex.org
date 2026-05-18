@@ -1,6 +1,6 @@
 import Image from "next/image"
 import Link from "next/link"
-import { Mic, Zap, Users, Brain, ExternalLink, Github, Play, Radio, Cpu, MessageSquare, Bot, Rocket, Search, Crown, Wrench, Bug, Sword, Star, Lightbulb, Atom, Beaker, Pill } from "lucide-react"
+import { Microphone as Mic, Lightning as Zap, Users, Brain, ArrowSquareOut as ExternalLink, GithubLogo as Github, Play, Radio, Cpu, ChatCircle as MessageSquare, Robot as Bot, RocketLaunch as Rocket, MagnifyingGlass as Search, Crown, Wrench, Bug, Sword, Star, Lightbulb, Atom, Flask as Beaker, Pill } from "@phosphor-icons/react/ssr"
 import { TypewriterSubtitle } from "@/components/typewriter"
 
 export default function SiliconSmackdown() {

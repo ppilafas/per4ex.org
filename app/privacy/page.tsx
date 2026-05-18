@@ -1,5 +1,4 @@
-import { Shield, Database, Lock, Eye, Server, Mail } from "lucide-react"
-
+import { Shield, Database, Lock, Eye, HardDrives as Server, Envelope as Mail } from "@phosphor-icons/react/ssr"
 export default function PrivacyPolicy() {
   return (
     <div className="space-y-12">

@@ -1,5 +1,5 @@
 import Image from "next/image"
-import { FileText, Quote } from "lucide-react"
+import { FileText, Quotes as Quote } from "@phosphor-icons/react/ssr"
 import { TypewriterSubtitle } from "@/components/typewriter"
 
 export default function AuthoredWorks() {

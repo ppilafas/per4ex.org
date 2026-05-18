@@ -2,7 +2,7 @@
 
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter"
 import { oneDark } from "react-syntax-highlighter/dist/esm/styles/prism"
-import { Copy, Check } from "lucide-react"
+import { Copy, Check } from "@phosphor-icons/react"
 import { useState } from "react"
 
 interface CodeBlockProps {

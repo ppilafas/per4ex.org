@@ -2,7 +2,7 @@
 
 import Image from "next/image"
 import useSWR from "swr"
-import { Star } from "lucide-react"
+import { Star } from "@phosphor-icons/react"
 import { TypewriterSubtitle } from "@/components/typewriter"
 
 // Fetcher for SWR

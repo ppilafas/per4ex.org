@@ -1,5 +1,5 @@
 import Image from "next/image"
-import { Mail, Code } from "lucide-react"
+import { Envelope as Mail, Code } from "@phosphor-icons/react/ssr"
 import { TypewriterSubtitle } from "@/components/typewriter"
 import { CTAButton } from "@/components/cta-button"
 

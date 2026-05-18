@@ -1,6 +1,6 @@
 import Image from "next/image"
 import Link from "next/link"
-import { ArrowRight, CheckCircle2, Mail, Shield, Wrench } from "lucide-react"
+import { ArrowRight, CheckCircle as CheckCircle2, Envelope as Mail, Shield, Wrench } from "@phosphor-icons/react/ssr"
 import { CTAButton } from "@/components/cta-button"
 import { VoiceAssistantMount } from "@/components/voice-assistant-mount"
 

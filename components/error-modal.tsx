@@ -1,8 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { AlertTriangle } from "lucide-react"
-
+import { Warning as AlertTriangle } from "@phosphor-icons/react"
 interface ErrorModalProps {
   title?: string
   description?: string

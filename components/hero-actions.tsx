@@ -1,7 +1,6 @@
 "use client"
 
-import { MessageSquare } from "lucide-react"
-
+import { ChatCircle as MessageSquare } from "@phosphor-icons/react"
 export function HeroActions() {
   return (
     <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">

@@ -6,7 +6,7 @@ import Image from "next/image"
 import { usePathname } from "next/navigation"
 import { cn } from "@/lib/utils"
 import { motion, AnimatePresence } from "framer-motion"
-import { Menu, X } from "lucide-react"
+import { List as Menu, X } from "@phosphor-icons/react"
 import { NavbarCanvas } from "./navbar-canvas"
 
 const navItems = [

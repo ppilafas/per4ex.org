@@ -1,14 +1,6 @@
 "use client"
 
-import { 
-  MessageSquare, 
-  Database, 
-  Mic, 
-  FileText, 
-  Bot, 
-  Server,
-  ArrowRight
-} from "lucide-react"
+import { ChatCircle as MessageSquare, Database, Microphone as Mic, FileText, Robot as Bot, HardDrives as Server, ArrowRight } from "@phosphor-icons/react"
 import Link from "next/link"
 
 const SOLUTIONS = [

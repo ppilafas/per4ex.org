@@ -1,7 +1,6 @@
 import Link from "next/link"
 import { getAllArticles, type ArticleMeta } from "@/lib/articles"
-import { ArrowRight, Calendar, Clock, Tag, BookOpen, Lightbulb, Code } from "lucide-react"
-
+import { ArrowRight, Calendar, Clock, Tag, BookOpen, Lightbulb, Code } from "@phosphor-icons/react/ssr"
 const categoryConfig = {
   project: { label: "Case Study", icon: BookOpen, color: "text-blue-400 bg-blue-400/10 border-blue-400/30" },
   insights: { label: "Insights", icon: Lightbulb, color: "text-amber-400 bg-amber-400/10 border-amber-400/30" },

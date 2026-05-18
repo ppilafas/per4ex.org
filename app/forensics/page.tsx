@@ -1,7 +1,6 @@
 import { cn } from "@/lib/utils"
 import Image from "next/image"
-import { Search, Database, Brain, Mic, Shield, FileText, Network, Clock, Zap, Terminal, Server, Eye, Layers, GitBranch, AudioLines, ScrollText, Lock, ChevronRight, Activity } from "lucide-react"
-
+import { MagnifyingGlass as Search, Database, Brain, Microphone as Mic, Shield, FileText, Network, Clock, Lightning as Zap, Terminal, HardDrives as Server, Eye, StackSimple as Layers, GitBranch, Waveform as AudioLines, Scroll as ScrollText, Lock, CaretRight as ChevronRight, Pulse as Activity } from "@phosphor-icons/react/ssr"
 export const metadata = {
   title: "Forensic AI Studio | supercore.tech",
   description: "A full-stack forensic AI suite for personal investigations: ingests evidence, maps entity relationships, analyzes audio recordings, and reasons in real-time across a vast, multi-source evidence corpus.",

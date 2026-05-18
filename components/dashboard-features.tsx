@@ -2,12 +2,7 @@
 
 import { useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import { 
-  Settings, Users, Activity, Router, 
-  Database, Shield, ToggleLeft, Radio, 
-  BarChart3, Brain, Lock
-} from "lucide-react"
-
+import { Gear as Settings, Users, Pulse as Activity, Network as Router, Database, Shield, ToggleLeft, Radio, ChartBar as BarChart3, Brain, Lock } from "@phosphor-icons/react"
 const FEATURES = [
   {
     id: "system",

@@ -1,7 +1,6 @@
 "use client"
 
-import { MessageSquare } from "lucide-react"
-
+import { ChatCircle as MessageSquare } from "@phosphor-icons/react"
 export function CTAButton() {
   return (
     <button 

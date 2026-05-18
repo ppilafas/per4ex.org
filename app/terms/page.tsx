@@ -1,5 +1,4 @@
-import { FileText, AlertTriangle, Shield, Code, Ban, Gavel } from "lucide-react"
-
+import { FileText, Warning as AlertTriangle, Shield, Code, Prohibit as Ban, Gavel } from "@phosphor-icons/react/ssr"
 export default function TermsOfService() {
   return (
     <div className="space-y-12">

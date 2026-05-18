@@ -1,5 +1,5 @@
 import Image from "next/image"
-import { Cpu, Mic, Shield, Server, Terminal, Layers, Link as LinkIcon, Globe, Database, Zap, Brain, MessageSquare, Clock, ArrowRight, User, Users, ChevronRight } from "lucide-react"
+import { Cpu, Microphone as Mic, Shield, HardDrives as Server, Terminal, StackSimple as Layers, Link as LinkIcon, Globe, Database, Lightning as Zap, Brain, ChatCircle as MessageSquare, Clock, ArrowRight, User, Users, CaretRight as ChevronRight } from "@phosphor-icons/react/ssr"
 import { TypewriterSubtitle } from "@/components/typewriter"
 // import { VoiceWidget } from "@/components/voice-widget"
 import { DashboardFeatures } from "@/components/dashboard-features"

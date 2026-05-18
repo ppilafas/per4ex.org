@@ -4,8 +4,7 @@ import ReactMarkdown from "react-markdown"
 import remarkGfm from "remark-gfm"
 import { CodeBlock, InlineCode } from "./code-block"
 import type { Components } from "react-markdown"
-import { Check, Square } from "lucide-react"
-
+import { Check, Square } from "@phosphor-icons/react"
 interface ArticleContentProps {
   content: string
 }

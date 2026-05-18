@@ -1,6 +1,5 @@
 import { TypewriterSubtitle } from "@/components/typewriter"
-import { Globe, Database, MessageSquare, CreditCard, Code, Layers } from "lucide-react"
-
+import { Globe, Database, ChatCircle as MessageSquare, CreditCard, Code, StackSimple as Layers } from "@phosphor-icons/react/ssr"
 export default function LTBR() {
   return (
     <div className="space-y-12">

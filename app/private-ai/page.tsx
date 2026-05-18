@@ -1,4 +1,4 @@
-import { Shield, Coins, Gauge, Server, Lock, Cpu, GitBranch, Mail } from "lucide-react"
+import { Shield, Coins, Gauge, HardDrives as Server, Lock, Cpu, GitBranch, Envelope as Mail } from "@phosphor-icons/react/ssr"
 import { CTAButton } from "@/components/cta-button"
 
 export const metadata = {

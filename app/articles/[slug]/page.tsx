@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation"
 import Link from "next/link"
 import { getAllArticles, getArticleBySlug } from "@/lib/articles"
-import { ArrowLeft, Calendar, Clock, Tag, BookOpen, Lightbulb, Code } from "lucide-react"
+import { ArrowLeft, Calendar, Clock, Tag, BookOpen, Lightbulb, Code } from "@phosphor-icons/react/ssr"
 import { ArticleContent } from "@/components/article-content"
 import type { Metadata } from "next"
 

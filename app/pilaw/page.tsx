@@ -1,5 +1,5 @@
 import Image from "next/image"
-import { Database, Lock, Server, ArrowRight } from "lucide-react"
+import { Database, Lock, HardDrives as Server, ArrowRight } from "@phosphor-icons/react/ssr"
 import { TypewriterSubtitle } from "@/components/typewriter"
 
 export default function PiLaw() {

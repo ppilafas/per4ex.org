@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react"
 import { useConversation } from "@elevenlabs/react"
 import { motion, AnimatePresence } from "framer-motion"
-import { Mic, PhoneOff, Loader2, Send, AlertCircle, RotateCcw, MessageSquare } from "lucide-react"
+import { Microphone as Mic, PhoneSlash as PhoneOff, CircleNotch as Loader2, PaperPlaneTilt as Send, WarningCircle as AlertCircle, ArrowCounterClockwise as RotateCcw, ChatCircle as MessageSquare } from "@phosphor-icons/react"
 import { cn } from "@/lib/utils"
 
 // ---------------------------------------------------------------------------
