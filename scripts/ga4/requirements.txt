@@ -1,0 +1,4 @@
+google-analytics-data>=0.18
+google-analytics-admin>=0.22
+google-auth-oauthlib>=1.2
+google-auth>=2.30
