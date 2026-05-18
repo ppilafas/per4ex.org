@@ -57,3 +57,7 @@ public/IP Assignment Agreement_SCRIBES.docx_signed.pdf
 
 # OAuth client secrets (defense-in-depth; real copy lives in gitignored local/)
 client_secret*.json
+
+# Python
+__pycache__/
+*.pyc
