@@ -97,50 +97,106 @@ prospect.
 
 ## 5. Reply template (first contact)
 
-**Voice:** direct, senior, honest about fit. No filler, no "I'd love to
-hear more about your exciting project." Match the project's positioning:
-senior AI systems engineer, Athens, ships private/AI systems for teams
-with real constraints. (Same probe-style discipline as the Upwork
-proposal memory: short, audition the client, no name-dropping in round 1.)
+**Voice rules** — what survived calibration with real sends (Raju, Kamol,
+20 May 2026):
 
-### HOT / WARM
+- **Narrative, not bulleted.** Questions live inside a sentence joined with
+  "and," not numbered lists.
+- **One opinion or observation, not pure agreement** ("Sensible direction,"
+  not "Great question!"). Not sycophantic.
+- **Em-dashes: aim for zero, at most one.** They are the strongest AI-slop
+  tell after bullet lists.
+- **Slight rhythm variation.** Don't write equally-weighted polished
+  sentences in a row.
+- **Never:** "Thanks for reaching out," "I'd love to," "happy to," "looking
+  forward to," "hope this finds you well."
+- **Sign-off identifies, doesn't decorate:** `Panagiotis Pilafas` then
+  `supercore.tech` on the next line. No calendar links, no email line
+  (already in the From).
+- **Naming Catalyst (the assistant)** is acceptable in inbound replies —
+  the visitor already touched it. Don't name other personal projects
+  (Forensic AI Studio, GTO Poker Coach, etc.) in round 1.
+
+### HOT / WARM (reconnaissance — assistant-captured lead)
 ```
 Hi <first name>,
 
-Thanks for reaching out via supercore.tech — saw your note about
-<one-line restatement of their actual ask>.
+You contacted the assistant on supercore.tech a few times asking about
+<one-line restatement of their actual ask>. Sensible direction,
+especially if <one-liner pointing at why their stated need has real
+teeth>.
 
-To know whether I'm the right fit and what this would look like in
-practice, two quick questions:
+Before I write back with anything useful, <one or two qualifying
+questions joined inside a sentence — distinguishing layers, not
+yes/no. For private-AI leads: "is this for your own setup, for a
+company, or for a client? And when you say 'private,' is that a hard
+requirement (compliance, data residency, contract clause) or a
+preference?">
 
-1. <Targeted question about the WHY — for private-AI leads:
-   what's driving the self-host requirement specifically?
-   compliance/data residency, cost at scale, or latency/control?>
-2. <Context question about their constraints — current infra,
-   rough volume or workload, budget range if known.>
+If this is exploratory and you're mainly trying to see how the
+pieces fit, point me there and I can send you some reading material.
+If you need an actual deployment built, those answers will tell me
+whether I'm the right person and roughly what it would take.
 
-Happy to give you a straight answer on whether self-hosting fits
-your case and what it would take. A short call works too — send a
-window or two and I'll pick one.
+Easier still: a ten-minute call usually settles those questions
+faster than email.
 
-— Panagiotis
-contact@supercore.tech
+Panagiotis Pilafas
+supercore.tech
 ```
 
-### COLD
+### COLD probe (empty body / "Free" budget / vague ask)
 ```
 Hi <first name>,
 
-Thanks for the note. To give you a useful answer I need a bit more —
-specifically <name the missing thing: the actual problem, budget range,
-what success looks like>.
+Got <one-sentence factual observation about what they sent> through
+<the channel they used>. Might have been an accidental click. If you
+actually wanted to ask something about <topic>, send it over.
 
 — Panagiotis
 ```
+
+### Subject conventions
+
+- **Direct mail from visitor** (mailto, `contact@supercore.tech`): reply
+  with `Re: <their exact original subject>` (typos and all) — preserves
+  threading on the visitor's side.
+- **Assistant-captured lead** (no prior email from visitor): do NOT use
+  the internal Resend subject `[Lead · Chat widget] <name>`. The visitor
+  never saw that subject and it reads like spam from a stranger. Use
+  `Following up from supercore.tech` or `Following up on your conversation
+  with Catalyst`.
+
+### First-name disambiguation
+
+Trust the email handle, not what the visitor typed into the assistant. The
+form field captures whatever they wrote (may be a middle name, nickname, or
+compound name); the email address they registered with themselves is the
+ground truth. Example: `raju.thapa9980@gmail.com` → first name is **Raju**,
+even if the assistant captured "Laxman Raju."
+
+### Threading caveat (technical)
+
+`mcp__catalyst__create_gmail_draft` does NOT accept `threadId`. Drafts
+therefore go out as standalone messages, not in-thread replies. Acceptable
+because:
+- Assistant-captured leads have no prior visitor-side thread anyway.
+- Direct-mail replies thread on the visitor's side as long as the subject
+  is `Re: <original subject>`.
+- The original inbound thread in your inbox is tracked via Gmail labels,
+  not by the reply being contained in it.
 
 **Always draft, never auto-send.** Use `create_gmail_draft` then surface
 the draft + classification reasoning to the human. `send_gmail` only after
 explicit per-message approval.
+
+### Reviewer checklist before send (~15 seconds)
+
+1. **Subject** is human-friendly (not the internal Resend lead subject).
+2. **From** dropdown is `contact@supercore.tech` (default in the Gmail
+   composer is `ppilafas@gmail.com`; easy to forget; the per-message switch
+   matters).
+3. **Body** reads cleanly once with fresh eyes.
 
 ---
 
