@@ -8,7 +8,7 @@ This is **supercore.tech** — Panagiotis's personal portfolio / showcase site (
 
 ## Scope note — not all work here is codebase work
 
-Some conversations in this repo are **proposal / client-acquisition work**, not site code. That work lives in `local/proposals/` (gitignored) plus auto-memory, and does not touch the Next.js codebase. If the task is about Upwork proposals, client interactions, or the opportunity pipeline, read `local/proposals/_WORKFLOW.md` first and operate by that system. The commit/deploy protocol below applies only to actual code changes.
+Some conversations in this repo are **proposal / client-acquisition work**, not site code. That work lives in `local/proposals/` (gitignored) plus auto-memory, and does not touch the Next.js codebase. If the task is about Upwork proposals, client interactions, or the opportunity pipeline, read `local/proposals/_WORKFLOW.md` first and operate by that system. Similarly, for **inbound-lead handling** (Gmail discovery of assistant/contact-form leads, triage, first reply), follow `docs/LEADS_WORKFLOW.md` — Gmail labels are the shared state across sessions; drafts only, never auto-send. The commit/deploy protocol below applies only to actual code changes.
 
 ## Commit protocol — autonomous, no asking
 
