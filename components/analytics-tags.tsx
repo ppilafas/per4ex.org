@@ -1,6 +1,5 @@
 "use client"
 
-import Script from "next/script"
 import { useEffect } from "react"
 
 // Google Ads tag — from the Ads account (public by nature, safe to commit).
@@ -17,6 +16,25 @@ declare global {
     gtag: (...args: unknown[]) => void
   }
 }
+
+// Inline init: defines dataLayer + gtag shim, sets Consent Mode v2 defaults
+// BEFORE any hit, then registers ads/GA4 configs. Plain <script
+// dangerouslySetInnerHTML> (not next/script) — next/script's
+// strategy="afterInteractive" with inline children was empirically failing
+// to execute in production (gtag.js loader fetched fine but no /g/collect
+// requests ever fired). Plain script tag matches Google's official snippet
+// and is the reliable path for Consent Mode init ordering.
+const INIT_SCRIPT = `
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+window.gtag = gtag;
+gtag('consent','default',{ad_storage:'denied',ad_user_data:'denied',ad_personalization:'denied',analytics_storage:'denied',functionality_storage:'granted',security_storage:'granted',wait_for_update:500});
+gtag('js', new Date());
+${ADS_ID ? `gtag('config','${ADS_ID}');` : ""}
+${GA4_ID ? `gtag('config','${GA4_ID}');` : ""}
+`.trim()
+
+const LOADER_SRC = `https://www.googletagmanager.com/gtag/js?id=${GA4_ID || ADS_ID}`
 
 export function AnalyticsTags() {
   useEffect(() => {
@@ -55,35 +73,10 @@ export function AnalyticsTags() {
 
   return (
     <>
-      <Script
-        id="gtag-src"
-        src={`https://www.googletagmanager.com/gtag/js?id=${GA4_ID || ADS_ID}`}
-        strategy="afterInteractive"
-      />
-      <Script id="gtag-init" strategy="afterInteractive">
-        {`
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
-          window.gtag = gtag;
-
-          // Consent Mode v2 — privacy-safe defaults set BEFORE any hit.
-          // Denied until the visitor chooses; components/consent-banner.tsx
-          // issues gtag('consent','update', …) to grant/keep-denied.
-          gtag('consent', 'default', {
-            ad_storage: 'denied',
-            ad_user_data: 'denied',
-            ad_personalization: 'denied',
-            analytics_storage: 'denied',
-            functionality_storage: 'granted',
-            security_storage: 'granted',
-            wait_for_update: 500
-          });
-
-          gtag('js', new Date());
-          ${ADS_ID ? `gtag('config', '${ADS_ID}');` : ""}
-          ${GA4_ID ? `gtag('config', '${GA4_ID}');` : ""}
-        `}
-      </Script>
+      {/* Inline init MUST render before the loader so consent default and
+          dataLayer queue are set up first. React renders in document order. */}
+      <script dangerouslySetInnerHTML={{ __html: INIT_SCRIPT }} />
+      <script async src={LOADER_SRC} />
     </>
   )
 }
